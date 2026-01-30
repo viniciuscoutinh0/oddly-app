@@ -13,6 +13,8 @@
         "blade-ui-kit/blade-heroicons": "^2.6",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "livewire/flux": "^2.11",
+        "livewire/flux-pro": "^2.11",
         "livewire/livewire": "^4.0"
     },
     "require-dev": {
@@ -88,5 +90,10 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [{
+        "name": "flux-pro",
+        "type": "composer",
+        "url": "https://composer.fluxui.dev"
+    }]
 }
