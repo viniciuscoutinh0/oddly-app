@@ -36,6 +36,7 @@
                     <flux:button
                         href="{{ route('login') }}"
                         variant="primary"
+                        color="cyan"
                         size="sm"
                         icon="plus"
                     >Entrar ou Criar minha conta</flux:button>
@@ -52,7 +53,7 @@
                     class="w-full h-52 sm:h-70 md:h-full object-cover"
                     alt="Hero image"
                 >
-                <div class="absolute inset-0 bg bg-linear-to-t from-black via-black/40 to-transparent"></div>
+                <div class="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent"></div>
             </div>
             <div class="flex flex-col justify-between">
                 <h1 class="text-3xl md:text-4xl text-center md:text-justify font-semibold mb-6 md:mb-8">
@@ -60,7 +61,9 @@
                         bolão</span>
                 </h1>
                 <flux:button
+                    href="{{ route('login') }}"
                     variant="primary"
+                    color="cyan"
                     icon="sparkles"
                 >Começar
                     agora</flux:button>
@@ -223,7 +226,9 @@
                         <p class="text-xs/6 md:text-sm/7 text-subtle">É rápido, grátis e sem complicação.</p>
                     </div>
                     <flux:button
+                        href="{{ route('login') }}"
                         variant="primary"
+                        color="cyan"
                         icon="sparkles"
                         class="w-full mb-3"
                     >Criar meu bolão agora
@@ -248,7 +253,7 @@
                         <a
                             href="#"
                             class="text-muted text-sm transition duration-75 hover:text-default hover:underline"
-                        >Oque é
+                        >O que é
                             Oddly?</a>
                         <a
                             href="#"
