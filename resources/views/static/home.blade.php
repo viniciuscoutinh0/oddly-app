@@ -76,7 +76,7 @@
             id="mobile-menu"
             class="fixed opacity-0 top-16 left-0 w-full overflow-hidden lg:hidden transition-all duration-300 ease-in-out bg-slate-900/75 backdrop-blur-md z-50"
             style="-webkit-backdrop-filter: blur(12px);"
-            :class="isOpenMobileMenu ? 'opacity-100 h-dvh' : 'h-0 opacity-0'"
+            :class="isOpenMobileMenu ? 'opacity-100 h-[calc(100dvh-4rem)]' : 'h-0 opacity-0'"
         >
             <nav class="flex flex-col p-4 gap-y-2">
                 <a
