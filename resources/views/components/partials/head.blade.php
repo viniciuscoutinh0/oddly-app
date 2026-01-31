@@ -21,7 +21,7 @@
         rel="stylesheet"
     >
 
-    {{-- @fluxAppearance --}}
+    @fluxAppearance
     @livewireStyles
     @vite('resources/css/app.css')
 </head>

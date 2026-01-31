@@ -7,12 +7,20 @@
 <x-partials.head :title="$title ?? null" />
 <x-partials.body>
     <header
+        x-data="{ isOpenMobileMenu: false }"
+        x-init="$watch('isOpenMobileMenu', (value) => {
+            if (value) {
+                document.body.classList.add('overflow-hidden');
+            } else {
+                document.body.classList.remove('overflow-hidden');
+            }
+        });"
         class="bg-slate-900/75 backdrop-blur-lg h-16 border-b border-slate-800 sticky top-0 inset-x-0 z-50"
-        style="-webkit-backdrop-filter: blur(8px);"
+        style="-webkit-backdrop-filter: blur(12px);"
     >
-        <div class="max-w-3xl mx-auto flex items-center h-full px-4">
+        <div class="max-w-3xl mx-auto flex items-center justify-between md:justify-baseline h-full px-4">
             <h1 class="text-xl text-secondary-500 font-extrabold mr-4 shrink-0">Oddly</h1>
-            <nav class="flex gap-4 h-full justify-items-center">
+            <nav class="flex gap-4 h-full justify-items-center max-lg:hidden">
                 <a
                     href="#"
                     aria-current="page"
@@ -39,6 +47,62 @@
                         color="cyan"
                         size="sm"
                         icon="plus"
+                    >Entrar ou Criar minha conta</flux:button>
+                </div>
+            </nav>
+
+            <button
+                class="lg:hidden inline-flex items-center justify-center px-2 h-9 rounded-lg hover:bg-slate-800 transition duration-75 focus:outline-none"
+                @click="isOpenMobileMenu = !isOpenMobileMenu"
+                :aria-expanded="isOpenMobileMenu.toString()"
+                aria-controls="mobile-menu"
+                aria-label="Menu"
+                x-cloak
+            >
+                <span class="sr-only">Abrir menu</span>
+                <x-heroicon-m-bars-3
+                    class="w-6 h-6 fill-subtle"
+                    x-show="!isOpenMobileMenu"
+                    aria-hidden="true"
+                />
+                <x-heroicon-m-x-mark
+                    class="w-6 h-6 fill-subtle"
+                    x-show="isOpenMobileMenu"
+                    aria-hidden="true"
+                />
+            </button>
+        </div>
+        <div
+            id="mobile-menu"
+            class="fixed opacity-0 top-16 left-0 w-full overflow-hidden lg:hidden transition-all duration-300 ease-in-out bg-slate-900/75 backdrop-blur-md z-50"
+            style="-webkit-backdrop-filter: blur(12px);"
+            :class="isOpenMobileMenu ? 'opacity-100 h-dvh' : 'h-0 opacity-0'"
+        >
+            <nav class="flex flex-col p-4 gap-y-2">
+                <a
+                    href="#"
+                    class="px-4 h-9 inline-flex items-center text-base font-medium text-subtle transition duration-75 focus:outline-none hover:text-default hover:bg-slate-800 rounded-lg"
+                >Início</a>
+                <a
+                    href="#"
+                    class="px-4 h-9 inline-flex items-center text-base font-medium text-subtle transition duration-75 focus:outline-none hover:text-default hover:bg-slate-800 rounded-lg"
+                >O que é Oddly?</a>
+                <a
+                    href="#"
+                    class="px-4 h-9 inline-flex items-center text-base font-medium text-subtle transition duration-75 focus:outline-none hover:text-default hover:bg-slate-800 rounded-lg"
+                >Como funciona</a>
+                <a
+                    href="#"
+                    class="px-4 h-9 inline-flex items-center text-base font-medium text-subtle transition duration-75 focus:outline-none hover:text-default hover:bg-slate-800 rounded-lg"
+                >Campeonatos</a>
+                <div class="pt-2">
+                    <flux:button
+                        href="{{ route('login') }}"
+                        variant="primary"
+                        color="cyan"
+                        size="sm"
+                        icon="plus"
+                        class="w-full"
                     >Entrar ou Criar minha conta</flux:button>
                 </div>
             </nav>
@@ -155,7 +219,8 @@
             <section>
                 <header class="mb-6 md:mb-8">
                     <h4 class="text-default text-xl md:text-2xl font-semibold tracking-wide mb-2">Campeonatos</h4>
-                    <p class="text-subtle text-sm md:text-base">Mostre sua habilidade nos palpites, acompanhe os jogos e
+                    <p class="text-subtle text-sm md:text-base">Mostre sua habilidade nos palpites, acompanhe os jogos
+                        e
                         dispute o
                         topo do ranking em tempo real.
                     </p>
