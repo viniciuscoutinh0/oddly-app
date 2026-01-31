@@ -5,11 +5,13 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+@import "../../vendor/livewire/flux/dist/flux.css";
+
 @theme {
     --font-sans: "Roboto", sans-serif;
     --font-sans--font-feature-settings: "cv11";
 
-    --color-primary-300: oklch(78.9% 0.154 211.53);
+    --color-primary-300: oklch(86.5% 0.127 207.078);
     --color-primary-400: oklch(78.9% 0.154 211.53);
     --color-primary-500: oklch(71.5% 0.143 215.221);
 
@@ -17,7 +19,13 @@
     --color-secondary-500: oklch(60.6% 0.25 292.717);
     --color-secondary-600: oklch(54.1% 0.281 293.009);
 
-    --color-accent: oklch(0.9683 0.0069 247.9);
+    --color-default: oklch(0.9683 0.0069 247.9);
     --color-subtle: oklch(0.7038 0.0402 256.99);
     --color-muted: oklch(0.5542 0.046 257.53);
+
+    --color-accent: oklch(60.9% 0.126 221.723);
+    --color-accent-content: oklch(60.9% 0.126 221.723);
+    --color-accent-foreground: var(--color-white);
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
