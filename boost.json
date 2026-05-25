@@ -1,0 +1,14 @@
+{
+    "agents": [
+        "copilot"
+    ],
+    "cloud": false,
+    "guidelines": true,
+    "skills": [
+        "laravel-best-practices",
+        "fluxui-development",
+        "livewire-development",
+        "pest-testing",
+        "tailwindcss-development"
+    ]
+}
