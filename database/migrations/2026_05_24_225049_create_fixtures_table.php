@@ -12,8 +12,8 @@ return new class extends Migration {
         Schema::create('fixtures', function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(Stage::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'home_team_id')->constrained('teams')->cascadeOnDelete();
-            $table->foreignIdFor(Team::class, 'away_team_id')->constrained('teams')->cascadeOnDelete();
+            $table->foreignIdFor(Team::class, 'home_team_id')->nullable()->constrained('teams')->cascadeOnDelete();
+            $table->foreignIdFor(Team::class, 'away_team_id')->nullable()->constrained('teams')->cascadeOnDelete();
             $table->integer('home_score')->nullable();
             $table->integer('away_score')->nullable();
             $table->datetime('match_date');

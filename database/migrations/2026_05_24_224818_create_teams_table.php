@@ -9,10 +9,11 @@ return new class extends Migration {
     {
         Schema::create('teams', function (Blueprint $table): void {
             $table->id();
-            $table->string('name', 30)->index();
-            $table->string('slug')->unique();
-            $table->string('short_name', 3);
-            $table->string('logo_url', 255)->nullable();
+            $table->string('name', 60)->index();
+            $table->string('short_name', 30);
+            $table->string('tla', 3);
+            $table->string('logo', 255);
+            $table->unsignedInteger('external_id')->nullable();
             $table->timestamps();
         });
     }

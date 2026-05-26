@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('name', 30)->index();
             $table->string('slug', 30)->unique();
             $table->enum('type', ['tournament', 'league']);
-            $table->string('logo_url')->nullable();
+            $table->string('logo')->nullable();
             $table->timestamps();
         });
     }

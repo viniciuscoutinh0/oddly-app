@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->foreignIdFor(Session::class)->constrained()->cascadeOnDelete();
             $table->string('name', 30);
             $table->boolean('is_knockout')->default(false);
+            $table->string('external_id')->nullable();
             $table->timestamps();
         });
     }

@@ -11,8 +11,9 @@ return new class extends Migration {
         Schema::create('sessions', function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(League::class)->constrained()->cascadeOnDelete();
-            $table->string('year', 9);
-            $table->boolean('is_current')->default(false);
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
+            $table->unsignedInteger('winner_id')->nullable();
             $table->timestamps();
         });
     }
