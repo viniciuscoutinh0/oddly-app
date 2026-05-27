@@ -14,13 +14,13 @@ final class Stage extends Model
     /** @use HasFactory<\Database\Factories\StageFactory> */
     use HasFactory;
 
-    public function session(): BelongsTo
+    public function season(): BelongsTo
     {
-        return $this->belongsTo(Session::class);
+        return $this->belongsTo(Season::class);
     }
 
     public function fixtures(): HasMany
     {
-        return $this->hasMany(Fixture::class);
+        return $this->hasMany(Fixture::class)->orderBy('match_date');
     }
 }

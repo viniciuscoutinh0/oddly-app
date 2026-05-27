@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Stage;
+use App\Models\Season;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Stage>
+ * @extends Factory<Season>
  */
-class StageFactory extends Factory
+class SeasonFactory extends Factory
 {
     /**
      * Define the model's default state.

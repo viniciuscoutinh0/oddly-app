@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Fixture;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Fixture>
+ * @extends Factory<Fixture>
  */
 class FixtureFactory extends Factory
 {
