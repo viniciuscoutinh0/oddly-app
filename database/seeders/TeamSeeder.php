@@ -25,8 +25,8 @@ final class TeamSeeder extends Seeder
                 'name' => $team['name'],
                 'short_name' => $team['shortName'],
                 'tla' => $team['tla'],
-                'logo' => $team['crest'],
-                'external_id' => $team['id'],
+                'logo_url' => $team['crest'],
+                'external_id' => (int) $team['id'],
             ]);
         }
     }

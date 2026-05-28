@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\Stage;
+use App\Models\Competition;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 
-final class StageSeeder extends Seeder
+final class SeasonSeeder extends Seeder
 {
     public function run(): void
     {
@@ -24,21 +24,20 @@ final class StageSeeder extends Seeder
             return;
         }
 
-        $stages = collect($data['matches'])->groupBy('stage')->keys();
+        $competition = Competition::query()->where('external_id', 2000)->first();
 
-        if ($stages->isEmpty()) {
+        if ($competition === null) {
             return;
         }
 
-        $order = 1;
+        $season = $data['matches'][0]['season'];
 
-        foreach ($stages as $stage) {
-            Stage::query()->create([
-                'season_id' => 1,
-                'name' => $stage,
-                'order' => $order++,
-                'is_knockout' => false,
+        $competition
+            ->seasons()
+            ->create([
+                'start_date' => $season['startDate'],
+                'end_date' => $season['endDate'],
+                'external_id' => (int) $season['id'],
             ]);
-        }
     }
 }

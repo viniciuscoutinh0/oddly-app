@@ -14,9 +14,12 @@ final class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            TeamSeeder::class,
             UserSeeder::class,
-            LeagueSeeder::class,
+            TeamSeeder::class,
+            CompetitionSeeder::class,
+            SeasonSeeder::class,
+            StageSeeder::class,
+            FixtureSeeder::class,
         ]);
     }
 }

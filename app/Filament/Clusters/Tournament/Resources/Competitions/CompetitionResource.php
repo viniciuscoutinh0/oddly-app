@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\Tournament\Resources\Competitions;
 use App\Filament\Clusters\Tournament\Resources\Competitions\Pages\CreateCompetition;
 use App\Filament\Clusters\Tournament\Resources\Competitions\Pages\EditCompetition;
 use App\Filament\Clusters\Tournament\Resources\Competitions\Pages\ListCompetitions;
+use App\Filament\Clusters\Tournament\Resources\Competitions\RelationManagers\SeasonsRelationManager;
 use App\Filament\Clusters\Tournament\Resources\Competitions\Schemas\CompetitionForm;
 use App\Filament\Clusters\Tournament\Resources\Competitions\Tables\CompetitionsTable;
 use App\Filament\Clusters\Tournament\TournamentCluster;
@@ -38,7 +39,7 @@ class CompetitionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SeasonsRelationManager::class,
         ];
     }
 

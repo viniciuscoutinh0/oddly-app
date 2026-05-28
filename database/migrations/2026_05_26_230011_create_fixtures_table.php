@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('home_score_pen')->nullable();
             $table->unsignedTinyInteger('away_score_pen')->nullable();
             $table->string('group_letter', 1)->nullable();
-            $table->unsignedTinyInteger('matchday')->nullable();
+            $table->unsignedTinyInteger('match_day')->nullable();
             $table->datetime('match_date')->index();
             $table->datetime('locked_at')->nullable();
             $table
