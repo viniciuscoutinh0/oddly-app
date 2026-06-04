@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Livewire\Auth\Register;
+use App\Livewire\Dashboard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,7 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
-    Route::view('/dashboard', 'static.home')->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
 });
 
 Route::post('/logout', function (Request $request) {
