@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Enums\Pool\Visibility;
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ListPools;
-use App\Filament\Clusters\Bolao\Resources\Pools\PoolResource;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\ListPools;
+use App\Filament\Clusters\Pools\Resources\Pools\PoolResource;
 use App\Models\Pool;
 use App\Models\User;
 

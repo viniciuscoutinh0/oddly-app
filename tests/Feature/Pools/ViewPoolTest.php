@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ViewPool;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\ViewPool;
 use App\Models\Pool;
 use App\Models\User;
 

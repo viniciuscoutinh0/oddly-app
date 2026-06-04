@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Clusters\Bolao\Resources\Pools\RelationManagers;
+namespace App\Filament\Clusters\Pools\Resources\Pools\RelationManagers;
 
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;

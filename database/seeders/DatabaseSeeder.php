@@ -20,6 +20,7 @@ final class DatabaseSeeder extends Seeder
             SeasonSeeder::class,
             StageSeeder::class,
             FixtureSeeder::class,
+            SeasonTeamSeeder::class,
         ]);
     }
 }

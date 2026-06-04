@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\Stage\Name;
+use App\Models\Season;
 use App\Models\Stage;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
@@ -24,20 +26,25 @@ final class StageSeeder extends Seeder
             return;
         }
 
-        $stages = collect($data['matches'])->groupBy('stage')->keys();
+        $season = Season::query()->first(['id']);
 
-        if ($stages->isEmpty()) {
+        if ($season === null) {
             return;
         }
 
-        $order = 1;
+        $stages = collect($data['matches'])
+            ->pluck('stage')
+            ->unique()
+            ->map(fn (string $stage): Name => Name::from(mb_strtolower($stage)));
+
+        $sortOrder = 1;
 
         foreach ($stages as $stage) {
             Stage::query()->create([
-                'season_id' => 1,
+                'season_id' => $season->id,
                 'name' => $stage,
-                'order' => $order++,
-                'is_knockout' => false,
+                'sort_order' => $sortOrder++,
+                'is_knockout' => $stage->isKnockout(),
             ]);
         }
     }

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\Fixture\Status;
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\PoolStandingsPage;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\PoolStandingsPage;
 use App\Models\Bet;
 use App\Models\Fixture;
 use App\Models\Pool;

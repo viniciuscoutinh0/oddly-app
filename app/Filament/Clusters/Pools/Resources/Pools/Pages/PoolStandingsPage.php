@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Clusters\Bolao\Resources\Pools\Pages;
+namespace App\Filament\Clusters\Pools\Resources\Pools\Pages;
 
 use App\Actions\Pool\RecalculatePoolScoringAction;
-use App\Filament\Clusters\Bolao\Resources\Pools\PoolResource;
+use App\Filament\Clusters\Pools\Resources\Pools\PoolResource;
 use App\Models\User;
 use App\Services\PoolStandings;
 use Filament\Actions\Action;
@@ -22,7 +22,7 @@ final class PoolStandingsPage extends Page
 
     protected static string $resource = PoolResource::class;
 
-    protected string $view = 'filament.clusters.bolao.pages.pool-standings';
+    protected string $view = 'filament.clusters.pools.pages.pool-standings';
 
     protected static ?string $title = 'Ranking';
 

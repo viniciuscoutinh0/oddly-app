@@ -5,7 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('seasons', function (Blueprint $table): void {
@@ -14,7 +15,7 @@ return new class extends Migration {
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->foreignId('winner_id')->nullable()->constrained('teams')->nullOnDelete();
-            $table->unsignedInteger('external_id')->nullable();
+            $table->unsignedInteger('external_id')->nullable()->unique();
             $table->timestamps();
         });
     }

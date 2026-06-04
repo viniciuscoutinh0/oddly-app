@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Clusters\Bolao\Resources\Pools\Tables;
+namespace App\Filament\Clusters\Pools\Resources\Pools\Tables;
 
 use App\Enums\Pool\Visibility;
 use App\Models\Season;

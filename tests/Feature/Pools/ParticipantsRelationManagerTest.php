@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Actions\Pool\JoinPoolAction;
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ViewPool;
-use App\Filament\Clusters\Bolao\Resources\Pools\RelationManagers\ParticipantsRelationManager;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\ViewPool;
+use App\Filament\Clusters\Pools\Resources\Pools\RelationManagers\ParticipantsRelationManager;
 use App\Models\Pool;
 use App\Models\User;
 

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Clusters\Bolao\Resources\Pools;
+namespace App\Filament\Clusters\Pools\Resources\Pools;
 
-use App\Filament\Clusters\Bolao\BolaoCluster;
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ListPools;
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\PoolStandingsPage;
-use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ViewPool;
-use App\Filament\Clusters\Bolao\Resources\Pools\RelationManagers\ParticipantsRelationManager;
-use App\Filament\Clusters\Bolao\Resources\Pools\Schemas\PoolInfolist;
-use App\Filament\Clusters\Bolao\Resources\Pools\Tables\PoolsTable;
+use App\Filament\Clusters\Pools\PoolsCluster;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\ListPools;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\PoolStandingsPage;
+use App\Filament\Clusters\Pools\Resources\Pools\Pages\ViewPool;
+use App\Filament\Clusters\Pools\Resources\Pools\RelationManagers\ParticipantsRelationManager;
+use App\Filament\Clusters\Pools\Resources\Pools\Schemas\PoolInfolist;
+use App\Filament\Clusters\Pools\Resources\Pools\Tables\PoolsTable;
 use App\Models\Pool;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -24,7 +24,7 @@ final class PoolResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static ?string $cluster = BolaoCluster::class;
+    protected static ?string $cluster = PoolsCluster::class;
 
     protected static ?string $recordTitleAttribute = 'name';
 

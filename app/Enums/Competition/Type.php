@@ -6,8 +6,10 @@ namespace App\Enums\Competition;
 
 use App\Enums\Concerns\HasCases;
 use Filament\Support\Colors\Color;
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
 
-enum Type: string
+enum Type: string implements HasColor, HasLabel
 {
     use HasCases;
 
@@ -15,7 +17,7 @@ enum Type: string
 
     case League = 'league';
 
-    public function label(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Cup => 'Copa',
@@ -23,7 +25,7 @@ enum Type: string
         };
     }
 
-    public function color(): array
+    public function getColor(): array
     {
         return match ($this) {
             self::Cup => Color::Blue,

@@ -5,7 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('fixtures', function (Blueprint $table): void {
@@ -19,15 +20,13 @@ return new class extends Migration {
             $table->unsignedTinyInteger('away_score_et')->nullable();
             $table->unsignedTinyInteger('home_score_pen')->nullable();
             $table->unsignedTinyInteger('away_score_pen')->nullable();
+            $table->string('duration', 20)->default('regular');
             $table->string('group_letter', 1)->nullable();
             $table->unsignedTinyInteger('match_day')->nullable();
             $table->datetime('match_date')->index();
             $table->datetime('locked_at')->nullable();
-            $table
-                ->enum('status', ['scheduled', 'in_progress', 'finished', 'postponed'])
-                ->default('scheduled')
-                ->index();
-            $table->unsignedInteger('external_id')->unique();
+            $table->string('status', 20)->default('scheduled')->index();
+            $table->unsignedInteger('external_id')->nullable()->unique();
             $table->timestamps();
             $table->index(['stage_id', 'match_date']);
         });

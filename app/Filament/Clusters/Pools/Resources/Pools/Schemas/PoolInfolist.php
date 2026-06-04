@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Clusters\Bolao\Resources\Pools\Schemas;
+namespace App\Filament\Clusters\Pools\Resources\Pools\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;

@@ -1,24 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<Team>
  */
-class TeamFactory extends Factory
+final class TeamFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
+        $name = fake()->unique()->country();
+
         return [
-            //
+            'name' => $name,
+            'short_name' => $name,
+            'tla' => Str::upper(Str::substr($name, 0, 3)),
+            'logo_url' => fake()->imageUrl(),
+            'external_id' => fake()->unique()->numberBetween(1, 999999),
         ];
     }
 }
