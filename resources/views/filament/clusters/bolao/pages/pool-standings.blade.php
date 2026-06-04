@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($this->standings() as $index => $row)
+                @forelse ($this->standings as $index => $row)
                     <tr class="border-t border-gray-100 dark:border-white/5">
                         <td class="px-4 py-3">{{ $index + 1 }}</td>
                         <td class="px-4 py-3">{{ $row['user']->name }}</td>

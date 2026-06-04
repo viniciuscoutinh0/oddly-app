@@ -56,7 +56,8 @@ it('recalculates points via the header action', function (): void {
 
     livewire(PoolStandingsPage::class, ['record' => $pool->id])
         ->callAction('recalculate')
-        ->assertHasNoActionErrors();
+        ->assertHasNoActionErrors()
+        ->assertNotified('Pontuação recalculada.');
 
     expect(Bet::first()->refresh()->is_exact)->toBeTrue();
 });

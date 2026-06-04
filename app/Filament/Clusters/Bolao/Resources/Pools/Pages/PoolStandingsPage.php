@@ -14,6 +14,7 @@ use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 
 final class PoolStandingsPage extends Page
 {
@@ -33,6 +34,7 @@ final class PoolStandingsPage extends Page
     /**
      * @return Collection<int, array{user: User, points: int}>
      */
+    #[Computed]
     public function standings(): Collection
     {
         return app(PoolStandings::class)->for($this->record);
