@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Observers\SeasonObserver;
+use Database\Factories\SeasonFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,9 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+#[ObservedBy(SeasonObserver::class)]
 final class Season extends Model
 {
-    /** @use HasFactory<\Database\Factories\SeasonFactory> */
+    /** @use HasFactory<SeasonFactory> */
     use HasFactory;
 
     protected function casts(): array
@@ -44,7 +48,7 @@ final class Season extends Model
 
     public function stages(): HasMany
     {
-        return $this->hasMany(Stage::class)->orderBy('order');
+        return $this->hasMany(Stage::class)->orderBy('sort_order');
     }
 
     public function fixtures(): HasManyThrough
@@ -52,10 +56,25 @@ final class Season extends Model
         return $this->hasManyThrough(Fixture::class, Stage::class);
     }
 
+    public function pools(): HasMany
+    {
+        return $this->hasMany(Pool::class);
+    }
+
+    public function championBets(): HasMany
+    {
+        return $this->hasMany(ChampionBet::class);
+    }
+
+    public function groupBets(): HasMany
+    {
+        return $this->hasMany(GroupBet::class);
+    }
+
     public function name(): Attribute
     {
         return Attribute::get(
-            fn ($v, $attributes): string => date('Y', strtotime($attributes['start_date'])),
+            fn (): string => $this->start_date->format('Y'),
         );
     }
 }

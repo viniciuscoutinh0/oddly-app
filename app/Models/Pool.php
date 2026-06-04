@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use App\Enums\Pool\Visibility;
+use Database\Factories\PoolFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+final class Pool extends Model
+{
+    /** @use HasFactory<PoolFactory> */
+    use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'visibility' => Visibility::class,
+            'points_exact' => 'integer',
+            'points_result' => 'integer',
+            'points_champion' => 'integer',
+            'points_group_position' => 'integer',
+        ];
+    }
+
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Season::class);
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function participants(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'pool_user')
+            ->withPivot('joined_at')
+            ->withTimestamps();
+    }
+
+    public function isPrivate(): bool
+    {
+        return $this->visibility === Visibility::Private;
+    }
+}
