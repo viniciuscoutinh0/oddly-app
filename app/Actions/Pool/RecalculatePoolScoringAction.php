@@ -22,6 +22,7 @@ final class RecalculatePoolScoringAction
 
     public function handle(Pool $pool): void
     {
+        $pool->loadMissing('season');
         $season = $pool->season;
 
         DB::transaction(function () use ($season): void {
