@@ -28,9 +28,23 @@ it('forbids a stranger from a private pool', function (): void {
 
 it('lets any authenticated user view a public pool but hides the invite code from non-members', function (): void {
     actingAs(User::factory()->create());
-    $pool = Pool::factory()->public()->create(['invite_code' => null]);
+    $pool = Pool::factory()->public()->create(['invite_code' => 'PUBCODE1']);
 
-    Livewire::test(Show::class, ['pool' => $pool])->assertOk()->assertSee($pool->name);
+    Livewire::test(Show::class, ['pool' => $pool])
+        ->assertOk()
+        ->assertSee($pool->name)
+        ->assertDontSee('PUBCODE1');
+});
+
+it('blocks the owner from leaving via the action', function (): void {
+    $owner = User::factory()->create();
+    actingAs($owner);
+    $pool = Pool::factory()->public()->create(['owner_id' => $owner->id]);
+    $pool->participants()->attach($owner->id, ['joined_at' => now()]);
+
+    Livewire::test(Show::class, ['pool' => $pool])
+        ->call('leave')
+        ->assertForbidden();
 });
 
 it('shows leave for a non-owner member and detaches on leave', function (): void {

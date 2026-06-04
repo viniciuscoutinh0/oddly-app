@@ -45,6 +45,8 @@ final class Show extends Component
 
     public function leave(LeavePoolAction $action): void
     {
+        abort_unless($this->canLeave(), 403);
+
         $action->handle(auth()->user(), $this->pool);
 
         $this->redirectRoute('dashboard');
