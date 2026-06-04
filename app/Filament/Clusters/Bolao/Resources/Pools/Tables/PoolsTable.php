@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\Clusters\Bolao\Resources\Pools\Tables;
 
 use App\Enums\Pool\Visibility;
+use App\Models\Season;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 final class PoolsTable
 {
@@ -17,7 +19,12 @@ final class PoolsTable
         return $table
             ->columns([
                 TextColumn::make('name')->label('Nome')->searchable()->sortable(),
-                TextColumn::make('season.name')->label('Temporada')->sortable(),
+                TextColumn::make('season.name')->label('Temporada')->sortable(query: function (Builder $query, string $direction): Builder {
+                    return $query->orderBy(
+                        Season::select('start_date')->whereColumn('seasons.id', 'pools.season_id'),
+                        $direction,
+                    );
+                }),
                 TextColumn::make('owner.name')->label('Dono')->searchable(),
                 TextColumn::make('visibility')->label('Visibilidade')->badge(),
                 TextColumn::make('participants_count')->label('Participantes')->counts('participants')->sortable(),

@@ -31,6 +31,15 @@ it('filters pools by visibility', function (): void {
         ->assertCanNotSeeTableRecords([$private]);
 });
 
+it('sorts pools by season without error', function (): void {
+    actingAs(User::factory()->admin()->create());
+    Pool::factory()->count(2)->create();
+
+    livewire(ListPools::class)
+        ->sortTable('season.name')
+        ->assertOk();
+});
+
 it('forbids non-admins from the pools list route', function (): void {
     actingAs(User::factory()->create());
 
