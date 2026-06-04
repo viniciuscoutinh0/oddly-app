@@ -74,5 +74,5 @@ it('should login successfully with correct credentials', function (): void {
         ->set('email', 'john@due.com')
         ->set('password', 'securepassword')
         ->call('login')
-        ->assertRedirect(uri: route('static.home'));
+        ->assertRedirect(uri: route('dashboard'));
 });
