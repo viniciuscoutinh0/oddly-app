@@ -6,6 +6,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard;
 use App\Livewire\Pools\Browse;
 use App\Livewire\Pools\Create;
+use App\Livewire\Pools\Show;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/pools', Browse::class)->name('pools.index');
     Route::get('/pools/create', Create::class)->name('pools.create');
-    // Placeholder: replaced by Show component in Task 5
-    Route::get('/pools/{pool:slug}', Create::class)->name('pools.show');
+    Route::get('/pools/{pool:slug}', Show::class)->name('pools.show');
 });
 
 Route::post('/logout', function (Request $request) {
