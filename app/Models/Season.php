@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Observers\SeasonObserver;
 use Database\Factories\SeasonFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
+#[ObservedBy(SeasonObserver::class)]
 final class Season extends Model
 {
     /** @use HasFactory<SeasonFactory> */
@@ -56,6 +59,11 @@ final class Season extends Model
     public function pools(): HasMany
     {
         return $this->hasMany(Pool::class);
+    }
+
+    public function championBets(): HasMany
+    {
+        return $this->hasMany(ChampionBet::class);
     }
 
     public function name(): Attribute

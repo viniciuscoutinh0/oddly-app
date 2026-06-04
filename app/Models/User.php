@@ -63,4 +63,9 @@ final class User extends Authenticatable implements FilamentUser
             ->withPivot('joined_at')
             ->withTimestamps();
     }
+
+    public function championBets(): HasMany
+    {
+        return $this->hasMany(ChampionBet::class);
+    }
 }
