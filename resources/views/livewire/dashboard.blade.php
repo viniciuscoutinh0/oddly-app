@@ -11,8 +11,8 @@
         <flux:card class="text-center space-y-4">
             <flux:heading size="lg">Você ainda não está em nenhum bolão</flux:heading>
             <div class="flex gap-3 justify-center">
-                <flux:button href="#" variant="primary" color="cyan">Criar bolão</flux:button>
-                <flux:button href="#" variant="ghost">Entrar em bolão</flux:button>
+                <flux:button :href="route('pools.create')" variant="primary" color="cyan">Criar bolão</flux:button>
+                <flux:button :href="route('pools.index')" variant="ghost">Entrar em bolão</flux:button>
             </div>
         </flux:card>
     @endforelse

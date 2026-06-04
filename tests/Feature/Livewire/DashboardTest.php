@@ -37,3 +37,11 @@ it('shows an empty state when the user has no pools', function (): void {
         ->assertSee('Criar bolão')
         ->assertSee('Entrar em bolão');
 });
+
+it('links the empty-state buttons to the pool routes', function (): void {
+    actingAs(User::factory()->create());
+
+    Livewire::test(Dashboard::class)
+        ->assertSee(route('pools.create'))
+        ->assertSee(route('pools.index'));
+});
