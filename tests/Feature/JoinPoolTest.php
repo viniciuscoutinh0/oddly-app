@@ -41,3 +41,21 @@ it('is idempotent and does not duplicate membership', function (): void {
 
     expect($pool->participants()->whereKey($user->id)->count())->toBe(1);
 });
+
+it('rejects a private pool when no code is given', function (): void {
+    $pool = Pool::factory()->create(['invite_code' => 'SECRET12']);
+    $user = User::factory()->create();
+
+    expect(fn () => app(JoinPoolAction::class)->handle($user, $pool))
+        ->toThrow(InvalidArgumentException::class);
+});
+
+it('exposes the inverse pools relation after joining', function (): void {
+    $pool = Pool::factory()->public()->create();
+    $user = User::factory()->create();
+
+    app(JoinPoolAction::class)->handle($user, $pool);
+
+    expect($user->pools()->whereKey($pool->id)->exists())->toBeTrue()
+        ->and($user->pools->first()->getRelationValue('pivot')->joined_at)->not->toBeNull();
+});

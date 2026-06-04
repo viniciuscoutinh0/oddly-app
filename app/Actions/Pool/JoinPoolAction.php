@@ -12,7 +12,7 @@ final class JoinPoolAction
 {
     public function handle(User $user, Pool $pool, ?string $inviteCode = null): void
     {
-        if ($pool->isPrivate() && $inviteCode !== $pool->invite_code) {
+        if ($pool->isPrivate() && ($inviteCode === null || $inviteCode !== $pool->invite_code)) {
             throw new InvalidArgumentException('Código de convite inválido.');
         }
 
