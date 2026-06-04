@@ -68,4 +68,9 @@ final class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(ChampionBet::class);
     }
+
+    public function groupBets(): HasMany
+    {
+        return $this->hasMany(GroupBet::class);
+    }
 }

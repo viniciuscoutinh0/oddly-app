@@ -66,6 +66,11 @@ final class Season extends Model
         return $this->hasMany(ChampionBet::class);
     }
 
+    public function groupBets(): HasMany
+    {
+        return $this->hasMany(GroupBet::class);
+    }
+
     public function name(): Attribute
     {
         return Attribute::get(
