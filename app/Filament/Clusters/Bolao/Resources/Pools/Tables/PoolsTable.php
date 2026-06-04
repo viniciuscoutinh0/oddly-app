@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Clusters\Bolao\Resources\Pools\Tables;
 
 use App\Enums\Pool\Visibility;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -26,6 +27,9 @@ final class PoolsTable
                 SelectFilter::make('visibility')->label('Visibilidade')->options(Visibility::class),
                 SelectFilter::make('season')->label('Temporada')->relationship('season', 'id')
                     ->getOptionLabelFromRecordUsing(fn ($record): string => $record->name),
+            ])
+            ->recordActions([
+                ViewAction::make(),
             ]);
     }
 }

@@ -6,10 +6,13 @@ namespace App\Filament\Clusters\Bolao\Resources\Pools;
 
 use App\Filament\Clusters\Bolao\BolaoCluster;
 use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ListPools;
+use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ViewPool;
+use App\Filament\Clusters\Bolao\Resources\Pools\Schemas\PoolInfolist;
 use App\Filament\Clusters\Bolao\Resources\Pools\Tables\PoolsTable;
 use App\Models\Pool;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
@@ -27,6 +30,11 @@ final class PoolResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Bolões';
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return PoolInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return PoolsTable::configure($table);
@@ -36,6 +44,7 @@ final class PoolResource extends Resource
     {
         return [
             'index' => ListPools::route('/'),
+            'view' => ViewPool::route('/{record}'),
         ];
     }
 }
