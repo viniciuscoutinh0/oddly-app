@@ -6,6 +6,7 @@ namespace App\Filament\Clusters\Bolao\Resources\Pools;
 
 use App\Filament\Clusters\Bolao\BolaoCluster;
 use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ListPools;
+use App\Filament\Clusters\Bolao\Resources\Pools\Pages\PoolStandingsPage;
 use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ViewPool;
 use App\Filament\Clusters\Bolao\Resources\Pools\RelationManagers\ParticipantsRelationManager;
 use App\Filament\Clusters\Bolao\Resources\Pools\Schemas\PoolInfolist;
@@ -53,6 +54,7 @@ final class PoolResource extends Resource
         return [
             'index' => ListPools::route('/'),
             'view' => ViewPool::route('/{record}'),
+            'standings' => PoolStandingsPage::route('/{record}/standings'),
         ];
     }
 }
