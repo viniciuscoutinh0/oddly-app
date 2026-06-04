@@ -27,7 +27,7 @@ new class extends Component {
 
         session()->regenerate();
 
-        $this->redirectRoute('static.home');
+        $this->redirectRoute('dashboard');
     }
 
     private function credentials(array $data): array
