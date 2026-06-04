@@ -47,6 +47,11 @@ final class User extends Authenticatable implements FilamentUser
         return $this->role === Role::Admin;
     }
 
+    public function bets(): HasMany
+    {
+        return $this->hasMany(Bet::class);
+    }
+
     public function ownedPools(): HasMany
     {
         return $this->hasMany(Pool::class, 'owner_id');
