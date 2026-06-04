@@ -7,6 +7,7 @@ use App\Enums\Fixture\Status;
 use App\Models\Bet;
 use App\Models\ChampionBet;
 use App\Models\Fixture;
+use App\Models\GroupBet;
 use App\Models\Pool;
 use App\Models\Season;
 use App\Models\Stage;
@@ -61,4 +62,31 @@ it('returns zero points for a participant with no bets', function (): void {
 
     expect($standings)->toHaveCount(1)
         ->and($standings->first()['points'])->toBe(0);
+});
+
+it('adds group bonus points using the pool rule', function (): void {
+    $season = Season::factory()->create();
+    $pool = Pool::factory()->public()->create([
+        'season_id' => $season->id,
+        'points_group_position' => 3,
+    ]);
+
+    $user = User::factory()->create();
+    app(JoinPoolAction::class)->handle($user, $pool);
+
+    // Two correct group-position bets => 2 * 3 = 6 points.
+    GroupBet::factory()->for($season)->create([
+        'user_id' => $user->id, 'group_letter' => 'A', 'predicted_position' => 1, 'is_correct' => true,
+    ]);
+    GroupBet::factory()->for($season)->create([
+        'user_id' => $user->id, 'group_letter' => 'A', 'predicted_position' => 2, 'is_correct' => true,
+    ]);
+    // An incorrect one must not count.
+    GroupBet::factory()->for($season)->create([
+        'user_id' => $user->id, 'group_letter' => 'B', 'predicted_position' => 1, 'is_correct' => false,
+    ]);
+
+    $standings = app(PoolStandings::class)->for($pool);
+
+    expect($standings->first()['points'])->toBe(6);
 });
