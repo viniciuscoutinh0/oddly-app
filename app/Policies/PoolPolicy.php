@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Enums\User\Role;
 use App\Models\Pool;
 use App\Models\User;
 
 final class PoolPolicy
 {
+    public function before(User $user): ?bool
+    {
+        return $user->role === Role::Admin ? true : null;
+    }
+
     public function view(User $user, Pool $pool): bool
     {
         if (! $pool->isPrivate()) {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Stage\Name;
+use Database\Factories\StageFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,8 +13,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Stage extends Model
 {
-    /** @use HasFactory<\Database\Factories\StageFactory> */
+    /** @use HasFactory<StageFactory> */
     use HasFactory;
+
+    protected function casts(): array
+    {
+        return [
+            'name' => Name::class,
+            'is_knockout' => 'boolean',
+        ];
+    }
 
     public function season(): BelongsTo
     {

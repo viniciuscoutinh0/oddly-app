@@ -12,7 +12,7 @@ trait HasCases
     {
         return collect(static::cases())
             ->mapWithKeys(fn (BackedEnum $enum): array => [
-                $enum->value => method_exists($enum, 'label') ? $enum->label() : $enum->name,
+                $enum->value => method_exists($enum, 'getLabel') ? $enum->getLabel() : $enum->name,
             ])
             ->all();
     }

@@ -17,6 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 final class StageResource extends Resource
 {
@@ -29,6 +30,11 @@ final class StageResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationParentItem = 'Seasons';
+
+    public static function getRecordTitle(?Model $record): ?string
+    {
+        return $record?->name?->getLabel();
+    }
 
     public static function form(Schema $schema): Schema
     {

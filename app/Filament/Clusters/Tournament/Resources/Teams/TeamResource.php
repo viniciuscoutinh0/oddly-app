@@ -42,15 +42,17 @@ class TeamResource extends Resource
                         JS),
 
                 Components\TextInput::make('short_name')
+                    ->label('Nome Curto')
                     ->required()
-                    ->maxLength(30),
+                    ->maxLength(60),
 
                 Components\TextInput::make('tla')
-                    ->label('TCL')
+                    ->label('TLA')
                     ->required()
-                    ->maxLength(3),
+                    ->maxLength(4),
 
                 Components\TextInput::make('logo_url')
+                    ->label('Logo')
                     ->required()
                     ->url()
                     ->prefixIcon(Heroicon::Link)
@@ -61,11 +63,19 @@ class TeamResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Team')
             ->columns([
-                Columns\TextColumn::make('Team')
+                Columns\ImageColumn::make('logo_url')
+                    ->label('')
+                    ->circular(),
+
+                Columns\TextColumn::make('name')
                     ->label('Nome')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+
+                Columns\TextColumn::make('tla')
+                    ->label('TLA')
+                    ->badge(),
             ])
             ->filters([
                 //

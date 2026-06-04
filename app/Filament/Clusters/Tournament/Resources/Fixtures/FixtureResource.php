@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class FixtureResource extends Resource
 {
@@ -23,7 +24,18 @@ class FixtureResource extends Resource
 
     protected static ?string $cluster = TournamentCluster::class;
 
-    protected static ?string $recordTitleAttribute = 'name';
+    public static function getRecordTitle(?Model $record): ?string
+    {
+        if (! $record instanceof Fixture) {
+            return null;
+        }
+
+        return sprintf(
+            '%s x %s',
+            $record->homeTeam?->name ?? 'A definir',
+            $record->awayTeam?->name ?? 'A definir',
+        );
+    }
 
     public static function form(Schema $schema): Schema
     {

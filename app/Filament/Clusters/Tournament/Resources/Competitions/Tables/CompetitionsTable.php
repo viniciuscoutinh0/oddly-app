@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Clusters\Tournament\Resources\Competitions\Tables;
 
-use App\Enums\Competition\Type;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -28,8 +27,7 @@ final class CompetitionsTable
 
                 Columns\TextColumn::make('type')
                     ->label('Tipo')
-                    ->badge()
-                    ->formatStateUsing(fn (Type $state): string => $state->label()),
+                    ->badge(),
 
                 Columns\TextColumn::make('seasons_count')
                     ->label('Edições')
