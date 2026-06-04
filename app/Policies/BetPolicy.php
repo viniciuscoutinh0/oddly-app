@@ -11,9 +11,8 @@ final class BetPolicy
 {
     public function update(User $user, Bet $bet): bool
     {
-        $fixture = $bet->fixture;
-        $lockTime = $fixture->locked_at ?? $fixture->match_date;
+        $bet->loadMissing('fixture');
 
-        return $user->id === $bet->user_id && now()->lt($lockTime);
+        return $user->id === $bet->user_id && ! $bet->fixture->isLocked();
     }
 }

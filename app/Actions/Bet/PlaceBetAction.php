@@ -13,7 +13,7 @@ final class PlaceBetAction
 {
     public function handle(User $user, Fixture $fixture, int $homeScore, int $awayScore): Bet
     {
-        if ($this->isLocked($fixture)) {
+        if ($fixture->isLocked()) {
             throw new RuntimeException('Os palpites para este jogo estão encerrados.');
         }
 
@@ -21,12 +21,5 @@ final class PlaceBetAction
             ['fixture_id' => $fixture->id],
             ['home_score' => $homeScore, 'away_score' => $awayScore],
         );
-    }
-
-    private function isLocked(Fixture $fixture): bool
-    {
-        $lockTime = $fixture->locked_at ?? $fixture->match_date;
-
-        return now()->gte($lockTime);
     }
 }

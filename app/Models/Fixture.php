@@ -49,7 +49,7 @@ final class Fixture extends Model
 
     public function isLocked(): bool
     {
-        return $this->locked_at !== null && now()->gte($this->locked_at);
+        return now()->gte($this->locked_at ?? $this->match_date);
     }
 
     public function isFinished(): bool
