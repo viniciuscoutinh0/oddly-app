@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Clusters\Tournament\Resources\Stages;
 
 use App\Filament\Clusters\Tournament\Resources\Stages\Pages\CreateStage;
@@ -16,7 +18,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class StageResource extends Resource
+final class StageResource extends Resource
 {
     protected static ?string $model = Stage::class;
 
@@ -25,6 +27,8 @@ class StageResource extends Resource
     protected static ?string $cluster = TournamentCluster::class;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $navigationParentItem = 'Seasons';
 
     public static function form(Schema $schema): Schema
     {

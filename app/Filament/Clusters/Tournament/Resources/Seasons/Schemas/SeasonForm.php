@@ -1,28 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Clusters\Tournament\Resources\Seasons\Schemas;
 
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 
-class SeasonForm
+final class SeasonForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(1)
             ->components([
-                Select::make('competition_id')
+                Components\Select::make('competition_id')
+                    ->label('Competição')
                     ->relationship('competition', 'name')
                     ->required(),
-                DatePicker::make('start_date')
-                    ->required(),
-                DatePicker::make('end_date'),
-                Select::make('winner_id')
+
+                Grid::make()
+                    ->schema([
+                        Components\DatePicker::make('start_date')
+                            ->label('Date de Início')
+                            ->required(),
+
+                        Components\DatePicker::make('end_date')
+                            ->label('Data de Termínio'),
+                    ]),
+
+                Components\Select::make('winner_id')
+                    ->label('Campeão')
                     ->relationship('winner', 'name'),
-                TextInput::make('external_id')
-                    ->numeric(),
             ]);
     }
 }

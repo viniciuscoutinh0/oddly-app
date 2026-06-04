@@ -24,7 +24,7 @@ class SeasonsTable
                     ->sortable(),
 
                 TextColumn::make('end_date')
-                    ->label('Data de Termíno')
+                    ->label('Data de Termínio')
                     ->date()
                     ->sortable(),
 

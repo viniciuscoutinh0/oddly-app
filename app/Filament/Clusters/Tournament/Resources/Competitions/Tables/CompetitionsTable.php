@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Clusters\Tournament\Resources\Competitions\Tables;
 
 use App\Enums\Competition\Type;
@@ -9,7 +11,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns;
 use Filament\Tables\Table;
 
-class CompetitionsTable
+final class CompetitionsTable
 {
     public static function configure(Table $table): Table
     {

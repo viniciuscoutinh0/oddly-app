@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Clusters\Tournament\Resources\Competitions;
 
 use App\Filament\Clusters\Tournament\Resources\Competitions\Pages\CreateCompetition;
@@ -16,7 +18,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
-class CompetitionResource extends Resource
+final class CompetitionResource extends Resource
 {
     protected static ?string $model = Competition::class;
 
@@ -25,6 +27,8 @@ class CompetitionResource extends Resource
     protected static ?string $cluster = TournamentCluster::class;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
