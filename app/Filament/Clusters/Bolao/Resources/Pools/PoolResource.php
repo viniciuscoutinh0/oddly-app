@@ -7,6 +7,7 @@ namespace App\Filament\Clusters\Bolao\Resources\Pools;
 use App\Filament\Clusters\Bolao\BolaoCluster;
 use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ListPools;
 use App\Filament\Clusters\Bolao\Resources\Pools\Pages\ViewPool;
+use App\Filament\Clusters\Bolao\Resources\Pools\RelationManagers\ParticipantsRelationManager;
 use App\Filament\Clusters\Bolao\Resources\Pools\Schemas\PoolInfolist;
 use App\Filament\Clusters\Bolao\Resources\Pools\Tables\PoolsTable;
 use App\Models\Pool;
@@ -38,6 +39,13 @@ final class PoolResource extends Resource
     public static function table(Table $table): Table
     {
         return PoolsTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            ParticipantsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
