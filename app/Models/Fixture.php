@@ -6,12 +6,15 @@ namespace App\Models;
 
 use App\Enums\Fixture\Duration;
 use App\Enums\Fixture\Status;
+use App\Observers\FixtureObserver;
 use Database\Factories\FixtureFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy(FixtureObserver::class)]
 final class Fixture extends Model
 {
     /** @use HasFactory<FixtureFactory> */
