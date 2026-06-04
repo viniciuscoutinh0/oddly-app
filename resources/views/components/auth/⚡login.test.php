@@ -17,14 +17,14 @@ it('should display login form with email and password fields', function (): void
         ->assertSee('password');
 });
 
-it('should redirect authenticated users to home page', function (): void {
+it('should redirect authenticated users to dashboard', function (): void {
     $user = App\Models\User::factory()->create();
 
     $response = actingAs($user);
 
     $response->get(uri: route('login'))
         ->assertStatus(302)
-        ->assertRedirect(uri: route('static.home'));
+        ->assertRedirect(uri: route('dashboard'));
 });
 
 it('should require email and password fields', function (): void {
