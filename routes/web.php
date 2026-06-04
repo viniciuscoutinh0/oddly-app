@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard;
+use App\Livewire\Pools\Bets;
 use App\Livewire\Pools\Browse;
 use App\Livewire\Pools\Create;
 use App\Livewire\Pools\Show;
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/pools', Browse::class)->name('pools.index');
     Route::get('/pools/create', Create::class)->name('pools.create');
     Route::get('/pools/{pool:slug}', Show::class)->name('pools.show');
+    Route::get('/pools/{pool:slug}/bets', Bets::class)->name('pools.bets');
 });
 
 Route::post('/logout', function (Request $request) {
