@@ -10,6 +10,7 @@ use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,5 +50,12 @@ final class User extends Authenticatable implements FilamentUser
     public function ownedPools(): HasMany
     {
         return $this->hasMany(Pool::class, 'owner_id');
+    }
+
+    public function pools(): BelongsToMany
+    {
+        return $this->belongsToMany(Pool::class, 'pool_user')
+            ->withPivot('joined_at')
+            ->withTimestamps();
     }
 }
