@@ -8,6 +8,7 @@ use App\Livewire\Pools\Bets;
 use App\Livewire\Pools\Browse;
 use App\Livewire\Pools\Create;
 use App\Livewire\Pools\Show;
+use App\Livewire\Pools\Standings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/pools/create', Create::class)->name('pools.create');
     Route::get('/pools/{pool:slug}', Show::class)->name('pools.show');
     Route::get('/pools/{pool:slug}/bets', Bets::class)->name('pools.bets');
+    Route::get('/pools/{pool:slug}/standings', Standings::class)->name('pools.standings');
 });
 
 Route::post('/logout', function (Request $request) {

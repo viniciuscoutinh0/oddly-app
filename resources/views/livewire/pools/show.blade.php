@@ -30,6 +30,6 @@
 
     <div class="flex gap-3">
         <flux:button :href="route('pools.bets', $pool)" variant="ghost">Palpites</flux:button>
-        <flux:button href="#" variant="ghost">Ranking</flux:button>
+        <flux:button :href="route('pools.standings', $pool)" variant="ghost">Ranking</flux:button>
     </div>
 </div>
