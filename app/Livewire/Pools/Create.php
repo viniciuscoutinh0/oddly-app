@@ -6,16 +6,21 @@ namespace App\Livewire\Pools;
 
 use App\Actions\Pool\CreatePoolAction;
 use App\Enums\Pool\Visibility;
+use App\Models\Competition;
 use App\Models\Season;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.dashboard')]
 final class Create extends Component
 {
+    #[Locked]
+    public ?Competition $competition = null;
+
     #[Validate('required|string|max:255')]
     public string $name = '';
 

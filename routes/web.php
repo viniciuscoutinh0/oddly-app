@@ -24,7 +24,7 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/pools', Browse::class)->name('pools.index');
-    Route::get('/pools/create', Create::class)->name('pools.create');
+    Route::get('/pools/create/{competition?}', Create::class)->name('pools.create');
     Route::get('/pools/{pool:slug}', Show::class)->name('pools.show');
     Route::get('/pools/{pool:slug}/bets', Bets::class)->name('pools.bets');
     Route::get('/pools/{pool:slug}/standings', Standings::class)->name('pools.standings');
@@ -37,4 +37,6 @@ Route::post('/logout', function (Request $request) {
     $request->session()->regenerateToken();
 
     return redirect()->route('static.home');
-})->middleware('auth')->name('logout');
+})
+    ->middleware('auth')
+    ->name('logout');
