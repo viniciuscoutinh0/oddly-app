@@ -96,3 +96,18 @@ it('does not save a locked fixture', function (): void {
 
     expect(Bet::where('fixture_id', $fixture->id)->exists())->toBeFalse();
 });
+
+it('shows the real result on a finished fixture', function (): void {
+    [$pool, $fixture] = poolWithFixture(fn () => [
+        'match_date' => now()->subHour(),
+        'status' => Status::Finished,
+        'home_score' => 2,
+        'away_score' => 1,
+    ]);
+    $user = User::factory()->create();
+    actingAs($user);
+    app(JoinPoolAction::class)->handle($user, $pool);
+
+    Livewire::test(Bets::class, ['pool' => $pool])
+        ->assertSee('Resultado: 2 x 1');
+});

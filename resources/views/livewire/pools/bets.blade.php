@@ -18,7 +18,13 @@
                             <flux:input type="number" min="0" class="w-16" wire:model="scores.{{ $fixture->id }}.away" :disabled="$fixture->isLocked()" />
                             <div class="flex-1">{{ $fixture->awayTeam?->name ?? 'A definir' }}</div>
                             <div class="w-40 text-sm text-zinc-500">
-                                @if ($fixture->isLocked()) Encerrado @else {{ $fixture->match_date->format('d/m H:i') }} @endif
+                                @if ($fixture->isFinished() && $fixture->home_score !== null && $fixture->away_score !== null)
+                                    Resultado: {{ $fixture->home_score }} x {{ $fixture->away_score }}
+                                @elseif ($fixture->isLocked())
+                                    Encerrado
+                                @else
+                                    {{ $fixture->match_date->format('d/m H:i') }}
+                                @endif
                             </div>
                         </div>
                     @endforeach
