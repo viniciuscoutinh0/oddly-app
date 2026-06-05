@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Observers\SeasonObserver;
+use Carbon\CarbonInterface;
 use Database\Factories\SeasonFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Carbon;
 
 #[ObservedBy(SeasonObserver::class)]
 final class Season extends Model
@@ -69,6 +71,20 @@ final class Season extends Model
     public function groupBets(): HasMany
     {
         return $this->hasMany(GroupBet::class);
+    }
+
+    public function bonusLocksAt(): ?CarbonInterface
+    {
+        $earliest = $this->fixtures()->min('fixtures.match_date');
+
+        return $earliest !== null ? Carbon::parse($earliest) : null;
+    }
+
+    public function bonusLocked(): bool
+    {
+        $at = $this->bonusLocksAt();
+
+        return $at !== null && now()->gte($at);
     }
 
     public function name(): Attribute
