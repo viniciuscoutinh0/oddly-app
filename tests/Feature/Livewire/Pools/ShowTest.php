@@ -69,3 +69,13 @@ it('does not show leave to the owner', function (): void {
 
     Livewire::test(Show::class, ['pool' => $pool])->assertDontSee('Sair do bolão');
 });
+
+it('links the palpites button to the bets page', function (): void {
+    $member = User::factory()->create();
+    actingAs($member);
+    $pool = Pool::factory()->public()->create();
+    app(JoinPoolAction::class)->handle($member, $pool);
+
+    Livewire::test(Show::class, ['pool' => $pool])
+        ->assertSee(route('pools.bets', $pool));
+});
