@@ -74,7 +74,10 @@ it('saves bets for editable fixtures', function (): void {
     Livewire::test(Bets::class, ['pool' => $pool])
         ->set("scores.{$fixture->id}.home", 2)
         ->set("scores.{$fixture->id}.away", 0)
-        ->call('save')->assertHasNoErrors();
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertSet('saved', true)
+        ->assertSee('Palpites salvos.');
 
     expect(Bet::where('user_id', $user->id)->where('fixture_id', $fixture->id)->first())
         ->not->toBeNull()->home_score->toBe(2)->away_score->toBe(0);

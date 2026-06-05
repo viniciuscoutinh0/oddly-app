@@ -23,6 +23,8 @@ final class Bets extends Component
      */
     public array $scores = [];
 
+    public bool $saved = false;
+
     private ?Collection $fixturesCache = null;
 
     public function mount(Pool $pool): void
@@ -50,6 +52,8 @@ final class Bets extends Component
 
     public function save(PlaceBetAction $action): void
     {
+        $this->saved = false;
+
         $user = auth()->user();
 
         foreach ($this->fixtures() as $fixture) {
@@ -67,13 +71,13 @@ final class Bets extends Component
             $action->handle($user, $fixture, (int) $home, (int) $away);
         }
 
-        session()->flash('status', 'Palpites salvos.');
+        $this->saved = true;
     }
 
     /**
      * @return Collection<int, Fixture>
      */
-    public function fixtures(): Collection
+    protected function fixtures(): Collection
     {
         return $this->fixturesCache ??= $this->pool->season->fixtures()
             ->with(['homeTeam', 'awayTeam', 'stage'])

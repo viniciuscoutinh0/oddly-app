@@ -1,6 +1,10 @@
 <div class="space-y-6">
     <flux:heading size="xl">{{ $pool->name }} · Palpites</flux:heading>
 
+    @if ($saved)
+        <flux:callout variant="success" class="mb-2">Palpites salvos.</flux:callout>
+    @endif
+
     <form wire:submit="save" class="space-y-8">
         @foreach ($fixtures->groupBy(fn ($fixture) => $fixture->stage->name->getLabel()) as $stageLabel => $stageFixtures)
             <flux:card>
