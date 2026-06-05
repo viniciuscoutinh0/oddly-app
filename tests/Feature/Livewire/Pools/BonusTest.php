@@ -5,9 +5,11 @@ declare(strict_types=1);
 use App\Actions\Pool\JoinPoolAction;
 use App\Livewire\Pools\Bonus;
 use App\Models\ChampionBet;
+use App\Models\Fixture;
 use App\Models\GroupBet;
 use App\Models\Pool;
 use App\Models\Season;
+use App\Models\Stage;
 use App\Models\Team;
 use App\Models\User;
 
@@ -64,8 +66,32 @@ it('prefills existing bonus predictions', function (): void {
     GroupBet::factory()->for($season)->create([
         'user_id' => $user->id, 'group_letter' => 'A', 'predicted_position' => 1, 'team_id' => $a->id,
     ]);
+    GroupBet::factory()->for($season)->create([
+        'user_id' => $user->id, 'group_letter' => 'A', 'predicted_position' => 2, 'team_id' => $b->id,
+    ]);
 
     Livewire::test(Bonus::class, ['pool' => $pool])
         ->assertSet('championTeamId', $a->id)
-        ->assertSet('groups.A.first', $a->id);
+        ->assertSet('groups.A.first', $a->id)
+        ->assertSet('groups.A.second', $b->id);
+});
+
+it('does not save when the bonus is locked', function (): void {
+    [$pool, $season, $a, $b] = bonusPool();
+    $stage = Stage::factory()->for($season)->create();
+    Fixture::factory()->for($stage)->create(['match_date' => now()->subHour()]);
+
+    $user = User::factory()->create();
+    actingAs($user);
+    app(JoinPoolAction::class)->handle($user, $pool);
+
+    Livewire::test(Bonus::class, ['pool' => $pool])
+        ->set('championTeamId', $a->id)
+        ->set('groups.A.first', $a->id)
+        ->set('groups.A.second', $b->id)
+        ->call('save')
+        ->assertSet('saved', false);
+
+    expect(ChampionBet::where('season_id', $season->id)->exists())->toBeFalse()
+        ->and(GroupBet::where('season_id', $season->id)->exists())->toBeFalse();
 });
