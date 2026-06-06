@@ -18,9 +18,7 @@ final class CreatePoolAction
     public function handle(User $owner, array $data): Pool
     {
         return DB::transaction(function () use ($owner, $data): Pool {
-            $visibility = $data['visibility'] instanceof Visibility
-                ? $data['visibility']
-                : Visibility::from($data['visibility']);
+            $visibility = $data['visibility'];
 
             $pool = Pool::create([
                 'name' => $data['name'],
@@ -28,7 +26,7 @@ final class CreatePoolAction
                 'description' => $data['description'] ?? null,
                 'season_id' => $data['season_id'],
                 'owner_id' => $owner->id,
-                'visibility' => $visibility,
+                'visibility' => $data['visibility'],
                 'invite_code' => $visibility === Visibility::Private ? Str::upper(Str::random(8)) : null,
                 'points_exact' => $data['points_exact'],
                 'points_result' => $data['points_result'],
