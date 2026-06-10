@@ -17,25 +17,16 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-/**
- * Bonus predictions: tournament champion and the classified teams of each group.
- * Up to three teams advance per group; everything auto-saves on change.
- */
 #[Layout('layouts.dashboard')]
 final class Bonus extends Component
 {
-    private const TEAMS_PER_GROUP = 3;
+    private const TEAMS_PER_GROUP = 2;
 
     #[Locked]
     public Pool $pool;
 
     public ?int $championTeamId = null;
 
-    /**
-     * Map of group_letter => ordered list of predicted classified team ids.
-     *
-     * @var array<string, array<int, int>>
-     */
     public array $groups = [];
 
     public function mount(Pool $pool): void
@@ -177,17 +168,20 @@ final class Bonus extends Component
     {
         $season = $this->pool->season;
 
-        $this->championTeamId = $season->championBets()
+        $this->championTeamId = $season
+            ->championBets()
             ->where('user_id', Auth::id())
             ->value('team_id');
 
-        $groupBets = $season->groupBets()
+        $groupBets = $season
+            ->groupBets()
             ->where('user_id', Auth::id())
             ->get()
             ->groupBy('group_letter');
 
         foreach ($this->groupLetters as $letter) {
-            $this->groups[$letter] = $groupBets->get($letter, collect())
+            $this->groups[$letter] = $groupBets
+                ->get($letter, collect())
                 ->sortBy('predicted_position')
                 ->pluck('team_id')
                 ->map(fn (mixed $id): int => (int) $id)
