@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="p-6 flex-1 min-w-0 flex flex-col justify-center">
+    <div class="p-4 md:p-6 flex-1 min-w-0 flex flex-col justify-center">
         <flux:heading
             size="xl"
             title="{{ $pool->name }}"

@@ -80,7 +80,7 @@
         <div class="lg:col-span-1 space-y-6">
             @can('seeInviteCode', $pool)
                 <div
-                    class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-6"
+                    class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6"
                     x-data="{ copied: false, copy() { navigator.clipboard.writeText(@js($pool->invite_code)); this.copied = true; setTimeout(() => this.copied = false, 2000); } }"
                 >
                     <div class="flex items-center gap-3 mb-4">
@@ -112,7 +112,7 @@
                 </div>
             @endcan
 
-            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-6">
+            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
                 <div class="flex items-center gap-3 mb-6">
                     <x-heroicon-m-information-circle class="text-zinc-400 w-5 h-5 shrink-0" />
                     <flux:heading size="lg">Informações</flux:heading>
@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-6">
+            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
                 <div class="flex items-center gap-3 mb-6">
                     <x-heroicon-m-shield-check class="text-zinc-400 w-5 h-5 shrink-0" />
                     <flux:heading size="lg">Regras de Pontuação</flux:heading>

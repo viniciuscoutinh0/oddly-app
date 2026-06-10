@@ -16,6 +16,56 @@
             {{ $fixture->group_letter ? 'Grupo ' . $fixture->group_letter : $group }}
         </flux:text>
 
+        @if (!$fixture->isFinished() && filled($fixture->locked_at))
+            <div
+                x-data="{
+                    target: {{ $fixture->locked_at->timestamp }} * 1000,
+                    expired: false,
+                    label: '',
+                    tick() {
+                        const diff = this.target - Date.now();
+
+                        if (diff <= 0) {
+                            this.expired = true;
+                            this.label = 'Encerrado';
+                            return;
+                        }
+
+                        const s = Math.floor(diff / 1000);
+                        const d = Math.floor(s / 86400);
+                        const h = Math.floor((s % 86400) / 3600);
+                        const m = Math.floor((s % 3600) / 60);
+                        const sec = s % 60;
+
+                        this.label = d > 0 ?
+                            `${d}d ${h}h ${m}m` :
+                            `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+                    },
+                    init() {
+                        this.tick();
+
+                        const id = setInterval(() => {
+                            this.tick();
+                            if (this.expired) clearInterval(id);
+                        }, 1000);
+                    },
+                }"
+                class="flex items-center gap-1.5"
+            >
+                <flux:icon.clock
+                    class="w-3.5 h-3.5 shrink-0"
+                    variant="micro"
+                    ::class="expired ? 'text-red-400' : 'text-zinc-400'"
+                />
+
+                <flux:text
+                    class="text-xs font-medium tabular-nums"
+                    ::class="expired ? 'text-red-400' : 'text-white'"
+                    x-text="label"
+                />
+            </div>
+        @endif
+
         <flux:badge
             size="sm"
             :color="$fixture->status->fluxColor()"
@@ -27,11 +77,11 @@
     <div
         x-data="{
             home: $wire.entangle('scores.{{ $fixture->id }}.home'),
-        
+
             away: $wire.entangle('scores.{{ $fixture->id }}.away'),
-        
+
             save: Alpine.debounce(function() { $wire.save({{ $fixture->id }}, this.home ?? 0, this.away ?? 0) }, 800),
-        
+
             init() {
                 this.$watch('home', () => this.save())
                 this.$watch('away', () => this.save())
@@ -83,9 +133,11 @@
     @if ($result)
         <div class="flex items-center justify-center gap-2 border-t border-zinc-800 bg-zinc-950/40 px-3 py-2">
             <flux:text class="text-sm font-medium text-white">
-                {{-- blade-formatter-disable --}}
-                Resultado: {{ $result['home'] }} x {{ $result['away'] }}@if ($fixture->duration !== Duration::Regular) ({{ $fixture->duration->getLabel() }})@endif
-                {{-- blade-formatter-enable --}}
+                Resultado: {{ $result['home'] }} x {{ $result['away'] }}
+
+                @if ($fixture->duration !== Duration::Regular)
+                    ({{ $fixture->duration->getLabel() }})
+                @endif
             </flux:text>
         </div>
     @endif

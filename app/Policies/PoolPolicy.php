@@ -41,7 +41,7 @@ final class PoolPolicy
 
     public function seeInviteCode(User $user, Pool $pool): bool
     {
-        return $pool->invite_code !== null && ($pool->isOwner($user) || $pool->hasParticipant($user));
+        return $pool->invite_code !== null && $pool->isOwner($user);
     }
 
     public function leave(User $user, Pool $pool): bool

@@ -1,4 +1,4 @@
-<div class="space-y-12">
+<div class="space-y-8">
     <div class="mb-6">
         <flux:heading size="xl">
             Criar um novo bolão
@@ -14,7 +14,7 @@
             @foreach ($this->competitions as $competition)
                 <a
                     href="{{ route('pools.create', ['competition' => $competition->id]) }}"
-                    class="border flex flex-col gap-4 p-6 items-center justify-center text-center border-zinc-800 bg-zinc-900 rounded-xl overflow-hidden transition duration-75 hover:border-accent cursor-pointer"
+                    class="border flex flex-col gap-4 p-4 md:p-6 items-center justify-center text-center border-zinc-800 bg-zinc-900 rounded-xl overflow-hidden transition duration-75 hover:border-accent cursor-pointer"
                     wire:key="competiton-{{ $competition->id }}"
                 >
                     <div class="flex flex-col items-center gap-3">

@@ -1,4 +1,4 @@
-<div class="space-y-12">
+<div class="space-y-8">
     <div>
         <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
             <div>
@@ -33,7 +33,7 @@
             wire:submit="create"
         >
             <div class="grid grid-cols-1 lg:grid-cols-2 items-start gap-6">
-                <div class="bg-zinc-900 border p-6 border-zinc-800 text-white rounded-xl">
+                <div class="bg-zinc-900 border p-4 md:p-6 border-zinc-800 text-white rounded-xl">
                     <flux:fieldset>
                         <flux:legend class="mb-6">
                             Informações Básicas
@@ -151,7 +151,7 @@
                     </flux:fieldset>
                 </div>
 
-                <div class="bg-zinc-900 border p-6 border-zinc-800 text-white rounded-xl">
+                <div class="bg-zinc-900 border p-4 md:p-6 border-zinc-800 text-white rounded-xl">
                     <flux:fieldset>
                         <flux:legend class="mb-6">
                             Configuração de Pontuação

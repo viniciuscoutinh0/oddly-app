@@ -1,4 +1,4 @@
-<div class="space-y-12">
+<div class="space-y-8">
     <div class="flex flex-col md:flex-row gap-6 md:items-center justify-between mb-6">
         <div class="shrink-0">
             <flux:heading size="xl">

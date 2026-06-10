@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="space-y-8">
     <flux:callout
         variant="warning"
         icon="exclamation-circle"
@@ -6,7 +6,7 @@
     />
 
     <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl mb-6 overflow-hidden">
-        <div class="p-6">
+        <div class="p-4 md:p-6 overflow-x-auto">
             <flux:table>
                 <flux:table.columns>
                     <flux:table.column>#</flux:table.column>

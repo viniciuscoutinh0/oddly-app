@@ -4,7 +4,7 @@
     </div>
 
     <div
-        class="relative flex flex-col justify-center p-6 gap-4 bg-accent text-white overflow-hidden rounded-t-[calc(0.75rem-1px)]">
+        class="relative flex flex-col justify-center p-4 md:p-6 gap-4 bg-accent text-white overflow-hidden rounded-t-[calc(0.75rem-1px)]">
         <flux:heading size="xl">
             Entrar com convite
         </flux:heading>
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <flux:field class="p-6 bg-zinc-800 relative rounded-b-[calc(0.75rem-1px)]">
+    <flux:field class="p-4 md:p-6 bg-zinc-800 relative rounded-b-[calc(0.75rem-1px)]">
         <flux:label
             for="code"
             badge="Obrigátorio"

@@ -1,5 +1,5 @@
 <div
-    class="lg:col-span-2 flex flex-col items-center gap-4 text-center border border-dashed border-zinc-800 bg-zinc-900 rounded-xl p-10">
+    class="lg:col-span-2 flex flex-col items-center gap-4 text-center border border-dashed border-zinc-800 bg-zinc-900 rounded-xl p-4 md:p-6">
     <div class="w-12 h-12 rounded-md bg-zinc-800 flex items-center justify-center shrink-0">
         <x-heroicon-m-user-group class="w-6 h-6 text-accent" />
     </div>
