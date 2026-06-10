@@ -7,6 +7,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ final class AppServiceProvider extends ServiceProvider
     {
         $this->configureModels();
         $this->configureDates();
+        $this->configureHttpScheme();
     }
 
     public function configureModels(): void
@@ -33,5 +35,10 @@ final class AppServiceProvider extends ServiceProvider
     public function configureDates(): void
     {
         Date::use(CarbonImmutable::class);
+    }
+
+    private function configureHttpScheme(): void
+    {
+        URL::forceHttps(app()->isProduction());
     }
 }
