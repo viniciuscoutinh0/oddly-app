@@ -23,7 +23,8 @@
                                 :color="match($loop->iteration) {
                                     1 => 'amber',
                                     2 => 'gray',
-                                    3 => 'yellow'
+                                    3 => 'yellow',
+                                    default => null
                                 }"
                                 :icon:trailing="$loop->iteration <= 3 ? 'star' : null"
                                 rounded
