@@ -117,22 +117,12 @@ final class Bonus extends Component
         return $this->pool->season->bonusLocked();
     }
 
-    /**
-     * Season teams with their group pivot, fetched once per request.
-     *
-     * @return Collection<int, Team>
-     */
     #[Computed]
     public function allTeams(): Collection
     {
         return $this->pool->season->teams()->get();
     }
 
-    /**
-     * Season teams grouped by their group letter, ordered by letter.
-     *
-     * @return Collection<string, Collection<int, Team>>
-     */
     #[Computed]
     public function teamsByGroup(): Collection
     {
@@ -142,18 +132,12 @@ final class Bonus extends Component
             ->sortKeys();
     }
 
-    /**
-     * @return Collection<int, string>
-     */
     #[Computed]
     public function groupLetters(): Collection
     {
         return $this->teamsByGroup->keys();
     }
 
-    /**
-     * @return Collection<int, Team>
-     */
     public function teamsInGroup(string $letter): Collection
     {
         return $this->teamsByGroup->get($letter, collect())->values();
