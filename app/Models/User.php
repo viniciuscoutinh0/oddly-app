@@ -9,6 +9,7 @@ use App\Enums\User\Role;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -41,6 +42,11 @@ final class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'role' => Role::class,
         ];
+    }
+
+    public function name(): Attribute
+    {
+        return Attribute::get(fn ($value): string => (string) Str::title($value));
     }
 
     public function canAccessPanel(Panel $panel): bool

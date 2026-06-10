@@ -1,25 +1,48 @@
-<div class="space-y-8">
-    <div>
-        <flux:heading size="xl" class="mb-4">Bolões públicos</flux:heading>
+<div class="space-y-12">
+    <div class="flex flex-col md:flex-row gap-6 md:items-center justify-between mb-6">
+        <div class="shrink-0">
+            <flux:heading size="xl">
+                Bolões públicos
+            </flux:heading>
 
-        @forelse ($pools as $pool)
-            <flux:card class="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <flux:heading size="lg">{{ $pool->name }}</flux:heading>
-                    <flux:text>Temporada {{ $pool->season->name }} · {{ $pool->participants_count }} participante(s)</flux:text>
-                </div>
-                <flux:button class="w-full sm:w-auto shrink-0" wire:click="join({{ $pool->id }})" variant="primary" color="cyan">Entrar</flux:button>
-            </flux:card>
-        @empty
-            <flux:text>Nenhum bolão público ainda.</flux:text>
-        @endforelse
+            <flux:text class="mt-1">
+                Escolha uma competição e comece a competir.
+            </flux:text>
+        </div>
+
+        <flux:input
+            icon="magnifying-glass"
+            placeholder="Pesquisar bolão..."
+            autocomplete="off"
+            class="md:max-w-xs flex-1"
+            wire:model.live.debounce.250ms="search"
+        >
+            @if (filled($search))
+                <x-slot name="iconTrailing">
+                    <flux:button
+                        size="sm"
+                        variant="subtle"
+                        icon="x-mark"
+                        class="-mr-1"
+                        wire:click="$set('search', null)"
+                    />
+                </x-slot>
+            @endif
+        </flux:input>
     </div>
 
-    <div class="max-w-md">
-        <flux:heading size="lg" class="mb-2">Entrar por código</flux:heading>
-        <form wire:submit="joinByCode" class="flex gap-2 items-end">
-            <flux:input label="Código de convite" wire:model="inviteCode" />
-            <flux:button type="submit">Entrar</flux:button>
-        </form>
+    <div class="flex flex-col md:flex-row md:items-start gap-6">
+        <div class="flex-1 space-y-6">
+            @forelse ($this->pools as $pool)
+                <x-pool.card
+                    :$pool
+                    wire:key="pool-{{ $pool }}"
+                />
+            @empty
+                <x-pool.empty />
+            @endforelse
+        </div>
+
+        <livewire:pools.join />
     </div>
 </div>

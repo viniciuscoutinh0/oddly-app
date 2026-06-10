@@ -7,15 +7,21 @@ namespace App\Livewire\Pools;
 use App\Actions\Pool\JoinPoolAction;
 use App\Enums\Pool\Visibility;
 use App\Models\Pool;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 #[Layout('layouts.dashboard')]
 final class Browse extends Component
 {
+    #[Url]
+    public ?string $search = null;
+
     public function join(int $poolId, JoinPoolAction $action): void
     {
         $pool = Pool::where('visibility', Visibility::Public)->findOrFail($poolId);
@@ -25,21 +31,27 @@ final class Browse extends Component
         $this->redirectRoute('pools.show', $pool);
     }
 
-    /**
-     * @return Collection<int, Pool>
-     */
+    #[Computed]
     public function pools(): Collection
     {
         return Pool::query()
             ->where('visibility', Visibility::Public)
             ->withCount('participants')
-            ->with('season')
+            ->with('season.competition')
+            ->when($this->search, fn (Builder $query, string $value): Builder => $query->whereLike(
+                'name',
+                '%'.$value.'%',
+            ))
             ->latest()
-            ->get();
+            ->get([
+                'id',
+                'name',
+                'season',
+            ]);
     }
 
     public function render(): View
     {
-        return view('livewire.pools.browse', ['pools' => $this->pools()]);
+        return view('livewire.pools.browse');
     }
 }

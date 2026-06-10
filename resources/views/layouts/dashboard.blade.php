@@ -10,11 +10,16 @@
         <div class="flex-1 flex flex-col min-w-0 h-full">
             <x-navbar />
 
-            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10">
-                <div class="max-w-7xl mx-auto w-full space-y-6">
-                    {{ $slot }}
+            <flux:main
+                container
+                class="overflow-y-auto"
+            >
+                <div class="flex max-md:flex-col items-start">
+                    <div class="flex-1 max-md:pt-6 self-stretch">
+                        {{ $slot }}
+                    </div>
                 </div>
-            </main>
+            </flux:main>
         </div>
     </div>
 </x-partials.body>

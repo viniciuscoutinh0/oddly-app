@@ -24,9 +24,9 @@
             Dashboard
         </flux:navbar.item>
 
-        {{-- <flux:navbar.item :href="route('pools.index')">
+        <flux:navbar.item :href="route('pools.index')">
             Bolões
-        </flux:navbar.item> --}}
+        </flux:navbar.item>
     </flux:navbar>
 
     <flux:spacer />

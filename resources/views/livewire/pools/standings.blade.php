@@ -22,25 +22,23 @@
                             <flux:badge
                                 :color="match($loop->iteration) {
                                     1 => 'amber',
-                                    2 => 'gray',
-                                    3 => 'yellow',
+                                    2 => 'zinc',
+                                    3 => 'orange',
                                     default => null
                                 }"
-                                :icon:trailing="$loop->iteration <= 3 ? 'star' : null"
-                                rounded
-
+                                :icon="$loop->iteration <= 3 ? 'star' : null"
                                 inset="top bottom"
                             >
-                                {{ $loop->iteration  }}
+                                {{ $loop->iteration  }}º
                             </flux:badge>
-                        {{-- blade-formatter-enable --}}
+                                {{-- blade-formatter-enable --}}
                             </flux:table.cell>
                             <flux:table.cell class="flex items-center gap-3">
                                 <flux:avatar
                                     size="xs"
                                     initials="{{ $standing->initials }}"
                                 />
-                                {{ $standing->name }}
+                                <flux:text variant="strong">{{ $standing->name }}</flux:text>
                             </flux:table.cell>
                             <flux:table.cell>{{ $standing->points }}</flux:table.cell>
                         </flux:table.row>

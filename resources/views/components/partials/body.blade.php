@@ -1,4 +1,4 @@
-<body class="antialiased relative bg-zinc-950 text-white text-base">
+<body class="antialiased relative bg-zinc-900/30 text-white text-base">
     {{ $slot }}
 
     @persist('toast')

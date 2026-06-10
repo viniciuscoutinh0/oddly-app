@@ -21,18 +21,12 @@
      </flux:sidebar.header>
 
      <flux:sidebar.nav>
-         <flux:sidebar.item
-             icon="squares-2x2"
-             :href="route('dashboard')"
-         >
+         <flux:sidebar.item :href="route('dashboard')">
              Dashboard
          </flux:sidebar.item>
 
-         {{-- <flux:sidebar.item
-             icon="user-group"
-             :href="route('pools.index')"
-         >
+         <flux:sidebar.item :href="route('pools.index')">
              Bolões
-         </flux:sidebar.item> --}}
+         </flux:sidebar.item>
      </flux:sidebar.nav>
  </flux:sidebar>
