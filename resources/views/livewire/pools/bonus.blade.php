@@ -43,7 +43,7 @@
             variant="subtle"
             class="mb-4 block text-sm"
         >
-            Selecione até 3 times que avançam em cada grupo.
+            Selecione até 2 times que avançam em cada grupo.
         </flux:text>
 
         @foreach ($this->groupLetters as $letter)
@@ -64,9 +64,9 @@
 
                     <flux:badge
                         size="sm"
-                        :color="$selectedCount === 3 ? 'green' : 'zinc'"
+                        :color="$selectedCount === 2 ? 'green' : 'zinc'"
                     >
-                        {{ $selectedCount }}/3
+                        {{ $selectedCount }}/2
                     </flux:badge>
                 </div>
 
