@@ -13,7 +13,7 @@ use App\Models\Season;
 use App\Models\Stage;
 use App\Models\Team;
 use App\Models\User;
-use App\Services\PoolStandings;
+use App\Services\Pool\PoolStandings;
 
 it('resolves fixture, champion, and group bets for the pool season', function (): void {
     $season = Season::factory()->create();
@@ -52,7 +52,7 @@ it('resolves fixture, champion, and group bets for the pool season', function ()
     expect($bet->refresh()->is_exact)->toBeTrue()
         ->and($championBet->refresh()->is_correct)->toBeTrue()
         ->and($groupBet->refresh()->is_correct)->toBeTrue()
-        ->and(app(PoolStandings::class)->for($pool)->first()['points'])->toBe(38);
+        ->and(app(PoolStandings::class)->for($pool)->first()->points)->toBe(38);
 });
 
 it('is idempotent', function (): void {
@@ -72,5 +72,5 @@ it('is idempotent', function (): void {
     $action->handle($pool);
     $action->handle($pool);
 
-    expect(app(PoolStandings::class)->for($pool)->first()['points'])->toBe($pool->points_exact);
+    expect(app(PoolStandings::class)->for($pool)->first()->points)->toBe($pool->points_exact);
 });

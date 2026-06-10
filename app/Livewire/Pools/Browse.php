@@ -8,44 +8,19 @@ use App\Actions\Pool\JoinPoolAction;
 use App\Enums\Pool\Visibility;
 use App\Models\Pool;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use InvalidArgumentException;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.dashboard')]
 final class Browse extends Component
 {
-    #[Validate('nullable|string')]
-    public string $inviteCode = '';
-
     public function join(int $poolId, JoinPoolAction $action): void
     {
         $pool = Pool::where('visibility', Visibility::Public)->findOrFail($poolId);
 
-        $action->handle(auth()->user(), $pool);
-
-        $this->redirectRoute('pools.show', $pool);
-    }
-
-    public function joinByCode(JoinPoolAction $action): void
-    {
-        $pool = Pool::where('invite_code', $this->inviteCode)->first();
-
-        if ($pool === null) {
-            $this->addError('inviteCode', 'Código de convite inválido.');
-
-            return;
-        }
-
-        try {
-            $action->handle(auth()->user(), $pool, $this->inviteCode);
-        } catch (InvalidArgumentException $e) {
-            $this->addError('inviteCode', $e->getMessage());
-
-            return;
-        }
+        $action->handle(Auth::user(), $pool);
 
         $this->redirectRoute('pools.show', $pool);
     }

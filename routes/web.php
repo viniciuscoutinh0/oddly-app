@@ -1,17 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+use App\Http\Controllers\Auth\LogoutController;
 use App\Livewire\Auth\Register;
 use App\Livewire\Dashboard;
-use App\Livewire\Pools\Bets;
-use App\Livewire\Pools\Bonus;
 use App\Livewire\Pools\Browse;
 use App\Livewire\Pools\Create;
 use App\Livewire\Pools\Show;
-use App\Livewire\Pools\Standings;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'static.home')->name('static.home');
@@ -22,19 +16,13 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
+    Route::get('/logout', LogoutController::class)->name('logout');
+
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
-    Route::get('/pools', Browse::class)->name('pools.index');
-    Route::get('/pools/create', Create::class)->name('pools.create');
-    Route::get('/pools/{pool:slug}', Show::class)->name('pools.show');
-    Route::get('/pools/{pool:slug}/bets', Bets::class)->name('pools.bets');
-    Route::get('/pools/{pool:slug}/standings', Standings::class)->name('pools.standings');
-    Route::get('/pools/{pool:slug}/bonus', Bonus::class)->name('pools.bonus');
+
+    Route::group(['prefix' => 'pools', 'as' => 'pools.'], function (): void {
+        Route::get('/', Browse::class)->name('index');
+        Route::get('/create/{competition?}', Create::class)->name('create');
+        Route::get('/{pool}', Show::class)->name('show');
+    });
 });
-
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    return redirect()->route('static.home');
-})->middleware('auth')->name('logout');

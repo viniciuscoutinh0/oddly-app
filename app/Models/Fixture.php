@@ -76,6 +76,22 @@ final class Fixture extends Model
     }
 
     /**
+     * Final score pair to display, honouring the duration. Null until finished.
+     *
+     * @return array{home: int, away: int}|null
+     */
+    public function finalScore(): ?array
+    {
+        if (! $this->isFinished()) {
+            return null;
+        }
+
+        [$home, $away] = $this->decisiveScores();
+
+        return ['home' => $home, 'away' => $away];
+    }
+
+    /**
      * Resolve the score pair that decides the result, honouring the duration.
      *
      * @return array{0: int, 1: int}

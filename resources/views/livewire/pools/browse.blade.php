@@ -3,12 +3,12 @@
         <flux:heading size="xl" class="mb-4">Bolões públicos</flux:heading>
 
         @forelse ($pools as $pool)
-            <flux:card class="mb-4 flex items-center justify-between">
+            <flux:card class="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <flux:heading size="lg">{{ $pool->name }}</flux:heading>
                     <flux:text>Temporada {{ $pool->season->name }} · {{ $pool->participants_count }} participante(s)</flux:text>
                 </div>
-                <flux:button wire:click="join({{ $pool->id }})" variant="primary" color="cyan">Entrar</flux:button>
+                <flux:button class="w-full sm:w-auto shrink-0" wire:click="join({{ $pool->id }})" variant="primary" color="cyan">Entrar</flux:button>
             </flux:card>
         @empty
             <flux:text>Nenhum bolão público ainda.</flux:text>

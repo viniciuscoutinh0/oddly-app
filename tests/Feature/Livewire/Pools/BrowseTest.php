@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Livewire\Pools\Browse;
 use App\Models\Pool;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;
 
@@ -26,25 +28,5 @@ it('joins a public pool and adds the user', function (): void {
         ->call('join', $pool->id)
         ->assertHasNoErrors();
 
-    expect($pool->participants()->whereKey(auth()->id())->exists())->toBeTrue();
-});
-
-it('joins a private pool with the correct invite code', function (): void {
-    $pool = Pool::factory()->create(['invite_code' => 'SECRET12']);
-
-    Livewire::test(Browse::class)
-        ->set('inviteCode', 'SECRET12')
-        ->call('joinByCode')
-        ->assertHasNoErrors();
-
-    expect($pool->participants()->whereKey(auth()->id())->exists())->toBeTrue();
-});
-
-it('shows an error for a wrong invite code', function (): void {
-    Pool::factory()->create(['invite_code' => 'SECRET12']);
-
-    Livewire::test(Browse::class)
-        ->set('inviteCode', 'WRONG')
-        ->call('joinByCode')
-        ->assertHasErrors('inviteCode');
+    expect($pool->participants()->whereKey(Auth::id())->exists())->toBeTrue();
 });

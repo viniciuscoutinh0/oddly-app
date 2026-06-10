@@ -7,9 +7,10 @@ namespace App\Enums\Pool;
 use App\Enums\Concerns\HasCases;
 use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
-enum Visibility: string implements HasColor, HasLabel
+enum Visibility: string implements HasColor, HasLabel, HasIcon
 {
     use HasCases;
 
@@ -29,6 +30,22 @@ enum Visibility: string implements HasColor, HasLabel
         return match ($this) {
             self::Public => Color::Green,
             self::Private => Color::Gray,
+        };
+    }
+
+    public function getIcon(): string
+    {
+        return match ($this) {
+            self::Public => 'globe-alt',
+            self::Private => 'lock-closed',
+        };
+    }
+
+    public function getDescription(): string
+    {
+        return match ($this) {
+            self::Public => 'Qualquer usuário pode ver e participar',
+            self::Private => 'Disponível apenas via link ou convite',
         };
     }
 }

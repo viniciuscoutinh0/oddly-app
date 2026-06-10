@@ -4,52 +4,43 @@ declare(strict_types=1);
 
 namespace App\Livewire\Pools;
 
-use App\Actions\Pool\LeavePoolAction;
 use App\Models\Pool;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 #[Layout('layouts.dashboard')]
 final class Show extends Component
 {
+    #[Locked]
     public Pool $pool;
 
     public function mount(Pool $pool): void
     {
-        abort_unless(Gate::allows('view', $pool), 403);
+        abort_unless(Gate::allows('view', $pool), code: 403);
 
-        $this->pool = $pool->load('season', 'participants', 'owner');
+        $this->pool = $pool
+            ->load(['season.competition', 'owner'])
+            ->loadCount('participants');
     }
 
-    public function isMember(): bool
+    /**
+     * When the bonus predictions lock (kick-off of the earliest fixture).
+     */
+    #[Computed]
+    public function bonusLocksAt(): ?CarbonInterface
     {
-        return $this->pool->participants->contains(auth()->id());
+        return $this->pool->season->bonusLocksAt();
     }
 
-    public function isOwner(): bool
+    #[Computed]
+    public function bonusLocked(): bool
     {
-        return $this->pool->owner_id === auth()->id();
-    }
-
-    public function canSeeInviteCode(): bool
-    {
-        return $this->pool->invite_code !== null && ($this->isOwner() || $this->isMember());
-    }
-
-    public function canLeave(): bool
-    {
-        return ! $this->isOwner() && $this->isMember();
-    }
-
-    public function leave(LeavePoolAction $action): void
-    {
-        abort_unless($this->canLeave(), 403);
-
-        $action->handle(auth()->user(), $this->pool);
-
-        $this->redirectRoute('dashboard');
+        return $this->bonusLocksAt !== null && now()->gte($this->bonusLocksAt);
     }
 
     public function render(): View

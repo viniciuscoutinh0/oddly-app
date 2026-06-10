@@ -12,8 +12,8 @@
                 @forelse ($this->standings as $index => $row)
                     <tr class="border-t border-gray-100 dark:border-white/5">
                         <td class="px-4 py-3">{{ $index + 1 }}</td>
-                        <td class="px-4 py-3">{{ $row['user']->name }}</td>
-                        <td class="px-4 py-3 text-right font-semibold">{{ $row['points'] }}</td>
+                        <td class="px-4 py-3">{{ $row->name }}</td>
+                        <td class="px-4 py-3 text-right font-semibold">{{ $row->points }}</td>
                     </tr>
                 @empty
                     <tr>

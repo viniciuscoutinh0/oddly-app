@@ -13,7 +13,6 @@ use App\Models\Team;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
 
 function poolWithFixture(?callable $fixtureState = null): array
 {
@@ -31,11 +30,6 @@ function poolWithFixture(?callable $fixtureState = null): array
 
     return [$pool, $fixture];
 }
-
-it('redirects guests to login', function (): void {
-    [$pool] = poolWithFixture();
-    get("/pools/{$pool->slug}/bets")->assertRedirect(route('login'));
-});
 
 it('forbids a non-participant', function (): void {
     [$pool] = poolWithFixture();
@@ -72,12 +66,8 @@ it('saves bets for editable fixtures', function (): void {
     app(JoinPoolAction::class)->handle($user, $pool);
 
     Livewire::test(Bets::class, ['pool' => $pool])
-        ->set("scores.{$fixture->id}.home", 2)
-        ->set("scores.{$fixture->id}.away", 0)
-        ->call('save')
-        ->assertHasNoErrors()
-        ->assertSet('saved', true)
-        ->assertSee('Palpites salvos.');
+        ->call('save', $fixture->id, 2, 0)
+        ->assertHasNoErrors();
 
     expect(Bet::where('user_id', $user->id)->where('fixture_id', $fixture->id)->first())
         ->not->toBeNull()->home_score->toBe(2)->away_score->toBe(0);
@@ -90,9 +80,8 @@ it('does not save a locked fixture', function (): void {
     app(JoinPoolAction::class)->handle($user, $pool);
 
     Livewire::test(Bets::class, ['pool' => $pool])
-        ->set("scores.{$fixture->id}.home", 2)
-        ->set("scores.{$fixture->id}.away", 0)
-        ->call('save')->assertHasNoErrors();
+        ->call('save', $fixture->id, 2, 0)
+        ->assertHasNoErrors();
 
     expect(Bet::where('fixture_id', $fixture->id)->exists())->toBeFalse();
 });

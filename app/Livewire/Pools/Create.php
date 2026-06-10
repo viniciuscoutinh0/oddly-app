@@ -6,59 +6,68 @@ namespace App\Livewire\Pools;
 
 use App\Actions\Pool\CreatePoolAction;
 use App\Enums\Pool\Visibility;
+use App\Livewire\Forms\PoolForm;
+use App\Models\Competition;
 use App\Models\Season;
+use Flux\Flux;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.dashboard')]
 final class Create extends Component
 {
-    #[Validate('required|string|max:255')]
-    public string $name = '';
+    public PoolForm $form;
 
-    public ?string $description = null;
-
-    #[Validate('required|exists:seasons,id')]
-    public ?int $season_id = null;
-
-    #[Validate('required')]
-    public string $visibility = 'private';
-
-    #[Validate('required|integer|min:0')]
-    public int $points_exact = 10;
-
-    #[Validate('required|integer|min:0')]
-    public int $points_result = 5;
-
-    #[Validate('required|integer|min:0')]
-    public int $points_champion = 25;
-
-    #[Validate('required|integer|min:0')]
-    public int $points_group_position = 3;
+    public function mount(?Competition $competition = null): void
+    {
+        $this->form->setCompetition($competition);
+    }
 
     public function create(CreatePoolAction $action): void
     {
-        $data = $this->validate();
-        $data['visibility'] = Visibility::from($this->visibility);
+        $data = $this->form->validate();
 
-        $pool = $action->handle(auth()->user(), $data);
+        $pool = $action->handle(Auth::user(), $data);
 
-        $this->redirectRoute('pools.show', $pool);
+        Flux::toast(
+            heading: 'Bolão criado! 🏆',
+            text: 'O grupo "'.$pool->name.'" está pronto. Hora de convidar a galera!',
+            variant: 'success',
+        );
+
+        $this->redirectRoute('pools.show', $pool, navigate: true);
     }
 
-    /**
-     * @return Collection<int, Season>
-     */
+    #[Computed]
+    public function competitions(): Collection
+    {
+        return Competition::query()->get(['id', 'name']);
+    }
+
+    #[Computed]
     public function seasons(): Collection
     {
-        return Season::query()->get();
+        return Season::query()
+            ->when($this->form->competition_id, fn (Builder $query, int $id): Builder => $query->where(
+                'competition_id',
+                $id,
+            ))
+            ->get();
+    }
+
+    #[Computed]
+    public function visibilities(): array
+    {
+        return Visibility::cases();
     }
 
     public function render(): View
     {
-        return view('livewire.pools.create', ['seasons' => $this->seasons()]);
+        return view('livewire.pools.create');
     }
 }

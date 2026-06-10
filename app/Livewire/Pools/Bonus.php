@@ -5,95 +5,159 @@ declare(strict_types=1);
 namespace App\Livewire\Pools;
 
 use App\Actions\Bet\PlaceChampionBetAction;
-use App\Actions\Bet\PlaceGroupBetAction;
+use App\Actions\Bet\SyncGroupBetsAction;
 use App\Models\Pool;
 use App\Models\Team;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
+/**
+ * Bonus predictions: tournament champion and the classified teams of each group.
+ * Up to three teams advance per group; everything auto-saves on change.
+ */
 #[Layout('layouts.dashboard')]
 final class Bonus extends Component
 {
+    private const TEAMS_PER_GROUP = 3;
+
+    #[Locked]
     public Pool $pool;
 
     public ?int $championTeamId = null;
 
     /**
-     * @var array<string, array{first: int|null, second: int|null}>
+     * Map of group_letter => ordered list of predicted classified team ids.
+     *
+     * @var array<string, array<int, int>>
      */
     public array $groups = [];
 
-    public bool $saved = false;
-
     public function mount(Pool $pool): void
     {
-        abort_unless($pool->participants()->whereKey(auth()->id())->exists(), 403);
+        abort_unless(Gate::allows('bet', $pool), code: 403);
 
-        $pool->loadMissing('season');
-        $this->pool = $pool;
+        $this->pool = $pool->loadMissing('season');
 
-        $season = $pool->season;
-
-        $this->championTeamId = $season->championBets()
-            ->where('user_id', auth()->id())
-            ->value('team_id');
-
-        $groupBets = $season->groupBets()->where('user_id', auth()->id())->get();
-
-        foreach ($this->groupLetters() as $letter) {
-            $this->groups[$letter] = [
-                'first' => $groupBets->first(fn ($bet): bool => $bet->group_letter === $letter && $bet->predicted_position === 1)?->team_id,
-                'second' => $groupBets->first(fn ($bet): bool => $bet->group_letter === $letter && $bet->predicted_position === 2)?->team_id,
-            ];
-        }
+        $this->fillExistingPredictions();
     }
 
-    public function save(PlaceChampionBetAction $champion, PlaceGroupBetAction $group): void
+    public function updatedChampionTeamId(): void
     {
-        $this->saved = false;
+        $this->saveChampion();
+    }
 
-        if ($this->pool->season->bonusLocked()) {
+    public function updatedGroups(mixed $value, string $key): void
+    {
+        $this->saveGroup($key);
+    }
+
+    public function toggleGroup(string $letter, int $teamId): void
+    {
+        if ($this->locked) {
             return;
         }
 
-        $user = auth()->user();
-        $season = $this->pool->season;
+        $current = $this->groups[$letter] ?? [];
 
-        if ($this->championTeamId !== null) {
-            $champion->handle($user, $season, (int) $this->championTeamId);
+        if (in_array($teamId, $current, true)) {
+            $current = array_values(array_filter($current, fn (int $id): bool => $id !== $teamId));
+        } elseif (count($current) < self::TEAMS_PER_GROUP) {
+            $current[] = $teamId;
+        } else {
+            return;
         }
 
-        foreach ($this->groups as $letter => $positions) {
-            if (! empty($positions['first']) && ! empty($positions['second'])) {
-                $group->handle($user, $season, (string) $letter, [
-                    1 => (int) $positions['first'],
-                    2 => (int) $positions['second'],
-                ]);
-            }
-        }
+        $this->groups[$letter] = $current;
 
-        $this->saved = true;
+        $this->saveGroup($letter);
     }
 
+    public function saveChampion(): void
+    {
+        if ($this->locked) {
+            return;
+        }
+
+        $season = $this->pool->season;
+
+        if ($this->championTeamId === null) {
+            $season->championBets()->where('user_id', Auth::id())->delete();
+
+            return;
+        }
+
+        if (! $this->allTeams->contains('id', $this->championTeamId)) {
+            return;
+        }
+
+        app(PlaceChampionBetAction::class)->handle(Auth::user(), $season, $this->championTeamId);
+    }
+
+    public function saveGroup(string $letter): void
+    {
+        if ($this->locked) {
+            return;
+        }
+
+        $valid = $this->teamsInGroup($letter)->pluck('id');
+
+        $teamIds = collect($this->groups[$letter] ?? [])
+            ->map(fn (mixed $id): int => (int) $id)
+            ->filter(fn (int $id): bool => $valid->contains($id))
+            ->unique()
+            ->take(self::TEAMS_PER_GROUP)
+            ->values()
+            ->all();
+
+        $this->groups[$letter] = $teamIds;
+
+        app(SyncGroupBetsAction::class)->handle(Auth::user(), $this->pool->season, $letter, $teamIds);
+    }
+
+    #[Computed]
     public function locked(): bool
     {
         return $this->pool->season->bonusLocked();
     }
 
     /**
+     * Season teams with their group pivot, fetched once per request.
+     *
+     * @return Collection<int, Team>
+     */
+    #[Computed]
+    public function allTeams(): Collection
+    {
+        return $this->pool->season->teams()->get();
+    }
+
+    /**
+     * Season teams grouped by their group letter, ordered by letter.
+     *
+     * @return Collection<string, Collection<int, Team>>
+     */
+    #[Computed]
+    public function teamsByGroup(): Collection
+    {
+        return $this->allTeams
+            ->filter(fn (Team $team): bool => filled($team->pivot->group_letter))
+            ->groupBy(fn (Team $team): string => (string) $team->pivot->group_letter)
+            ->sortKeys();
+    }
+
+    /**
      * @return Collection<int, string>
      */
+    #[Computed]
     public function groupLetters(): Collection
     {
-        return $this->pool->season->teams()
-            ->wherePivotNotNull('group_letter')
-            ->get()
-            ->pluck('pivot.group_letter')
-            ->unique()
-            ->sort()
-            ->values();
+        return $this->teamsByGroup->keys();
     }
 
     /**
@@ -101,24 +165,33 @@ final class Bonus extends Component
      */
     public function teamsInGroup(string $letter): Collection
     {
-        return $this->pool->season->teams()
-            ->wherePivot('group_letter', $letter)
-            ->get();
-    }
-
-    /**
-     * @return Collection<int, Team>
-     */
-    public function allTeams(): Collection
-    {
-        return $this->pool->season->teams()->get();
+        return $this->teamsByGroup->get($letter, collect())->values();
     }
 
     public function render(): View
     {
-        return view('livewire.pools.bonus', [
-            'groupLetters' => $this->groupLetters(),
-            'allTeams' => $this->allTeams(),
-        ]);
+        return view('livewire.pools.bonus');
+    }
+
+    private function fillExistingPredictions(): void
+    {
+        $season = $this->pool->season;
+
+        $this->championTeamId = $season->championBets()
+            ->where('user_id', Auth::id())
+            ->value('team_id');
+
+        $groupBets = $season->groupBets()
+            ->where('user_id', Auth::id())
+            ->get()
+            ->groupBy('group_letter');
+
+        foreach ($this->groupLetters as $letter) {
+            $this->groups[$letter] = $groupBets->get($letter, collect())
+                ->sortBy('predicted_position')
+                ->pluck('team_id')
+                ->map(fn (mixed $id): int => (int) $id)
+                ->all();
+        }
     }
 }

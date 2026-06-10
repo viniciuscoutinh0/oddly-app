@@ -61,23 +61,14 @@ new class extends Component {
                         wire:model="email"
                     />
 
-                    <div class="relative">
-                        <flux:input
-                            label="Senha"
-                            type="password"
-                            placeholder="sua senha secreta"
-                            required
-                            viewable
-                            wire:model="password"
-                        />
-                        <div class="absolute inset-y-0 right-0 pr-0">
-                            <flux:link
-                                href="#"
-                                variant="ghost"
-                                class="text-xs"
-                            >Esqueceu a senha?</flux:link>
-                        </div>
-                    </div>
+                    <flux:input
+                        label="Senha"
+                        type="password"
+                        placeholder="sua senha secreta"
+                        required
+                        viewable
+                        wire:model="password"
+                    />
 
                     <flux:field variant="inline">
                         <flux:checkbox wire:model="remember" />
@@ -91,11 +82,17 @@ new class extends Component {
                         color="cyan"
                         class="min-w-full"
                     >Entrar no jogo</flux:button>
+
+                    <flux:button
+                        :href="route('register')"
+                        variant="subtle"
+                        class="min-w-full"
+                    >Criar conta</flux:button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="flex-1 overflow-hidden rounded-lg p-16 max-lg:hidden">
+    <div class="flex-1 overflow-hidden rounded-xl p-16 max-lg:hidden">
         <img
             src="{{ asset('images/hero.webp') }}"
             alt="Oddly"

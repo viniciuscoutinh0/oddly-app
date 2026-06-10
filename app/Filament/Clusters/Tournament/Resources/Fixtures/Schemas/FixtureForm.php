@@ -27,9 +27,9 @@ final class FixtureForm
                         Select::make('stage_id')
                             ->label('Fase')
                             ->relationship('stage', 'id')
-                            ->getOptionLabelFromRecordUsing(
-                                fn (Stage $record): string => "{$record->season->name} - {$record->name->getLabel()}",
-                            )
+                            // ->getOptionLabelFromRecordUsing(
+                            //     fn (Stage $record): string => "{$record->season->name} - {$record->name->getLabel()}",
+                            // )
                             ->searchable()
                             ->preload()
                             ->required()

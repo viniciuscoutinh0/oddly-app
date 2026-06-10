@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 final class User extends Authenticatable implements FilamentUser
 {
@@ -59,7 +60,8 @@ final class User extends Authenticatable implements FilamentUser
 
     public function pools(): BelongsToMany
     {
-        return $this->belongsToMany(Pool::class, 'pool_user')
+        return $this
+            ->belongsToMany(Pool::class, 'pool_user')
             ->withPivot('joined_at')
             ->withTimestamps();
     }
@@ -72,5 +74,14 @@ final class User extends Authenticatable implements FilamentUser
     public function groupBets(): HasMany
     {
         return $this->hasMany(GroupBet::class);
+    }
+
+    public function initials(): string
+    {
+        return Str::of($this->name)
+            ->explode(' ')
+            ->map(fn (string $name): string => (string) Str::of($name)->substr(0, 1))
+            ->take(2)
+            ->implode('');
     }
 }

@@ -39,13 +39,29 @@ final class Pool extends Model
 
     public function participants(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'pool_user')
+        return $this
+            ->belongsToMany(User::class, 'pool_user')
             ->withPivot('joined_at')
             ->withTimestamps();
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->visibility === Visibility::Public;
     }
 
     public function isPrivate(): bool
     {
         return $this->visibility === Visibility::Private;
+    }
+
+    public function hasParticipant(User $user): bool
+    {
+        return $this->participants->contains($user->id);
+    }
+
+    public function isOwner(User $user): bool
+    {
+        return $this->owner_id === $user->id;
     }
 }

@@ -1,5 +1,9 @@
-<body class="antialiased relative bg-slate-950 text-default text-base">
+<body class="antialiased relative bg-zinc-950 text-white text-base">
     {{ $slot }}
+
+    @persist('toast')
+        <flux:toast />
+    @endpersist
 
     @fluxScripts
     @livewireScripts
