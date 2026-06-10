@@ -38,9 +38,9 @@
         <flux:profile :initials="auth()->user()->initials()" />
 
         <flux:menu>
-            <flux:menu.group heading="Conta">
+            {{-- <flux:menu.group heading="Conta">
                 <flux:menu.item>Perfil</flux:menu.item>
-            </flux:menu.group>
+            </flux:menu.group> --}}
 
             <flux:menu.item :href="route('logout')">Sair</flux:menu.item>
         </flux:menu>
