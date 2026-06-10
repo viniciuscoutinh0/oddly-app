@@ -13,7 +13,7 @@ use App\Models\Season;
 use App\Models\Stage;
 use App\Models\Team;
 use App\Models\User;
-use App\Services\PoolStandings;
+use App\Services\Pool\PoolStandings;
 
 it('ranks participants by total points using pool rules', function (): void {
     $season = Season::factory()->create();
@@ -48,9 +48,9 @@ it('ranks participants by total points using pool rules', function (): void {
 
     $standings = app(PoolStandings::class)->for($pool);
 
-    expect($standings->first()['user']->id)->toBe($exactUser->id)
-        ->and($standings->first()['points'])->toBe(35)
-        ->and($standings->last()['points'])->toBe(5);
+    expect($standings->first()->id)->toBe($exactUser->id)
+        ->and($standings->first()->points)->toBe(35)
+        ->and($standings->last()->points)->toBe(5);
 });
 
 it('returns zero points for a participant with no bets', function (): void {
@@ -61,7 +61,7 @@ it('returns zero points for a participant with no bets', function (): void {
     $standings = app(PoolStandings::class)->for($pool);
 
     expect($standings)->toHaveCount(1)
-        ->and($standings->first()['points'])->toBe(0);
+        ->and($standings->first()->points)->toBe(0);
 });
 
 it('adds group bonus points using the pool rule', function (): void {
@@ -88,5 +88,5 @@ it('adds group bonus points using the pool rule', function (): void {
 
     $standings = app(PoolStandings::class)->for($pool);
 
-    expect($standings->first()['points'])->toBe(6);
+    expect($standings->first()->points)->toBe(6);
 });

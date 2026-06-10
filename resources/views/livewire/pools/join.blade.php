@@ -1,4 +1,4 @@
-<div class="rounded-sm overflow-hidden border-accent border max-w-xs w-full shrink-0">
+<div class="rounded-xl overflow-hidden border-accent border w-full lg:max-w-xs shrink-0">
     <div class="relative flex flex-col justify-center p-6 gap-4 bg-accent text-white overflow-hidden">
         <flux:heading size="xl">
             Entrar com convite

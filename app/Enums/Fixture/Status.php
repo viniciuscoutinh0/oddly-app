@@ -40,4 +40,15 @@ enum Status: string implements HasColor, HasLabel
             self::Cancelled => Color::Red,
         };
     }
+
+    public function fluxColor(): string
+    {
+        return match ($this) {
+            self::Scheduled => 'zinc',
+            self::InProgress => 'amber',
+            self::Finished => 'green',
+            self::Postponed => 'orange',
+            self::Cancelled => 'red',
+        };
+    }
 }

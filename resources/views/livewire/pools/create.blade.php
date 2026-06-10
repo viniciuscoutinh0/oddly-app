@@ -1,6 +1,6 @@
 <div class="space-y-12">
     <div>
-        <div class="flex justify-between mb-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
             <div>
                 <flux:heading size="xl">
                     Criar Bolão
@@ -11,7 +11,7 @@
                 </flux:text>
             </div>
 
-            <div>
+            <div class="flex gap-3">
                 <flux:button
                     variant="subtle"
                     :href="route('pools.index')"
@@ -32,8 +32,8 @@
             id="create-pool"
             wire:submit="create"
         >
-            <div class="grid grid-cols-2 gap-6">
-                <div class="bg-zinc-900 border p-6 border-zinc-800 text-white rounded-sm">
+            <div class="grid grid-cols-1 lg:grid-cols-2 items-start gap-6">
+                <div class="bg-zinc-900 border p-6 border-zinc-800 text-white rounded-xl">
                     <flux:fieldset>
                         <flux:legend class="mb-6">
                             Informações Básicas
@@ -41,11 +41,11 @@
 
                         @if (filled($this->form->competition))
                             <div
-                                class="p-3 border border-zinc-800 rounded-sm flex gap-3 items-center mb-6"
+                                class="p-3 border border-zinc-800 rounded-lg flex gap-3 items-center mb-6"
                                 wire:transition
                             >
                                 <div
-                                    class="w-10 h-10 bg-zinc-800 text-xs font-black border border-zinc-700/50 flex items-center justify-center shrink-0 rounded-sm">
+                                    class="w-10 h-10 bg-zinc-800 text-xs font-black border border-zinc-700/50 flex items-center justify-center shrink-0 rounded-md">
                                     {{ $this->form->competition->code }}
                                 </div>
                                 <div class="flex-1">
@@ -151,7 +151,7 @@
                     </flux:fieldset>
                 </div>
 
-                <div class="bg-zinc-900 border p-6 border-zinc-800 text-white rounded-sm">
+                <div class="bg-zinc-900 border p-6 border-zinc-800 text-white rounded-xl">
                     <flux:fieldset>
                         <flux:legend class="mb-6">
                             Configuração de Pontuação

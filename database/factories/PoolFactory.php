@@ -40,7 +40,7 @@ final class PoolFactory extends Factory
 
     public function public(): static
     {
-        return $this->state(fn (array $attributes): array => [
+        return $this->state(fn (): array => [
             'visibility' => Visibility::Public,
             'invite_code' => null,
         ]);

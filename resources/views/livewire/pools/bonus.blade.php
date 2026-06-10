@@ -1,47 +1,92 @@
-<div class="space-y-6">
-    <flux:heading size="xl">{{ $pool->name }} · Bônus</flux:heading>
-
-    @if ($saved)
-        <flux:callout variant="success">Bônus salvos.</flux:callout>
-    @endif
-
-    @if ($this->locked())
+<div class="space-y-8">
+    @if ($this->locked)
         <flux:callout variant="warning">Os palpites bônus estão encerrados.</flux:callout>
     @endif
 
-    <form wire:submit="save" class="space-y-8">
-        <flux:card>
-            <flux:heading size="lg" class="mb-3">Campeão</flux:heading>
-            <flux:select wire:model="championTeamId" :disabled="$this->locked()">
-                <flux:select.option value="">Selecione…</flux:select.option>
-                @foreach ($allTeams as $team)
-                    <flux:select.option :value="$team->id">{{ $team->name }}</flux:select.option>
+    <div class="overflow-hidden bg-zinc-900 border border-zinc-800 rounded-xl">
+        <div class="flex items-center justify-between gap-2 bg-zinc-800 text-white px-3 py-1.5 border-b border-zinc-800">
+            <flux:text class="text-xs text-white">
+                Campeão
+            </flux:text>
+
+            <flux:badge
+                size="sm"
+                :color="$championTeamId ? 'green' : 'zinc'"
+            >
+                {{ $championTeamId ? 1 : 0 }}/1
+            </flux:badge>
+        </div>
+
+        <div class="p-3">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                @foreach ($this->allTeams as $team)
+                    <x-bonus.team-card
+                        :team="$team"
+                        :selected="$championTeamId === $team->id"
+                        :disabled="$this->locked"
+                        wire:click="$set('championTeamId', {{ $team->id }})"
+                        wire:key="champion-{{ $team->id }}"
+                    />
                 @endforeach
-            </flux:select>
-        </flux:card>
+            </div>
 
-        @foreach ($groupLetters as $letter)
-            <flux:card>
-                <flux:heading size="lg" class="mb-3">Grupo {{ $letter }}</flux:heading>
-                <div class="grid grid-cols-2 gap-4">
-                    <flux:select label="1º" wire:model="groups.{{ $letter }}.first" :disabled="$this->locked()">
-                        <flux:select.option value="">Selecione…</flux:select.option>
-                        @foreach ($this->teamsInGroup($letter) as $team)
-                            <flux:select.option :value="$team->id">{{ $team->name }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
-                    <flux:select label="2º" wire:model="groups.{{ $letter }}.second" :disabled="$this->locked()">
-                        <flux:select.option value="">Selecione…</flux:select.option>
-                        @foreach ($this->teamsInGroup($letter) as $team)
-                            <flux:select.option :value="$team->id">{{ $team->name }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
+            <flux:error name="championTeamId" />
+        </div>
+    </div>
+
+    <div>
+        <flux:heading
+            size="lg"
+            class="mb-3"
+        >Classificados por grupo</flux:heading>
+        <flux:text
+            variant="subtle"
+            class="mb-4 block text-sm"
+        >
+            Selecione até 3 times que avançam em cada grupo.
+        </flux:text>
+
+        @foreach ($this->groupLetters as $letter)
+            @php
+                $selected = $groups[$letter] ?? [];
+                $selectedCount = count($selected);
+            @endphp
+
+            <div
+                class="overflow-hidden bg-zinc-900 mb-3 last:mb-0 border border-zinc-800 rounded-xl"
+                wire:key="group-{{ $letter }}"
+            >
+                <div
+                    class="flex items-center justify-between gap-2 bg-zinc-800 text-white px-3 py-1.5 border-b border-zinc-800">
+                    <flux:text class="text-xs text-white">
+                        Grupo {{ $letter }}
+                    </flux:text>
+
+                    <flux:badge
+                        size="sm"
+                        :color="$selectedCount === 3 ? 'green' : 'zinc'"
+                    >
+                        {{ $selectedCount }}/3
+                    </flux:badge>
                 </div>
-            </flux:card>
-        @endforeach
 
-        @unless ($this->locked())
-            <flux:button type="submit" variant="primary" color="cyan">Salvar bônus</flux:button>
-        @endunless
-    </form>
+                <div class="p-3">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                        @foreach ($this->teamsInGroup($letter) as $team)
+                            <x-bonus.team-card
+                                :team="$team"
+                                :selected="in_array($team->id, $selected, true)"
+                                :disabled="$this->locked ||
+                                    ($selectedCount >= 3 && !in_array($team->id, $selected, true))"
+                                wire:click="toggleGroup('{{ $letter }}', {{ $team->id }})"
+                                wire:key="group-{{ $letter }}-team-{{ $team->id }}"
+                            />
+                        @endforeach
+                    </div>
+
+                    <flux:error name="groups.{{ $letter }}" />
+                </div>
+            </div>
+        @endforeach
+    </div>
 </div>

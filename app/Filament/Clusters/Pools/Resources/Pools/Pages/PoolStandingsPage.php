@@ -6,8 +6,8 @@ namespace App\Filament\Clusters\Pools\Resources\Pools\Pages;
 
 use App\Actions\Pool\RecalculatePoolScoringAction;
 use App\Filament\Clusters\Pools\Resources\Pools\PoolResource;
-use App\Models\User;
-use App\Services\PoolStandings;
+use App\Services\Pool\PoolStandings;
+use App\Services\Pool\ValueObjects\UserStanding;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
@@ -32,7 +32,7 @@ final class PoolStandingsPage extends Page
     }
 
     /**
-     * @return Collection<int, array{user: User, points: int}>
+     * @return Collection<int, UserStanding>
      */
     #[Computed]
     public function standings(): Collection

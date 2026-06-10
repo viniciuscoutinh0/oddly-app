@@ -1,36 +1,183 @@
-<div class="space-y-6">
-    <div class="flex items-center justify-between">
-        <flux:heading size="xl">{{ $pool->name }}</flux:heading>
-        @if ($this->canLeave())
-            <flux:button wire:click="leave" variant="danger">Sair do bolão</flux:button>
-        @endif
+<div class="space-y-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="min-w-0">
+            <flux:heading size="xl">
+                {{ $pool->name }}
+            </flux:heading>
+
+            @if (filled($pool->description))
+                <flux:text class="mt-1" variant="subtle">
+                    {{ $pool->description }}
+                </flux:text>
+            @endif
+
+            <div class="flex flex-wrap items-center gap-2 mt-3">
+                <flux:badge size="sm" icon="trophy" color="zinc">
+                    {{ $pool->season->competition->name }}
+                </flux:badge>
+
+                <flux:badge size="sm" icon="calendar" color="zinc">
+                    Temporada {{ $pool->season->name }}
+                </flux:badge>
+
+                <flux:badge
+                    size="sm"
+                    :icon="$pool->visibility->getIcon()"
+                    :color="$pool->isPublic() ? 'green' : 'zinc'"
+                >
+                    {{ $pool->visibility->getLabel() }}
+                </flux:badge>
+
+                <flux:badge size="sm" icon="user-group" color="zinc">
+                    {{ $pool->participants_count }}
+                    {{ str('participante')->plural($pool->participants_count) }}
+                </flux:badge>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 shrink-0">
+            <flux:button variant="subtle" :href="route('pools.index')">
+                Voltar
+            </flux:button>
+
+            <livewire:pools.leave :pool="$pool" />
+        </div>
     </div>
 
-    <flux:text>Temporada {{ $pool->season->name }} · {{ $pool->visibility->getLabel() }}</flux:text>
+    <div class="grid grid-cols-1 lg:grid-cols-3 items-start gap-6">
+        <div class="lg:col-span-2">
+            <flux:tab.group>
+                <flux:tabs>
+                    <flux:tab name="standings" icon="trophy">Ranking</flux:tab>
+                    @can('bet', $pool)
+                        <flux:tab name="bets" icon="document-check">Palpites</flux:tab>
+                        <flux:tab name="bonus" icon="gift">Bônus</flux:tab>
+                    @endcan
+                </flux:tabs>
 
-    @if ($this->canSeeInviteCode())
-        <flux:callout>
-            Código de convite: <strong>{{ $pool->invite_code }}</strong>
-        </flux:callout>
-    @endif
+                <flux:tab.panel name="standings">
+                    <livewire:pools.standings :$pool />
+                </flux:tab.panel>
 
-    <flux:card>
-        <flux:heading size="lg">Pontuação</flux:heading>
-        <flux:text>Placar exato: {{ $pool->points_exact }} · Resultado: {{ $pool->points_result }} · Campeão: {{ $pool->points_champion }} · Grupo: {{ $pool->points_group_position }}</flux:text>
-    </flux:card>
+                @can('bet', $pool)
+                    <flux:tab.panel name="bets">
+                        <livewire:pools.bets :$pool />
+                    </flux:tab.panel>
 
-    <flux:card>
-        <flux:heading size="lg" class="mb-2">Participantes</flux:heading>
-        <ul class="space-y-1">
-            @foreach ($pool->participants as $participant)
-                <li>{{ $participant->name }}</li>
-            @endforeach
-        </ul>
-    </flux:card>
+                    <flux:tab.panel name="bonus">
+                        <livewire:pools.bonus :$pool />
+                    </flux:tab.panel>
+                @endcan
+            </flux:tab.group>
 
-    <div class="flex gap-3">
-        <flux:button :href="route('pools.bets', $pool)" variant="ghost">Palpites</flux:button>
-        <flux:button :href="route('pools.standings', $pool)" variant="ghost">Ranking</flux:button>
-        <flux:button :href="route('pools.bonus', $pool)" variant="ghost">Bônus</flux:button>
+            @cannot('bet', $pool)
+                <flux:callout class="mt-4" icon="information-circle">
+                    Entre no bolão para fazer seus palpites e bônus.
+                </flux:callout>
+            @endcannot
+        </div>
+
+        <div class="lg:col-span-1 space-y-6">
+            @can('seeInviteCode', $pool)
+                <div
+                    class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-6"
+                    x-data="{ copied: false, copy() { navigator.clipboard.writeText(@js($pool->invite_code)); this.copied = true; setTimeout(() => this.copied = false, 2000); } }"
+                >
+                    <div class="flex items-center gap-3 mb-4">
+                        <x-heroicon-m-ticket class="text-zinc-400 w-5 h-5 shrink-0" />
+                        <flux:heading size="lg">Convite</flux:heading>
+                    </div>
+
+                    <flux:text variant="subtle" class="text-xs mb-2 block">
+                        Compartilhe o código para convidar participantes.
+                    </flux:text>
+
+                    <div class="flex items-center gap-2">
+                        <code class="flex-1 bg-zinc-800/50 border border-zinc-800 rounded-lg px-3 py-2 font-mono tracking-widest text-center">
+                            {{ $pool->invite_code }}
+                        </code>
+
+                        <flux:button
+                            size="sm"
+                            variant="filled"
+                            icon="clipboard"
+                            x-on:click="copy()"
+                            x-bind:title="copied ? 'Copiado!' : 'Copiar'"
+                        />
+                    </div>
+
+                    <flux:text class="text-xs text-green-400 mt-2 block" x-show="copied" x-cloak>
+                        Código copiado!
+                    </flux:text>
+                </div>
+            @endcan
+
+            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <x-heroicon-m-information-circle class="text-zinc-400 w-5 h-5 shrink-0" />
+                    <flux:heading size="lg">Informações</flux:heading>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between gap-3">
+                        <flux:text variant="subtle" class="text-xs uppercase">Organizador</flux:text>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <flux:avatar size="xs" :initials="$pool->owner->initials()" />
+                            <flux:text class="truncate">{{ $pool->owner->name }}</flux:text>
+                        </div>
+                    </div>
+
+                    <flux:separator variant="subtle" />
+
+                    <div class="flex items-center justify-between gap-3">
+                        <flux:text variant="subtle" class="text-xs uppercase">Período</flux:text>
+                        <flux:text class="text-end">
+                            {{ $pool->season->start_date->format('d/m/Y') }}
+                            –
+                            {{ $pool->season->end_date->format('d/m/Y') }}
+                        </flux:text>
+                    </div>
+
+                    <flux:separator variant="subtle" />
+
+                    <div class="flex items-center justify-between gap-3">
+                        <flux:text variant="subtle" class="text-xs uppercase">Bônus</flux:text>
+                        @if (! $this->bonusLocksAt)
+                            <flux:badge size="sm" color="zinc">Sem partidas</flux:badge>
+                        @elseif ($this->bonusLocked)
+                            <flux:badge size="sm" color="red" icon="lock-closed">Encerrado</flux:badge>
+                        @else
+                            <flux:text class="text-end">
+                                Encerra {{ $this->bonusLocksAt->format('d/m/Y H:i') }}
+                            </flux:text>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <x-heroicon-m-shield-check class="text-zinc-400 w-5 h-5 shrink-0" />
+                    <flux:heading size="lg">Regras de Pontuação</flux:heading>
+                </div>
+
+                <div class="grid grid-cols-1 gap-3">
+                    @foreach ([
+                        ['icon' => 'heroicon-m-flag', 'label' => 'Placar exato', 'points' => $pool->points_exact],
+                        ['icon' => 'heroicon-m-check-circle', 'label' => 'Resultado (V/E/D)', 'points' => $pool->points_result],
+                        ['icon' => 'heroicon-m-trophy', 'label' => 'Campeão final', 'points' => $pool->points_champion],
+                        ['icon' => 'heroicon-m-rectangle-stack', 'label' => 'Classificado do grupo', 'points' => $pool->points_group_position],
+                    ] as $rule)
+                        <div class="bg-zinc-800/50 flex items-center justify-between gap-3 p-4 border-l-2 border-accent rounded-r-lg">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <x-dynamic-component :component="$rule['icon']" class="w-5 h-5 shrink-0 text-zinc-400" />
+                                <flux:text class="text-xs uppercase">{{ $rule['label'] }}</flux:text>
+                            </div>
+                            <flux:heading size="lg" class="shrink-0">+{{ $rule['points'] }}</flux:heading>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </div>
 </div>

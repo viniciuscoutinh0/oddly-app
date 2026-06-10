@@ -9,10 +9,10 @@
 
             <form wire:submit="register">
                 <div class="space-y-6">
-                    <flux:input label="Nome" placeholder="Seu nome" required wire:model="name" />
+                    <flux:input label="Nome" placeholder="Ex.: João Silva" required wire:model="name" />
                     <flux:input label="E-mail" placeholder="seu.email@exemplo.com" required wire:model="email" />
-                    <flux:input label="Senha" type="password" viewable required wire:model="password" />
-                    <flux:input label="Confirme a senha" type="password" viewable required wire:model="password_confirmation" />
+                    <flux:input label="Senha" type="password" placeholder="Mínimo 8 caracteres" viewable required wire:model="password" />
+                    <flux:input label="Confirme a senha" type="password" placeholder="Repita a senha" viewable required wire:model="password_confirmation" />
 
                     <flux:button type="submit" variant="primary" color="cyan" class="min-w-full">Criar conta</flux:button>
 
@@ -24,7 +24,7 @@
             </form>
         </div>
     </div>
-    <div class="flex-1 overflow-hidden rounded-lg p-16 max-lg:hidden">
+    <div class="flex-1 overflow-hidden rounded-xl p-16 max-lg:hidden">
         <img src="{{ asset('images/hero.webp') }}" alt="Oddly" class="object-cover w-full h-full rounded-lg" draggable="false" />
     </div>
 </div>

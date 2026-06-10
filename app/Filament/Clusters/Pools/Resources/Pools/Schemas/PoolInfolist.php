@@ -18,7 +18,7 @@ final class PoolInfolist
                     ->columns(2)
                     ->schema([
                         TextEntry::make('name')->label('Nome'),
-                        TextEntry::make('visibility')->label('Visibilidade')->badge(),
+                        // TextEntry::make('visibility')->label('Visibilidade')->badge(),
                         TextEntry::make('owner.name')->label('Dono'),
                         TextEntry::make('season.name')->label('Temporada'),
                         TextEntry::make('invite_code')->label('Código de Convite')->placeholder('—'),

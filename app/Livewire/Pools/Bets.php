@@ -8,41 +8,47 @@ use App\Actions\Bet\PlaceBetAction;
 use App\Models\Bet;
 use App\Models\Fixture;
 use App\Models\Pool;
+use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-#[Layout('layouts.dashboard')]
+/**
+ * @property User $user
+ * @property Collection<Fixture> $fixtures
+ * @property Collection<Fixture> $groups
+ */
 final class Bets extends Component
 {
+    #[Locked]
     public Pool $pool;
 
     /**
-     * @var array<int, array{home: int|string|null, away: int|string|null}>
+     * @var array<int, array{home: int|null, away: int|null}>
      */
     public array $scores = [];
 
-    public bool $saved = false;
-
-    private ?Collection $fixturesCache = null;
-
-    public function mount(Pool $pool): void
+    #[Computed]
+    public function user(): User
     {
-        abort_unless($pool->participants()->whereKey(auth()->id())->exists(), 403);
+        return Auth::user();
+    }
 
-        $pool->loadMissing('season');
-        $this->pool = $pool;
-
-        $fixtures = $this->fixtures();
+    public function mount(): void
+    {
+        abort_unless(Gate::allows('bet', $this->pool), code: 403);
 
         $bets = Bet::query()
-            ->where('user_id', auth()->id())
-            ->whereIn('fixture_id', $fixtures->pluck('id'))
+            ->where('user_id', $this->user->id)
+            ->whereIn('fixture_id', $this->fixtures->pluck('id'))
             ->get()
             ->keyBy('fixture_id');
 
-        foreach ($fixtures as $fixture) {
+        foreach ($this->fixtures as $fixture) {
             $this->scores[$fixture->id] = [
                 'home' => $bets[$fixture->id]->home_score ?? null,
                 'away' => $bets[$fixture->id]->away_score ?? null,
@@ -50,39 +56,38 @@ final class Bets extends Component
         }
     }
 
-    public function save(PlaceBetAction $action): void
+    public function save(int $id, int $homeScore, int $awayScore): void
     {
-        $this->saved = false;
+        /** @var Fixture $fixture */
+        $fixture = $this->fixtures->firstWhere('id', $id);
 
-        $user = auth()->user();
-
-        foreach ($this->fixtures() as $fixture) {
-            if ($fixture->isLocked()) {
-                continue;
-            }
-
-            $home = $this->scores[$fixture->id]['home'] ?? null;
-            $away = $this->scores[$fixture->id]['away'] ?? null;
-
-            if ($home === null || $home === '' || $away === null || $away === '') {
-                continue;
-            }
-
-            $action->handle($user, $fixture, (int) $home, (int) $away);
+        if (! $fixture || $fixture->isLocked() || $fixture->isFinished()) {
+            return;
         }
 
-        $this->saved = true;
+        if ($homeScore < 0 || $awayScore < 0 || $homeScore > 99 || $awayScore > 99) {
+            return;
+        }
+
+        app(PlaceBetAction::class)->handle($this->user, $fixture, $homeScore, $awayScore);
     }
 
     /**
      * @return Collection<int, Fixture>
      */
-    protected function fixtures(): Collection
+    #[Computed]
+    public function fixtures(): Collection
     {
-        return $this->fixturesCache ??= $this->pool->season->fixtures()
-            ->with(['homeTeam', 'awayTeam', 'stage'])
+        return $this->pool
+            ->season
+            ->fixtures()
+            ->with([
+                'homeTeam',
+                'awayTeam',
+                'stage',
+            ])
             ->get()
-            ->sortBy(fn ($fixture): string => sprintf(
+            ->sortBy(fn (Fixture $fixture): string => sprintf(
                 '%03d-%s',
                 $fixture->stage->sort_order,
                 $fixture->match_date->format('YmdHis'),
@@ -90,8 +95,17 @@ final class Bets extends Component
             ->values();
     }
 
+    #[Computed]
+    public function groups(): Collection
+    {
+        return $this->fixtures
+            ->groupBy(fn (Fixture $fixture): string => $fixture->match_day
+                ? "Fase de Grupos - Rodada {$fixture->match_day}"
+                : $fixture->stage->name->getLabel());
+    }
+
     public function render(): View
     {
-        return view('livewire.pools.bets', ['fixtures' => $this->fixtures()]);
+        return view('livewire.pools.bets', ['fixtures' => $this->fixtures]);
     }
 }

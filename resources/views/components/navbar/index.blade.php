@@ -1,40 +1,48 @@
-<div class="border-b border-zinc-800 h-16 w-full">
-    <div class="flex items-center justify-between w-full max-w-7xl mx-auto h-full sm:px-10 xl:px-0">
-        <nav class="flex gap-6 h-full">
-            <a
-                href="{{ route('dashboard') }}"
-                class="text-accent border-b-2 border-accent -mb-px h-full flex items-center text-sm cursor-pointer focus:outline-hidden transition duration-75"
-            >
-                Dashboard
-            </a>
+<flux:header
+    container
+    class="relative bg-zinc-900 border-b border-zinc-800"
+>
+    <flux:sidebar.toggle
+        class="lg:hidden"
+        icon="bars-2"
+    />
 
-            <a
-                href="{{ route('pools.index') }}"
-                class="text-zinc-400 border-b-2 border-transparent hover:text-accent hover:border-accent -mb-px h-full flex items-center text-sm cursor-pointer focus:outline-hidden transition duration-75"
-            >
-                Bolões
-            </a>
-            <a
-                href="#"
-                class="text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 -mb-px h-full flex items-center text-sm cursor-pointer focus:outline-hidden transition duration-75"
-            >
-                Ranking
-            </a>
-            <a
-                href="#"
-                class="text-zinc-400 border-b-2 border-transparent hover:text-zinc-200 -mb-px h-full flex items-center text-sm cursor-pointer focus:outline-hidden transition duration-75"
-            >
-                Resultados
-            </a>
-        </nav>
+    <flux:brand
+        href="#"
+        :name="config('app.name')"
+        class="max-lg:hidden"
+    >
+        <x-slot name="logo">
+            <div class="size-6 rounded-md shrink-0 bg-accent text-accent-foreground flex items-center justify-center">
+                <span class="font-bold">O</span>
+            </div>
+        </x-slot>
+    </flux:brand>
 
-        <div class="shrink-0 flex items-center gap-3">
-            <span class="text-xs font-medium text-zinc-400">Olá, Vinicius Coutinho</span>
+    <flux:navbar class="-mb-px max-lg:hidden">
+        <flux:navbar.item :href="route('dashboard')">
+            Dashboard
+        </flux:navbar.item>
 
-            <flux:avatar
-                name="Vinicius Coutinho"
-                size="sm"
-            />
-        </div>
-    </div>
-</div>
+        {{-- <flux:navbar.item :href="route('pools.index')">
+            Bolões
+        </flux:navbar.item> --}}
+    </flux:navbar>
+
+    <flux:spacer />
+
+    <flux:dropdown
+        position="bottom"
+        align="end"
+    >
+        <flux:profile :initials="auth()->user()->initials()" />
+
+        <flux:menu>
+            <flux:menu.group heading="Conta">
+                <flux:menu.item>Perfil</flux:menu.item>
+            </flux:menu.group>
+
+            <flux:menu.item :href="route('logout')">Sair</flux:menu.item>
+        </flux:menu>
+    </flux:dropdown>
+</flux:header>

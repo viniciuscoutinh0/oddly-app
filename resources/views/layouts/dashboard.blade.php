@@ -10,7 +10,7 @@
         <div class="flex-1 flex flex-col min-w-0 h-full">
             <x-navbar />
 
-            <main class="flex-1 overflow-y-auto p-10">
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10">
                 <div class="max-w-7xl mx-auto w-full space-y-6">
                     {{ $slot }}
                 </div>

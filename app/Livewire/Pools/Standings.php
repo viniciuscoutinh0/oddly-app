@@ -5,28 +5,24 @@ declare(strict_types=1);
 namespace App\Livewire\Pools;
 
 use App\Models\Pool;
-use App\Models\User;
-use App\Services\PoolStandings;
+use App\Services\Pool\PoolStandings;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
-#[Layout('layouts.dashboard')]
 final class Standings extends Component
 {
+    #[Locked]
     public Pool $pool;
 
-    public function mount(Pool $pool): void
+    public function mount(): void
     {
-        abort_unless($pool->participants()->whereKey(auth()->id())->exists(), 403);
-
-        $this->pool = $pool;
+        $this->pool = $this->pool->load(['season', 'participants']);
     }
 
-    /**
-     * @return Collection<int, array{user: User, points: int}>
-     */
+    #[Computed]
     public function standings(): Collection
     {
         return app(PoolStandings::class)->for($this->pool);
@@ -34,6 +30,6 @@ final class Standings extends Component
 
     public function render(): View
     {
-        return view('livewire.pools.standings', ['standings' => $this->standings()]);
+        return view('livewire.pools.standings');
     }
 }

@@ -161,7 +161,7 @@
                 </div>
                 <img
                     src="{{ asset('images/badges.png') }}"
-                    class="object-cover w-full mx-auto rounded-lg"
+                    class="object-cover w-full mx-auto rounded-xl"
                 >
             </div>
         </section>
@@ -169,7 +169,7 @@
         <section class="mb-12 md:mb-16">
             <h3 class="text-default text-xl md:text-2xl font-semibold tracking-wide mb-6 md:mb-8">Como funciona?</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <div class="bg-slate-900 rounded-md border border-slate-800 p-4 md:p-6">
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 md:p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 shrink-0 bg-secondary-500 rounded-md flex items-center justify-center">
                             <x-heroicon-m-user-plus class="w-5 h-5 text-default shrink-0" />
@@ -179,7 +179,7 @@
                     <p class="text-xs/6 md:text-sm/6 text-subtle">Entre rápido e sem complicação.
                         Crie sua conta e esteja pronto para palpitar em minutos.</p>
                 </div>
-                <div class="bg-slate-900 rounded-md border border-slate-800 p-4 md:p-6">
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 md:p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 shrink-0 bg-secondary-500 rounded-md flex items-center justify-center">
                             <x-heroicon-m-squares-2x2 class="w-5 h-5 text-default shrink-0" />
@@ -190,7 +190,7 @@
                         mais.
                         Você escolhe onde quer mostrar seu talento.</p>
                 </div>
-                <div class="bg-slate-900 rounded-md border border-slate-800 p-4 md:p-6">
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 md:p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 shrink-0 bg-secondary-500 rounded-md flex items-center justify-center">
                             <x-heroicon-m-plus-circle class="w-5 h-5 text-default shrink-0" />
@@ -200,7 +200,7 @@
                     <p class="text-xs/6 md:text-sm/6 text-subtle">Convide amigos, familiares ou colegas de trabalho.
                         Defina regras, pontuação e comece a disputa.</p>
                 </div>
-                <div class="bg-slate-900 rounded-md border border-slate-800 p-4 md:p-6">
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-4 md:p-6">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 shrink-0 bg-secondary-500 rounded-md flex items-center justify-center">
                             <x-heroicon-m-puzzle-piece class="w-5 h-5 text-default shrink-0" />
@@ -227,24 +227,24 @@
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-                    <div class="flex flex-col items-center bg-slate-800 rounded-lg p-6 md:p-4 gap-3">
-                        <div class="w-18 h-18 rounded-lg bg-white"></div>
+                    <div class="flex flex-col items-center bg-slate-800 rounded-xl p-6 md:p-4 gap-3">
+                        <div class="w-18 h-18 rounded-md bg-white"></div>
                         <h4 class="text-sm md:text-base font-semibold text-default">UEFA Champions League</h4>
                         <p class="text-subtle text-xs md:text-sm text-center md:text-justify">Palpite nos maiores
                             confrontos da
                             Europa e dispute rodada a
                             rodada com seus amigos para ver quem realmente entende de futebol.</p>
                     </div>
-                    <div class="flex flex-col items-center bg-slate-800 rounded-lg p-6 md:p-4 gap-3">
-                        <div class="w-18 h-18 rounded-lg bg-white"></div>
+                    <div class="flex flex-col items-center bg-slate-800 rounded-xl p-6 md:p-4 gap-3">
+                        <div class="w-18 h-18 rounded-md bg-white"></div>
                         <h4 class="text-sm md:text-base font-semibold text-default">FIFA World Cup 2026</h4>
                         <p class="text-subtle text-xs md:text-sm text-center md:text-justify">A Copa do Mundo é o palco
                             perfeito
                             para provar seus palpites.
                             Crie bolões, acumule pontos e conquiste badges a cada fase.</p>
                     </div>
-                    <div class="flex flex-col items-center bg-slate-800 rounded-lg p-6 md:p-4 gap-3">
-                        <div class="w-18 h-18 rounded-lg bg-white"></div>
+                    <div class="flex flex-col items-center bg-slate-800 rounded-xl p-6 md:p-4 gap-3">
+                        <div class="w-18 h-18 rounded-md bg-white"></div>
                         <h4 class="text-sm md:text-base font-semibold text-default">Brasileirão Betano</h4>
                         <p class="text-subtle text-xs md:text-sm text-center md:text-justify">Todos os jogos, todas as
                             rodadas.
@@ -285,7 +285,7 @@
                     </ul>
                 </div>
 
-                <div class="bg-slate-900 rounded-lg border border-slate-800 p-6 md:p-8">
+                <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 md:p-8">
                     <div class="mb-6">
                         <h3 class="font-semibold text-xl md:text-2xl text-default mb-2">Entre no jogo agora</h3>
                         <p class="text-xs/6 md:text-sm/7 text-subtle">É rápido, grátis e sem complicação.</p>

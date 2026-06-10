@@ -17,12 +17,11 @@ final class PoolPolicy
 
     public function view(User $user, Pool $pool): bool
     {
-        if (! $pool->isPrivate()) {
+        if ($pool->isPublic()) {
             return true;
         }
 
-        return $user->id === $pool->owner_id
-            || $pool->participants()->whereKey($user->id)->exists();
+        return $user->id === $pool->owner_id || $pool->hasParticipant($user);
     }
 
     public function update(User $user, Pool $pool): bool
@@ -33,5 +32,20 @@ final class PoolPolicy
     public function delete(User $user, Pool $pool): bool
     {
         return $user->id === $pool->owner_id;
+    }
+
+    public function bet(User $user, Pool $pool): bool
+    {
+        return $pool->isOwner($user) || $pool->hasParticipant($user);
+    }
+
+    public function seeInviteCode(User $user, Pool $pool): bool
+    {
+        return $pool->invite_code !== null && ($pool->isOwner($user) || $pool->hasParticipant($user));
+    }
+
+    public function leave(User $user, Pool $pool): bool
+    {
+        return ! $pool->isOwner($user) && $pool->hasParticipant($user);
     }
 }
