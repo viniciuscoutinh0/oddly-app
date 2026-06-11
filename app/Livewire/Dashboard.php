@@ -39,11 +39,15 @@ final class Dashboard extends Component
                     ->orWhereHas('participants', fn (Builder $query): Builder => $query->whereKey($userId));
             })
             ->withCount('participants')
-            ->with('season.competition:id,name')
-            ->get([
-                'id',
-                'name',
-            ]);
+            ->with([
+                'season' => fn ($query) => $query
+                    ->with('competition:id,name')
+                    ->withCount([
+                        'fixtures',
+                        'fixtures as fixtures_finished_count' => fn (Builder $query): Builder => $query->finished(),
+                    ]),
+            ])
+            ->get(['id', 'name']);
     }
 
     public function render(): View

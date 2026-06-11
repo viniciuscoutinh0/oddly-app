@@ -7,6 +7,7 @@ namespace App\Filament\Clusters\Tournament\Resources\Seasons\Schemas;
 use Filament\Forms\Components;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Number;
 
 final class SeasonForm
 {
@@ -20,9 +21,17 @@ final class SeasonForm
                     ->relationship('competition', 'name')
                     ->required(),
 
-                Components\TextInput::make('emblem_url')
+                Components\FileUpload::make('logo_path')
                     ->label('Logo')
-                    ->url()
+                    ->image()
+                    ->maxSize(1024 * 1024)
+                    ->directory('season-assets')
+                    ->helperText(
+                        fn (Components\FileUpload $component): string => 'Tamanho máximo permitido: '
+                        .Number::fileSize(
+                            $component->getMaxSize(),
+                        ),
+                    )
                     ->nullable(),
 
                 Grid::make()

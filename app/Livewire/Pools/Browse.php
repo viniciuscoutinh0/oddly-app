@@ -37,7 +37,14 @@ final class Browse extends Component
         return Pool::query()
             ->where('visibility', Visibility::Public)
             ->withCount('participants')
-            ->with('season.competition')
+            ->with([
+                'season' => fn ($query) => $query
+                    ->with('competition:id,name')
+                    ->withCount([
+                        'fixtures',
+                        'fixtures as fixtures_finished_count' => fn (Builder $query): Builder => $query->finished(),
+                    ]),
+            ])
             ->when($this->search, fn (Builder $query, string $value): Builder => $query->whereLike(
                 'name',
                 '%'.$value.'%',
@@ -46,7 +53,6 @@ final class Browse extends Component
             ->get([
                 'id',
                 'name',
-                'season',
             ]);
     }
 

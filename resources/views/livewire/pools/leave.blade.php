@@ -2,10 +2,10 @@
     @can('leave', $pool)
         <flux:button
             variant="danger"
-            icon="x-mark"
+            icon="exclamation-triangle"
             wire:click="leave"
         >
-            Sair
+            Sair do Bolão
         </flux:button>
     @endcan
 </div>

@@ -6,9 +6,20 @@
 >
 
     <div
-        class="relative w-full sm:w-36 shrink-0 flex flex-col gap-3 items-center justify-center bg-accent p-4 border-b sm:border-b-0 sm:border-r border-zinc-800 text-center"
-        @if ($pool->season->emblem_url) style="background-image: url('{{ $pool->season->emblem_url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;" @endif
-    >
+        class="relative w-full sm:w-36 shrink-0 flex flex-col gap-3 items-center justify-center bg-accent p-4 border-b sm:border-b-0 sm:border-r border-zinc-800 text-center">
+        @if (filled($url = $pool->season->logo))
+            <img
+                src="{{ $url }}"
+                alt="Logo {{ $pool->season->competition->name }}"
+                loading="lazy"
+                class="bg-cover bg-center shrink-0 w-16 h-16 md:w-20 md:h-20"
+            />
+        @else
+            <flux:icon.trophy
+                variant="solid"
+                class="w-8 h-8 md:w-16 md:h-16 shrink-0"
+            />
+        @endif
     </div>
 
     <div class="p-4 md:p-6 flex-1 min-w-0 flex flex-col justify-center">
@@ -47,10 +58,10 @@
             <flux:label>
                 Completo
                 <x-slot name="trailing">
-                    <span class="tabular-nums">{{ $pool->season->progress() }}%</span>
+                    <span class="tabular-nums">{{ $pool->season->progress }}%</span>
                 </x-slot>
             </flux:label>
-            <flux:progress :value="$pool->season->progress()" />
+            <flux:progress :value="$pool->season->progress" />
         </flux:field>
     </div>
 </a>

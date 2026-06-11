@@ -8,7 +8,6 @@ use App\Observers\SeasonObserver;
 use Carbon\CarbonInterface;
 use Database\Factories\SeasonFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,9 +31,24 @@ final class Season extends Model
         ];
     }
 
+    protected function progress(): Attribute
+    {
+        return Attribute::get(fn (): int => $this->fixtures_count === 0
+            ? 0
+            : (int) round(($this->fixtures_finished_count / $this->fixtures_count) * 100));
+    }
+
+    protected function logo(): Attribute
+    {
+        return Attribute::get(fn (): string => filled($this->logo_path)
+            ? asset("storage/{$this->logo_path}")
+            : null);
+    }
+
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'season_teams')
+        return $this
+            ->belongsToMany(Team::class, 'season_teams')
             ->withPivot('group_letter', 'group_position')
             ->withTimestamps();
     }
@@ -72,22 +86,6 @@ final class Season extends Model
     public function groupBets(): HasMany
     {
         return $this->hasMany(GroupBet::class);
-    }
-
-    public function progress(): int
-    {
-        if (! $this->hasAttribute('fixtures_count') || ! $this->hasAttribute('fixtures_finished_count')) {
-            $this->loadCount([
-                'fixtures',
-                'fixtures as fixtures_finished_count' => fn (Builder $query): Builder => $query->finished(),
-            ]);
-        }
-
-        if ($this->fixtures_count === 0) {
-            return 0;
-        }
-
-        return (int) round(($this->fixtures_finished_count / $this->fixtures_count) * 100);
     }
 
     public function bonusLocksAt(): ?CarbonInterface

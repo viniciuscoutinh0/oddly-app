@@ -8,14 +8,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('seasons', function (Blueprint $table): void {
-            $table->string('emblem_url')->nullable();
+            $table->string('logo_path')->after('winner_id')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('seasons', function (Blueprint $table): void {
-            $table->dropColumn('emblem_url');
+            $table->dropColumn('logo_path');
         });
     }
 };
