@@ -40,7 +40,7 @@ final class Season extends Model
 
     protected function logo(): Attribute
     {
-        return Attribute::get(fn (): string => filled($this->logo_path)
+        return Attribute::get(fn (): ?string => filled($this->logo_path)
             ? asset("storage/{$this->logo_path}")
             : null);
     }
