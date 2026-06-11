@@ -8,6 +8,7 @@ use App\Observers\SeasonObserver;
 use Carbon\CarbonInterface;
 use Database\Factories\SeasonFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -71,6 +72,22 @@ final class Season extends Model
     public function groupBets(): HasMany
     {
         return $this->hasMany(GroupBet::class);
+    }
+
+    public function progress(): int
+    {
+        if (! $this->hasAttribute('fixtures_count') || ! $this->hasAttribute('fixtures_finished_count')) {
+            $this->loadCount([
+                'fixtures',
+                'fixtures as fixtures_finished_count' => fn (Builder $query): Builder => $query->finished(),
+            ]);
+        }
+
+        if ($this->fixtures_count === 0) {
+            return 0;
+        }
+
+        return (int) round(($this->fixtures_finished_count / $this->fixtures_count) * 100);
     }
 
     public function bonusLocksAt(): ?CarbonInterface

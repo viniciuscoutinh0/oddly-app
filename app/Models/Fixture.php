@@ -9,6 +9,8 @@ use App\Enums\Fixture\Status;
 use App\Observers\FixtureObserver;
 use Database\Factories\FixtureFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[ObservedBy(FixtureObserver::class)]
 final class Fixture extends Model
 {
+    private const MINUTES_BEFORE_MATCH_TO_LOCK = 30;
+
     /** @use HasFactory<FixtureFactory> */
     use HasFactory;
 
@@ -50,9 +54,17 @@ final class Fixture extends Model
         return $this->hasMany(Bet::class);
     }
 
+    #[Scope]
+    public function finished(Builder $query): Builder
+    {
+        return $query->where('status', Status::Finished);
+    }
+
     public function isLocked(): bool
     {
-        return now()->gte($this->locked_at);
+        return now()->gte(
+            $this->locked_at ?? $this->match_date->subMinutes(self::MINUTES_BEFORE_MATCH_TO_LOCK),
+        );
     }
 
     public function isFinished(): bool

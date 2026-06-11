@@ -24,9 +24,7 @@ final class Dashboard extends Component
     #[Computed]
     public function competitions(): Collection
     {
-        return Competition::query()
-            ->withCount('seasons')
-            ->get(['id', 'name']);
+        return Competition::query()->withCount('seasons')->get(['id', 'name']);
     }
 
     #[Computed]
@@ -38,11 +36,14 @@ final class Dashboard extends Component
             ->where(function (Builder $query) use ($userId): void {
                 $query
                     ->where('owner_id', $userId)
-                    ->orWhereHas('participants', fn (Builder $query) => $query->whereKey($userId));
+                    ->orWhereHas('participants', fn (Builder $query): Builder => $query->whereKey($userId));
             })
             ->withCount('participants')
-            ->with('season.competition')
-            ->get();
+            ->with('season.competition:id,name')
+            ->get([
+                'id',
+                'name',
+            ]);
     }
 
     public function render(): View

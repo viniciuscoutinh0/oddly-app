@@ -20,6 +20,11 @@ final class SeasonForm
                     ->relationship('competition', 'name')
                     ->required(),
 
+                Components\TextInput::make('emblem_url')
+                    ->label('Logo')
+                    ->url()
+                    ->nullable(),
+
                 Grid::make()
                     ->schema([
                         Components\DatePicker::make('start_date')
