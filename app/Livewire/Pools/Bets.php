@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Livewire\Pools;
 
 use App\Actions\Bet\PlaceBetAction;
+use App\Exceptions\Bet\BetException;
 use App\Models\Bet;
 use App\Models\Fixture;
 use App\Models\Pool;
 use App\Models\User;
+use Exception;
+use Flux\Flux;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -22,6 +26,7 @@ use Livewire\Component;
  * @property Collection<Fixture> $fixtures
  * @property Collection<Fixture> $groups
  */
+#[Lazy]
 final class Bets extends Component
 {
     #[Locked]
@@ -58,18 +63,33 @@ final class Bets extends Component
 
     public function save(int $id, int $homeScore, int $awayScore): void
     {
-        /** @var Fixture $fixture */
+        /** @var ?Fixture $fixture */
         $fixture = $this->fixtures->firstWhere('id', $id);
 
-        if (! $fixture || $fixture->isLocked() || $fixture->isFinished()) {
+        if (! $fixture) {
             return;
         }
 
-        if ($homeScore < 0 || $awayScore < 0 || $homeScore > 99 || $awayScore > 99) {
-            return;
-        }
+        try {
+            app(PlaceBetAction::class)->handle(
+                $this->user,
+                $fixture,
+                $homeScore,
+                $awayScore,
+            );
 
-        app(PlaceBetAction::class)->handle($this->user, $fixture, $homeScore, $awayScore);
+            Flux::toast(
+                heading: 'Palpite salvo! 🎯',
+                text: 'Seu palpite foi registrado com sucesso.',
+                variant: 'success',
+            );
+        } catch (BetException $exception) {
+            Flux::toast(
+                heading: 'Impedimento! 🚩',
+                text: $exception->getMessage(),
+                variant: 'danger',
+            );
+        }
     }
 
     /**
@@ -108,7 +128,12 @@ final class Bets extends Component
     public function bets(): Collection
     {
         return collect($this->scores)
-            ->reject(fn (array $values): bool => in_array(null, $values, true));
+            ->filter(fn (array $values): bool => collect($values)->some(fn (?int $value): bool => filled($value)));
+    }
+
+    public function placeholder(): View
+    {
+        return view('components.bet.placeholder');
     }
 
     public function render(): View

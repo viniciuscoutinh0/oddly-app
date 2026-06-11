@@ -24,7 +24,10 @@ final class Show extends Component
         abort_unless(Gate::allows('view', $pool), code: 403);
 
         $this->pool = $pool
-            ->load(['season.competition', 'owner'])
+            ->load([
+                'season.competition',
+                'owner',
+            ])
             ->loadCount('participants');
     }
 

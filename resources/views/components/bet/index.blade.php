@@ -10,7 +10,10 @@
 <div
     {{ $attributes->class([
             'ring-2 ring-offset-2 ring-offset-zinc-800 ring-accent' => $beted,
-        ])->merge(['class' => 'overflow-hidden bg-zinc-900 mb-3 last:mb-0 border border-zinc-800 rounded-xl']) }}>
+        ])->merge([
+            'class' =>
+                'overflow-hidden bg-zinc-900 mb-[calc(0.75rem+calc(var(--spacing)*2))] last:mb-0 border border-zinc-800 rounded-xl transition duration-75',
+        ]) }}>
 
     <div class="flex items-center justify-between gap-2 bg-zinc-800 text-white px-3 py-1.5 border-b border-zinc-800">
         <flux:text class="text-xs text-white">
@@ -21,32 +24,43 @@
             <div
                 x-data="{
                     target: {{ $fixture->locked_at->timestamp }} * 1000,
+                
                     expired: false,
+                
                     label: '',
+                
                     tick() {
                         const diff = this.target - Date.now();
                 
                         if (diff <= 0) {
                             this.expired = true;
+                
                             this.label = 'Encerrado';
+                
                             return;
                         }
                 
                         const s = Math.floor(diff / 1000);
+                
                         const d = Math.floor(s / 86400);
+                
                         const h = Math.floor((s % 86400) / 3600);
+                
                         const m = Math.floor((s % 3600) / 60);
+                
                         const sec = s % 60;
                 
                         this.label = d > 0 ?
                             `${d}d ${h}h ${m}m` :
                             `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
                     },
+                
                     init() {
                         this.tick();
                 
                         const id = setInterval(() => {
                             this.tick();
+                
                             if (this.expired) clearInterval(id);
                         }, 1000);
                     },
@@ -81,7 +95,7 @@
         
             away: $wire.entangle('scores.{{ $fixture->id }}.away'),
         
-            save: Alpine.debounce(function() { $wire.save({{ $fixture->id }}, this.home ?? 0, this.away ?? 0) }, 800),
+            save: Alpine.debounce(function() { $wire.save({{ $fixture->id }}, this.home ?? 0, this.away ?? 0) }, 250),
         
             init() {
                 this.$watch('home', () => this.save())

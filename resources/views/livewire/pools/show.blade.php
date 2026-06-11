@@ -126,58 +126,39 @@
 
         <div class="lg:col-span-1 space-y-6">
             @can('seeInviteCode', $pool)
-                <div
-                    class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6"
-                    x-data="{
-                        copied: false,
-                        copy() {
-                            navigator.clipboard.writeText(@js($pool->invite_code));
-                            this.copied = true;
-                            setTimeout(() => this.copied = false, 2000);
-                        }
-                    }"
-                >
+                <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
                     <div class="flex items-center gap-3 mb-4">
-                        <x-heroicon-m-ticket class="text-zinc-400 w-5 h-5 shrink-0" />
+                        <flux:icon.ticket
+                            variant="mini"
+                            class="text-zinc-400 shrink-0"
+                        />
+
                         <flux:heading size="lg">Convite</flux:heading>
                     </div>
 
                     <flux:text
                         variant="subtle"
-                        class="text-xs mb-2 block"
+                        class="text-xs mb-3 block"
                     >
                         Compartilhe o código para convidar participantes.
                     </flux:text>
 
-                    <div class="flex items-center gap-2">
-                        <code
-                            class="flex-1 bg-zinc-800/50 border border-zinc-800 rounded-lg px-3 py-2 font-mono tracking-widest text-center"
-                        >
-                            {{ $pool->invite_code }}
-                        </code>
-
-                        <flux:button
-                            size="sm"
-                            variant="filled"
-                            icon="clipboard"
-                            x-on:click="copy()"
-                            x-bind:title="copied ? 'Copiado!' : 'Copiar'"
-                        />
-                    </div>
-
-                    <flux:text
-                        class="text-xs text-green-400 mt-2 block"
-                        x-show="copied"
-                        x-cloak
-                    >
-                        Código copiado!
-                    </flux:text>
+                    <flux:input
+                        icon="ticket"
+                        :value="$pool->invite_code"
+                        readonly
+                        copyable
+                    />
                 </div>
             @endcan
 
             <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
                 <div class="flex items-center gap-3 mb-6">
-                    <x-heroicon-m-information-circle class="text-zinc-400 w-5 h-5 shrink-0" />
+                    <flux:icon.information-circle
+                        variant="mini"
+                        class="text-zinc-400 shrink-0"
+                    />
+
                     <flux:heading size="lg">Informações</flux:heading>
                 </div>
 
@@ -186,13 +167,19 @@
                         <flux:text
                             variant="subtle"
                             class="text-xs uppercase"
-                        >Organizador</flux:text>
+                        >
+                            Organizador
+                        </flux:text>
+
                         <div class="flex items-center gap-2 min-w-0">
                             <flux:avatar
                                 size="xs"
                                 :initials="$pool->owner->initials()"
                             />
-                            <flux:text class="truncate">{{ $pool->owner->name }}</flux:text>
+
+                            <flux:text class="truncate">
+                                {{ $pool->owner->name }}
+                            </flux:text>
                         </div>
                     </div>
 
@@ -202,7 +189,10 @@
                         <flux:text
                             variant="subtle"
                             class="text-xs uppercase"
-                        >Período</flux:text>
+                        >
+                            Período
+                        </flux:text>
+
                         <flux:text class="text-end">
                             {{ $pool->season->start_date->format('d/m/Y') }}
                             –
@@ -217,6 +207,7 @@
                             variant="subtle"
                             class="text-xs uppercase"
                         >Bônus</flux:text>
+
                         @if (!$this->bonusLocksAt)
                             <flux:badge
                                 size="sm"
@@ -239,7 +230,11 @@
 
             <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
                 <div class="flex items-center gap-3 mb-6">
-                    <x-heroicon-m-shield-check class="text-zinc-400 w-5 h-5 shrink-0" />
+                    <flux:icon.shield-check
+                        variant="mini"
+                        class="text-zinc-400 shrink-0"
+                    />
+
                     <flux:heading size="lg">Regras de Pontuação</flux:heading>
                 </div>
 

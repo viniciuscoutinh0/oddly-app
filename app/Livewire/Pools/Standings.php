@@ -19,13 +19,28 @@ final class Standings extends Component
 
     public function mount(): void
     {
-        $this->pool = $this->pool->load(['season', 'participants']);
+        $this->pool = $this->pool->load([
+            'season',
+            'participants',
+        ]);
     }
 
     #[Computed]
     public function standings(): Collection
     {
         return app(PoolStandings::class)->for($this->pool);
+    }
+
+    #[Computed]
+    public function leaders(): Collection
+    {
+        return $this->standings->take(3);
+    }
+
+    #[Computed]
+    public function others(): Collection
+    {
+        return $this->standings->skip(3);
     }
 
     public function render(): View
