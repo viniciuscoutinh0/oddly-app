@@ -33,6 +33,13 @@
         />
     </div>
 
+    <flux:callout
+        color="sky"
+        icon="information-circle"
+        heading="Você já deu palpite em {{ $this->bets->count() }} de {{ $this->fixtures->count() }} {{ str('partida')->plural($this->fixtures->count()) }}."
+        class="mb-6"
+    />
+
     @foreach ($this->groups as $group => $fixtures)
         <div
             wire:key="group-{{ str($group)->slug() }}"
@@ -43,6 +50,7 @@
                 <x-bet
                     :$fixture
                     :$group
+                    :beted="isset($this->bets[$fixture->id])"
                     wire:key="fixture-{{ $fixture->id }}"
                 />
             @endforeach

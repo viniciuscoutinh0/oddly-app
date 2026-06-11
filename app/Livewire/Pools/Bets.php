@@ -104,8 +104,15 @@ final class Bets extends Component
                 : $fixture->stage->name->getLabel());
     }
 
+    #[Computed]
+    public function bets(): Collection
+    {
+        return collect($this->scores)
+            ->reject(fn (array $values): bool => in_array(null, $values, true));
+    }
+
     public function render(): View
     {
-        return view('livewire.pools.bets', ['fixtures' => $this->fixtures]);
+        return view('livewire.pools.bets');
     }
 }

@@ -1,52 +1,68 @@
 <div class="space-y-8">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div class="min-w-0">
-            <flux:heading size="xl">
-                {{ $pool->name }}
-            </flux:heading>
+        <div class="flex items-start gap-3">
+            <div class="shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden flex items-center justify-center">
+                @if (filled($url = $pool->season->logo))
+                    <img
+                        src="{{ $url }}"
+                        alt="Logo {{ $pool->season->competition->name }}"
+                        loading="lazy"
+                        class="w-full h-full object-cover"
+                    />
+                @else
+                    <flux:icon.trophy
+                        variant="solid"
+                        class="w-8 h-8 md:w-12 md:h-12"
+                    />
+                @endif
+            </div>
 
-            @if (filled($pool->description))
-                <flux:text
-                    class="mt-1"
-                    variant="subtle"
-                >
-                    {{ $pool->description }}
-                </flux:text>
-            @endif
+            <div class="min-w-0 flex flex-col gap-3">
+                <div class="min-w-0">
+                    <flux:heading size="xl">{{ $pool->name }}</flux:heading>
 
-            <div class="flex flex-wrap items-center gap-2 mt-3">
-                <flux:badge
-                    size="sm"
-                    icon="trophy"
-                    color="zinc"
-                >
-                    {{ $pool->season->competition->name }}
-                </flux:badge>
+                    @if (filled($pool->description))
+                        <flux:text
+                            class="mt-1"
+                            variant="subtle"
+                        >{{ $pool->description }}</flux:text>
+                    @endif
+                </div>
 
-                <flux:badge
-                    size="sm"
-                    icon="calendar"
-                    color="zinc"
-                >
-                    Temporada {{ $pool->season->name }}
-                </flux:badge>
+                <div class="flex flex-wrap items-center gap-2">
+                    <flux:badge
+                        size="sm"
+                        icon="trophy"
+                        color="zinc"
+                    >
+                        {{ $pool->season->competition->name }}
+                    </flux:badge>
 
-                <flux:badge
-                    size="sm"
-                    :icon="$pool->visibility->getIcon()"
-                    :color="$pool->isPublic() ? 'green' : 'zinc'"
-                >
-                    {{ $pool->visibility->getLabel() }}
-                </flux:badge>
+                    <flux:badge
+                        size="sm"
+                        icon="calendar"
+                        color="zinc"
+                    >
+                        Temporada {{ $pool->season->name }}
+                    </flux:badge>
 
-                <flux:badge
-                    size="sm"
-                    icon="user-group"
-                    color="zinc"
-                >
-                    {{ $pool->participants_count }}
-                    {{ str('participante')->plural($pool->participants_count) }}
-                </flux:badge>
+                    <flux:badge
+                        size="sm"
+                        :icon="$pool->visibility->getIcon()"
+                        :color="$pool->isPublic() ? 'green' : 'zinc'"
+                    >
+                        {{ $pool->visibility->getLabel() }}
+                    </flux:badge>
+
+                    <flux:badge
+                        size="sm"
+                        icon="user-group"
+                        color="zinc"
+                    >
+                        {{ $pool->participants_count }}
+                        {{ str('participante')->plural($pool->participants_count) }}
+                    </flux:badge>
+                </div>
             </div>
         </div>
 
@@ -112,9 +128,14 @@
             @can('seeInviteCode', $pool)
                 <div
                     class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6"
-                    x-data="{ copied: false, copy() { navigator.clipboard.writeText(@js($pool->invite_code));
+                    x-data="{
+                        copied: false,
+                        copy() {
+                            navigator.clipboard.writeText(@js($pool->invite_code));
                             this.copied = true;
-                            setTimeout(() => this.copied = false, 2000); } }"
+                            setTimeout(() => this.copied = false, 2000);
+                        }
+                    }"
                 >
                     <div class="flex items-center gap-3 mb-4">
                         <x-heroicon-m-ticket class="text-zinc-400 w-5 h-5 shrink-0" />
