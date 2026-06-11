@@ -26,7 +26,7 @@ final class BetPoint implements PointSource
                     ) as points
                     SQL,
                 [
-                    $pool->points_exact,
+                    $pool->points_exact + $pool->points_result,
                     $pool->points_result,
                 ],
             )
