@@ -1,4 +1,4 @@
- @props(['user' => null, 'position' => 1])
+ @props(['user', 'position' => 1])
 
  @php
      $color = match ($position) {
@@ -10,11 +10,12 @@
 
  <div
      {{ $attributes->class([
-             'bg-amber-400/5 border-amber-500  ring-amber-500 order-1 -top-2' => $position === 1,
-             'bg-zinc-400/5 border-zinc-400 ring-zinc-400' => $position === 2,
-             'bg-orange-400/5 border-orange-400 ring-orange-400' => $position === 3,
+             'bg-amber-400/5 border-amber-500 ring-amber-500 order-2 -top-2' => $position === 1,
+             'bg-zinc-400/5 border-zinc-400 ring-zinc-400 order-1' => $position === 2,
+             'bg-orange-400/5 border-orange-400 ring-orange-400 order-3' => $position === 3,
          ])->merge([
-             'class' => 'relative flex flex-col items-center text-center rounded-xl gap-3 pt-9 px-2 pb-6 sm:px-6 ring-2 border',
+             'class' =>
+                 'relative flex flex-col items-center text-center rounded-xl gap-3 pt-9 px-2 pb-6 sm:px-6 ring-2 border',
          ]) }}>
      <flux:avatar
          :initials="$user->initials"
@@ -25,7 +26,7 @@
          :$color
      />
 
-     <flux:text class="w-full break-words">
+     <flux:text class="w-full wrap-break-word">
          {{ $user->name }}
      </flux:text>
 

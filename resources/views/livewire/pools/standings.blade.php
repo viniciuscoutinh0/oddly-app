@@ -5,7 +5,7 @@
         heading=" Pontuação é processada ao final do dia."
     />
 
-    <div class="grid grid-cols-3 gap-2 sm:gap-3">
+    <div class="grid grid-cols-3 gap-3 sm:gap-3">
         @foreach ($this->leaders as $user)
             <x-standing.card
                 :$user
@@ -37,7 +37,7 @@
                             <flux:table.row :key="$user->id">
                                 <flux:table.cell>
                                     <flux:badge>
-                                        {{ $loop->iteration }}º
+                                        {{ $loop->iteration + $this->leaders->count() }}º
                                     </flux:badge>
                                 </flux:table.cell>
                                 <flux:table.cell class="flex items-center gap-3">
