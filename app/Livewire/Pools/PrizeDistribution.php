@@ -19,15 +19,38 @@ final class PrizeDistribution extends Component
 
     public array $distributions = [];
 
+    public function rules(): array
+    {
+        return [
+            'distributions' => ['required', 'array'],
+            'distributions.*.position' => ['required', 'integer'],
+            'distributions.*.percentage' => ['required', 'numeric', 'between:0,100'],
+        ];
+    }
+
     public function mount(): void
     {
+
+        if ($this->pool->distributions->isEmpty()) {
+            $this->distributions = [
+                [
+                    'position' => 1,
+                    'percentage' => 100
+                ],
+            ];
+
+            return;
+        }
+
         $this->distributions = $this->pool
             ->distributions
-            ->map(fn (PoolPrizeDistribution $destribution) => [
+            ->map(fn (PoolPrizeDistribution $destribution): array => [
                 'position' => $destribution->position,
                 'percentage' => $destribution->percentage,
             ])
-            ->all() ?? [];
+            ->all();
+
+
     }
 
     public function addPosition(): void
@@ -41,6 +64,7 @@ final class PrizeDistribution extends Component
     public function removePosition(int $index): void
     {
         unset($this->distributions[$index]);
+
         $this->distributions = array_values($this->distributions);
 
         foreach ($this->distributions as $i => &$distribution) {
@@ -49,9 +73,21 @@ final class PrizeDistribution extends Component
     }
 
     #[Computed]
-    public function totalPercentage(): int
+    public function rest(): int|float
     {
-        return array_sum(array_column($this->distributions, 'percentage'));
+        return array_sum(array_column($this->distributions, 'percentage')) * $this->pool->entry_fee / 100;
+    }
+
+    #[Computed]
+    public function isValid(): bool
+    {
+
+        return array_sum(array_column($this->distributions, 'percentage')) === 100;
+    }
+
+    public function save(): void
+    {
+        $data = $this->validate();
     }
 
     public function render(): View|Factory
