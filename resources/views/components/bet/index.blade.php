@@ -135,15 +135,17 @@
                 {{ $fixture->match_date->format('d/m/Y à\\s H:i') }}
             </flux:text>
 
-            <flux:modal.trigger name="edit-profile-{{ $fixture->id }}">
-                <flux:button
-                    size="sm"
-                    icon="rectangle-stack"
-                    variant="subtle"
-                >
-                    Palpites
-                </flux:button>
-            </flux:modal.trigger>
+            @if ($locked)
+                <flux:modal.trigger name="edit-profile-{{ $fixture->id }}">
+                    <flux:button
+                        size="sm"
+                        icon="rectangle-stack"
+                        variant="subtle"
+                    >
+                        Palpites
+                    </flux:button>
+                </flux:modal.trigger>
+            @endif
         </div>
 
         <x-bet.team
@@ -165,12 +167,13 @@
         </div>
     @endif
 
-    <flux:modal
-        name="edit-profile-{{ $fixture->id }}"
-        class="md:max-w-lg"
-        flyout
-        variant="floating"
-    >
+    @if ($locked)
+        <flux:modal
+            name="edit-profile-{{ $fixture->id }}"
+            class="md:max-w-lg"
+            flyout
+            variant="floating"
+        >
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">Palpites da partida</flux:heading>
@@ -229,7 +232,7 @@
                         @class([
                             'flex items-center gap-3 bg-zinc-900 border text-white rounded-xl px-3 py-2.5',
                             'border-green-600' => $bet->is_exact || $bet->is_correct_result,
-                            'border-zinc-700' => !$bet->is_exact || !$bet->is_correct_result,
+                            'border-zinc-700' => ! ($bet->is_exact || $bet->is_correct_result),
                         ])
                         wire:key="bet-{{ $bet->id }}"
                     >
@@ -264,5 +267,6 @@
                 @endforelse
             </div>
         </div>
-    </flux:modal>
+        </flux:modal>
+    @endif
 </div>
