@@ -35,7 +35,10 @@
         position="bottom"
         align="end"
     >
-        <flux:profile :initials="auth()->user()->initials()" />
+        <flux:profile
+            circle
+            :initials="auth()->user()->initials()"
+        />
 
         <flux:menu>
             {{-- <flux:menu.group heading="Conta">
