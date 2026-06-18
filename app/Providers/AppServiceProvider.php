@@ -8,6 +8,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Number;
 use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
@@ -17,6 +18,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->configureModels();
         $this->configureDates();
         $this->configureHttpScheme();
+        $this->configureCurrency();
     }
 
     public function configureModels(): void
@@ -35,5 +37,10 @@ final class AppServiceProvider extends ServiceProvider
     private function configureHttpScheme(): void
     {
         URL::forceHttps(app()->isProduction());
+    }
+
+    private function configureCurrency(): void
+    {
+        Number::useCurrency('BRL');
     }
 }

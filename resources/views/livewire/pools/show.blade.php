@@ -75,6 +75,15 @@
                 Voltar
             </flux:button>
 
+            @can('isOwner', $pool)
+                <flux:button
+                    icon="trophy"
+                    x-on:click="$flux.modal('prize-distribution-manager').show();"
+                >
+                    Definir Premiação
+                </flux:button>
+            @endcan
+
             <livewire:pools.leave :pool="$pool" />
         </div>
     </div>
@@ -259,4 +268,6 @@
             </div>
         </div>
     </div>
+
+    <livewire:pools.prize-distribution :pool="$pool" />
 </div>

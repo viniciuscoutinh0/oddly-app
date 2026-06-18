@@ -93,7 +93,7 @@ final class Bets extends Component
     }
 
     /**
-     * @return Collection<int, Fixture>
+     * @return Collection<int,Fixture>
      */
     #[Computed]
     public function fixtures(): Collection
@@ -105,6 +105,7 @@ final class Bets extends Component
                 'homeTeam',
                 'awayTeam',
                 'stage',
+                'bets.user',
             ])
             ->get()
             ->sortBy(fn (Fixture $fixture): string => sprintf(

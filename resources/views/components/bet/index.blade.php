@@ -111,7 +111,6 @@
             model="home"
         />
 
-
         <div class="flex flex-col items-center justify-center gap-2">
             <div class="flex items-center gap-3">
                 <flux:heading
@@ -135,8 +134,19 @@
             >
                 {{ $fixture->match_date->format('d/m/Y à\\s H:i') }}
             </flux:text>
-        </div>
 
+            @if ($locked)
+                <flux:modal.trigger name="edit-profile-{{ $fixture->id }}">
+                    <flux:button
+                        size="sm"
+                        icon="rectangle-stack"
+                        variant="subtle"
+                    >
+                        Palpites
+                    </flux:button>
+                </flux:modal.trigger>
+            @endif
+        </div>
 
         <x-bet.team
             :team="$fixture->awayTeam"
@@ -157,4 +167,106 @@
         </div>
     @endif
 
+    @if ($locked)
+        <flux:modal
+            name="edit-profile-{{ $fixture->id }}"
+            class="md:max-w-lg"
+            flyout
+            variant="floating"
+        >
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Palpites da partida</flux:heading>
+                <flux:text class="mt-2">Veja o que cada participante apostou para esta partida.</flux:text>
+            </div>
+
+            <div class="flex items-center justify-center gap-4 rounded-xl border border-zinc-700 bg-zinc-900 p-4">
+                @foreach ([$fixture->homeTeam, $fixture->awayTeam] as $team)
+                    @if (!$loop->first)
+                        <flux:separator text="x" />
+                    @endif
+
+                    <div class="flex flex-col items-center gap-2 min-w-0 shrink-0">
+                        <div class="w-10 h-10 shrink-0">
+                            @if (filled($team))
+                                <img
+                                    src="{{ $team->logo_url }}"
+                                    alt="{{ $team->name }}"
+                                    class="w-full h-full object-contain"
+                                />
+                            @else
+                                <div
+                                    class="w-full h-full rounded-md border border-dashed border-zinc-800 bg-zinc-800/15">
+                                </div>
+                            @endif
+                        </div>
+
+                        <flux:text
+                            variant="strong"
+                            class="text-center text-sm truncate max-w-24"
+                        >
+                            {{ $team?->name ?? 'A definir' }}
+                        </flux:text>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="flex items-center justify-between">
+                <flux:text
+                    variant="subtle"
+                    class="text-sm"
+                >Total de Palpites</flux:text>
+
+                <flux:badge
+                    size="sm"
+                    class="tabular-nums"
+                >
+                    {{ $fixture->bets->count() }}
+                </flux:badge>
+
+            </div>
+
+            <div class="space-y-3">
+                @forelse ($fixture->bets as $bet)
+                    <div
+                        @class([
+                            'flex items-center gap-3 bg-zinc-900 border text-white rounded-xl px-3 py-2.5',
+                            'border-green-600' => $bet->is_exact || $bet->is_correct_result,
+                            'border-zinc-700' => ! ($bet->is_exact || $bet->is_correct_result),
+                        ])
+                        wire:key="bet-{{ $bet->id }}"
+                    >
+                        <flux:avatar
+                            circle
+                            size="sm"
+                            initials="{{ $bet->user->initials() }}"
+                            class="shrink-0"
+                        />
+
+                        <flux:text
+                            variant="strong"
+                            class="flex-1 min-w-0 truncate"
+                        >
+                            {{ $bet->user->name }}
+                        </flux:text>
+
+                        <flux:text
+                            variant="strong"
+                            class="shrink-0 text-lg tabular-nums"
+                        >
+                            {{ $bet->home_score }} <flux:text
+                                variant="subtle"
+                                class="text-xs"
+                            >x</flux:text> {{ $bet->away_score }}
+                        </flux:text>
+                    </div>
+                @empty
+                    <flux:text variant="subtle">
+                        Nenhum palpite registrado para esta partida.
+                    </flux:text>
+                @endforelse
+            </div>
+        </div>
+        </flux:modal>
+    @endif
 </div>
