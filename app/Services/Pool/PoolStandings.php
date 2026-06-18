@@ -54,6 +54,6 @@ final readonly class PoolStandings
     {
         $percentage = (float) $pool->distributions->firstWhere('position', $key + 1)?->percentage ?? 0;
 
-        return ($percentage / 100) * $pool->entry_fee;
+        return ($percentage / 100) * $pool->totalAward();
     }
 }

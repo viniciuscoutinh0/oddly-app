@@ -7,11 +7,13 @@ namespace App\Livewire\Pools;
 use App\Models\Pool;
 use App\Models\PoolPrizeDistribution;
 use Flux\Flux;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -40,13 +42,21 @@ final class PrizeDistribution extends Component
             ->all();
     }
 
+    #[Computed]
+    public function totalAward(): int
+    {
+        return $this->pool->totalAward();
+    }
+
     public function save(): void
     {
         $this->distributions = collect($this->distributions)
-            ->filter(fn (?int $value): bool => filled($value))
+            ->filter(fn (?int $value): bool => filled($value) || $value !== 0)
             ->all();
 
         try {
+            $this->authorize('isOwner', $this->pool);
+
             $data = $this->validate();
 
             DB::beginTransaction();
@@ -63,7 +73,17 @@ final class PrizeDistribution extends Component
                 );
 
             DB::commit();
+        } catch (AuthorizationException) {
+            Flux::toast(
+                heading: 'Você não tem permissão',
+                text: 'Você não tem permissão para executar está ação.',
+                variant: 'danger',
+            );
+
+            return;
         } catch (ValidationException $exception) {
+            DB::rollBack();
+
             Flux::toast(
                 heading: 'Verifique as posições ⚠️',
                 text: 'Alguns valores estão incorretos. Revise a distribuição antes de salvar.',

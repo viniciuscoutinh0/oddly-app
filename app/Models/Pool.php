@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\Pool\Visibility;
-use Database\Factories\PoolFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 final class Pool extends Model
 {
-    /** @use HasFactory<PoolFactory> */
+    /** @use HasFactory<\Database\Factories\PoolFactory> */
     use HasFactory;
 
     protected function casts(): array
@@ -26,6 +24,7 @@ final class Pool extends Model
             'points_result' => 'integer',
             'points_champion' => 'integer',
             'points_group_position' => 'integer',
+            'entry_fee' => 'integer',
         ];
     }
 
@@ -50,6 +49,11 @@ final class Pool extends Model
     public function distributions(): HasMany
     {
         return $this->hasMany(PoolPrizeDistribution::class);
+    }
+
+    public function totalAward(): int
+    {
+        return $this->entry_fee * $this->participants()->count();
     }
 
     public function isPublic(): bool

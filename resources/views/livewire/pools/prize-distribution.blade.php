@@ -6,78 +6,79 @@
 >
     <div
         x-data="{
-            amount: @js($pool->entry_fee ?? 0),
-
+            amount: @js($this->totalAward ?? 0),
+        
             distributions: $wire.entangle('distributions'),
-
+        
             add() {
-
                 const keys = Object.keys(this.distributions)
                     .map(Number)
                     .filter(key => !isNaN(key) && this.distributions[key] !== undefined);
-
+        
                 const nextPosition = keys.length > 0 ? Math.max(...keys) + 1 : 1;
-
+        
                 this.distributions[nextPosition] = 0;
             },
-
+        
             clear() {
                 if (this.isEmpty) return;
-
-                this.distributions = Object.assign({});
+        
+                this.distributions = {};
             },
-
+        
             get allocations() {
                 const total = parseFloat(this.amount);
                 let calculated = {};
-
+        
                 Object.keys(this.distributions).forEach(position => {
                     const percentage = parseFloat(this.distributions[position]) || 0;
                     calculated[position] = this._round((total * (percentage / 100)), 2);
                 });
-
+        
                 return calculated;
             },
-
+        
             get isEmpty() {
                 return Object.keys(this.distributions ?? {}).length === 0;
             },
-
+        
             get totalPercentage() {
                 return Object.values(this.distributions)
                     .reduce((sum, value) => sum + (parseFloat(value) || 0), 0);
             },
-
+        
             get isFullAllocated() {
                 return Math.abs(this.totalPercentage - 100) < 0.0001;
             },
-
+        
             get availableAmount() {
                 const totalAllocatedInMoney = Object.values(this.allocations)
                     .reduce((sum, value) => sum + value, 0);
-
+        
                 return Math.max(0, this.amount - totalAllocatedInMoney);
             },
-
+        
             limit(event, position) {
-                let value = parseFloat(event.target.value) || 0;
-
-                const old = parseFloat(this.distributions[position]) || 0;
+                let value = parseInt(event.target.value) || 0;
+        
+                const old = parseInt(this.distributions[position]) || 0;
+        
                 const total = this.totalPercentage - old;
+        
                 const maxAllowed = Math.max(0, 100 - total);
-
+        
                 if (value > maxAllowed) {
                     value = maxAllowed;
                 }
-
+        
                 this.distributions[position] = value;
                 event.target.value = value;
             },
-
+        
             money(value) {
                 return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0)
             },
-
+        
             _round(value, decimals) {
                 return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
             }
@@ -149,6 +150,7 @@
                             <div class="flex-1">
                                 <flux:slider
                                     min="0"
+                                    step="1"
                                     max="100"
                                     x-on:input="limit($event, position)"
                                     x-model="distributions[position]"
@@ -159,6 +161,7 @@
                                 type="number"
                                 min="0"
                                 max="100"
+                                step="1"
                                 size="sm"
                                 class="max-w-18 shrink-0"
                                 x-model="distributions[position]"
@@ -180,7 +183,7 @@
             >
                 Distribuído: <span
                     class="font-bold"
-                    x-text="`${totalPercentage}`"
+                    x-text="`${Number(totalPercentage).toFixed()}`"
                 ></span>/100%
             </flux:text>
 

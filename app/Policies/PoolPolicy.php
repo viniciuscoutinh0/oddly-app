@@ -34,6 +34,11 @@ final class PoolPolicy
         return $user->id === $pool->owner_id;
     }
 
+    public function isOwner(User $user, Pool $pool): bool
+    {
+        return $this->isOwner($user, $pool);
+    }
+
     public function bet(User $user, Pool $pool): bool
     {
         return $pool->isOwner($user) || $pool->hasParticipant($user);
