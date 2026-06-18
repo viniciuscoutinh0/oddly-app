@@ -45,7 +45,7 @@ final readonly class PoolStandings
 
     private function awarding(Pool $pool, Collection $ranked): Collection
     {
-        $total = $pool->totalAward();
+        $total = $pool->entry_fee * $pool->participants->count();
 
         $position = 0;
 
