@@ -20,25 +20,56 @@ final readonly class PoolStandings
 
     public function for(Pool $pool): Collection
     {
-        /** @var Collection $participants */
-        $participants = $pool->participants;
+        return $this->awarding($pool, $this->rank($pool));
+    }
 
-        $ids = $participants->pluck('id');
+    private function rank(Pool $pool): Collection
+    {
+        $ids = $pool->participants->pluck('id');
 
         $sources = collect($this->sources())->map(
             fn (PointSource $source): Collection => $source->pointsFor($pool, $ids),
         );
 
-        return $participants
-            ->map(fn (User $user, int $key): UserStanding => new UserStanding(
+        return $pool
+            ->participants
+            ->map(fn (User $user): UserStanding => new UserStanding(
                 id: $user->id,
                 name: $user->name,
                 initials: $user->initials(),
                 points: $sources->sum(fn (Collection $point): int => (int) ($point[$user->id] ?? 0)),
-                award: $this->resolveAward($pool, $key),
             ))
             ->sortByDesc(fn (UserStanding $standing): int => $standing->points)
             ->values();
+    }
+
+    private function awarding(Pool $pool, Collection $ranked): Collection
+    {
+        $total = $pool->entry_fee * $pool->participants->count();
+
+        $position = 0;
+
+        return $ranked
+            ->groupBy(fn (UserStanding $standing): int => $standing->points)
+            ->flatMap(function (Collection $group) use ($pool, $total, &$position): Collection {
+                $count = $group->count();
+
+                $percentage = collect(range($position, $position + $count - 1))
+                    ->sum(fn (int $pos): float => $this->percentageFor($pool, $pos));
+
+                $position += $count;
+                $award = (($percentage / 100) * $total) / $count;
+
+                return $group->map(
+                    fn (UserStanding $standing): UserStanding => $standing->withAward($award),
+                );
+            })
+            ->values();
+    }
+
+    private function percentageFor(Pool $pool, int $position): float
+    {
+        return (float) ($pool->distributions->firstWhere('position', $position + 1)?->percentage ?? 0);
     }
 
     private function sources(): array
@@ -48,12 +79,5 @@ final readonly class PoolStandings
             $this->group,
             $this->champion,
         ];
-    }
-
-    private function resolveAward(Pool $pool, int $key): float
-    {
-        $percentage = (float) $pool->distributions->firstWhere('position', $key + 1)?->percentage ?? 0;
-
-        return ($percentage / 100) * $pool->totalAward();
     }
 }

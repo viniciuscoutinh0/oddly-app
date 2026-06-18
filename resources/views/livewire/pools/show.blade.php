@@ -183,6 +183,7 @@
                         <div class="flex items-center gap-2 min-w-0">
                             <flux:avatar
                                 size="xs"
+                                circle
                                 :initials="$pool->owner->initials()"
                             />
 
@@ -204,8 +205,23 @@
 
                         <flux:text class="text-end">
                             {{ $pool->season->start_date->format('d/m/Y') }}
-                            –
+                            à
                             {{ $pool->season->end_date->format('d/m/Y') }}
+                        </flux:text>
+                    </div>
+
+                    <flux:separator variant="subtle" />
+
+                    <div class="flex items-center justify-between gap-3">
+                        <flux:text
+                            variant="subtle"
+                            class="text-xs uppercase"
+                        >
+                            Premiação
+                        </flux:text>
+
+                        <flux:text class="text-end">
+                            {{ Number::currency($pool->entry_fee * $pool->participants_count) }}
                         </flux:text>
                     </div>
 

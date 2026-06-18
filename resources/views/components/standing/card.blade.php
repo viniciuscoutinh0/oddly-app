@@ -3,16 +3,16 @@
  @php
      $color = match ($position) {
          1 => 'amber',
-         2 => 'zinc',
+         2 => 'slate',
          3 => 'orange',
      };
  @endphp
 
  <div
      {{ $attributes->class([
-             'bg-amber-400/5 border-amber-500 ring-amber-500 order-2 -top-2' => $position === 1,
-             'bg-zinc-400/5 border-zinc-400 ring-zinc-400 order-1' => $position === 2,
-             'bg-orange-400/5 border-orange-400 ring-orange-400 order-3' => $position === 3,
+             'bg-amber-500/5 border-amber-500/80 ring-amber-500/30 order-2 -top-2' => $position === 1, // Ouro
+             'bg-slate-400/5 border-slate-400/80 ring-slate-400/30 order-1' => $position === 2, // Prata
+             'bg-amber-700/5 border-amber-700/80 ring-amber-700/30 order-3' => $position === 3, // Bronze
          ])->merge([
              'class' =>
                  'relative flex flex-col items-center text-center rounded-xl gap-3 pt-9 px-2 pb-6 sm:px-6 ring-2 border',
@@ -32,10 +32,8 @@
      </flux:text>
 
      <flux:heading size="xl">
-         {{ $user->points }}
-         {{ str('pt')->plural($user->points) }}
+         {{ $user->points }}{{ str('pt')->plural($user->points) }}
      </flux:heading>
-
 
      <flux:text
          variant="strong"
@@ -49,6 +47,8 @@
          variant="solid"
          rounded
          :$color
-         class="absolute -top-4"
-     >{{ $position }}</flux:badge>
+         class="absolute text-white w-8 -top-4"
+     >
+         {{ $position }}
+     </flux:badge>
  </div>
