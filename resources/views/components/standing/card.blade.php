@@ -35,6 +35,12 @@
          {{ str('pt')->plural($user->points) }}
      </flux:heading>
 
+
+     <flux:text class="w-full wrap-break-word">
+         {{ Number::currency($user->award) }}
+     </flux:text>
+
+
      <flux:badge
          size="lg"
          variant="solid"

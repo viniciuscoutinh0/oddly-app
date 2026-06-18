@@ -75,7 +75,12 @@
                 Voltar
             </flux:button>
 
-            <flux:button x-on:click="$flux.modal('prize-distribution-manager').show()">Edit profile</flux:button>
+            <flux:button
+                icon="gift"
+                x-on:click="$flux.modal('prize-distribution-manager').show()"
+            >
+                Definir Premiação
+            </flux:button>
 
             <livewire:pools.leave :pool="$pool" />
         </div>

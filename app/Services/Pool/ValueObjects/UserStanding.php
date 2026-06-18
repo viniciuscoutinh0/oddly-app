@@ -11,5 +11,6 @@ final readonly class UserStanding
         public string $name,
         public string $initials,
         public int $points,
+        public ?float $award = null,
     ) {}
 }

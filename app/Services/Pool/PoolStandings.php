@@ -30,11 +30,12 @@ final readonly class PoolStandings
         );
 
         return $participants
-            ->map(fn (User $user): UserStanding => new UserStanding(
+            ->map(fn (User $user, int $key): UserStanding => new UserStanding(
                 id: $user->id,
                 name: $user->name,
                 initials: $user->initials(),
                 points: $sources->sum(fn (Collection $point): int => (int) ($point[$user->id] ?? 0)),
+                award: $this->resolveAward($pool, $key),
             ))
             ->sortByDesc(fn (UserStanding $standing): int => $standing->points)
             ->values();
@@ -47,5 +48,12 @@ final readonly class PoolStandings
             $this->group,
             $this->champion,
         ];
+    }
+
+    private function resolveAward(Pool $pool, int $key): float
+    {
+        $percentage = (float) $pool->distributions->firstWhere('position', $key + 1)?->percentage ?? 0;
+
+        return ($percentage / 100) * $pool->entry_fee;
     }
 }

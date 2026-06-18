@@ -22,6 +22,7 @@ final class Standings extends Component
         $this->pool = $this->pool->load([
             'season',
             'participants',
+            'distributions',
         ]);
     }
 

@@ -6,9 +6,12 @@ namespace App\Livewire\Pools;
 
 use App\Models\Pool;
 use App\Models\PoolPrizeDistribution;
+use Flux\Flux;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\Computed;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
@@ -19,75 +22,74 @@ final class PrizeDistribution extends Component
 
     public array $distributions = [];
 
-    public function rules(): array
+    protected function rules(): array
     {
         return [
             'distributions' => ['required', 'array'],
-            'distributions.*.position' => ['required', 'integer'],
-            'distributions.*.percentage' => ['required', 'numeric', 'between:0,100'],
+            'distributions.*' => ['required', 'integer', 'min:1', 'max:100'],
         ];
     }
 
     public function mount(): void
     {
-
-        if ($this->pool->distributions->isEmpty()) {
-            $this->distributions = [
-                [
-                    'position' => 1,
-                    'percentage' => 100
-                ],
-            ];
-
-            return;
-        }
-
         $this->distributions = $this->pool
             ->distributions
-            ->map(fn (PoolPrizeDistribution $destribution): array => [
-                'position' => $destribution->position,
-                'percentage' => $destribution->percentage,
+            ->mapWithKeys(fn (PoolPrizeDistribution $distribution): array => [
+                $distribution->position => $distribution->percentage,
             ])
             ->all();
-
-
-    }
-
-    public function addPosition(): void
-    {
-        $this->distributions[] = [
-            'position' => count($this->distributions) + 1,
-            'percentage' => 0,
-        ];
-    }
-
-    public function removePosition(int $index): void
-    {
-        unset($this->distributions[$index]);
-
-        $this->distributions = array_values($this->distributions);
-
-        foreach ($this->distributions as $i => &$distribution) {
-            $distribution['position'] = $i + 1;
-        }
-    }
-
-    #[Computed]
-    public function rest(): int|float
-    {
-        return array_sum(array_column($this->distributions, 'percentage')) * $this->pool->entry_fee / 100;
-    }
-
-    #[Computed]
-    public function isValid(): bool
-    {
-
-        return array_sum(array_column($this->distributions, 'percentage')) === 100;
     }
 
     public function save(): void
     {
-        $data = $this->validate();
+        $this->distributions = collect($this->distributions)
+            ->filter(fn (?int $value): bool => filled($value))
+            ->all();
+
+        try {
+            $data = $this->validate();
+
+            DB::beginTransaction();
+
+            $this->pool->distributions()->delete();
+
+            $this->pool
+                ->distributions()
+                ->createMany(
+                    collect($data['distributions'])->map(fn (int $percentage, int $position): array => [
+                        'position' => $position,
+                        'percentage' => $percentage,
+                    ]),
+                );
+
+            DB::commit();
+        } catch (ValidationException $exception) {
+            Flux::toast(
+                heading: 'Verifique as posições ⚠️',
+                text: 'Alguns valores estão incorretos. Revise a distribuição antes de salvar.',
+                variant: 'danger',
+            );
+
+            throw $exception;
+        } catch (QueryException $exception) {
+            DB::rollBack();
+
+            Flux::toast(
+                heading: 'Não foi possível salvar ⚠️',
+                text: 'Houve um problema ao salvar a premiação. Por favor, tente novamente.',
+                variant: 'danger',
+            );
+
+            return;
+        }
+
+        Flux::toast(
+            heading: 'Tudo pronto para o pódio! 🎯',
+            text: 'A premiação foi dividida e salva com sucesso.',
+            variant: 'success',
+        );
+
+        Flux::modal('prize-distribution-manager')->close();
     }
 
     public function render(): View|Factory
