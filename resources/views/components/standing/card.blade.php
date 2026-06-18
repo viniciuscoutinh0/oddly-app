@@ -17,6 +17,7 @@
              'class' =>
                  'relative flex flex-col items-center text-center rounded-xl gap-3 pt-9 px-2 pb-6 sm:px-6 ring-2 border',
          ]) }}>
+
      <flux:avatar
          :initials="$user->initials"
          circle
@@ -36,16 +37,18 @@
      </flux:heading>
 
 
-     <flux:text class="w-full wrap-break-word">
+     <flux:text
+         variant="strong"
+         class="w-full text-white wrap-break-word"
+     >
          {{ Number::currency($user->award) }}
      </flux:text>
-
 
      <flux:badge
          size="lg"
          variant="solid"
          rounded
          :$color
-         class="absolute -top-3"
+         class="absolute -top-4"
      >{{ $position }}</flux:badge>
  </div>

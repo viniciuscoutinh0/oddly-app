@@ -8,7 +8,7 @@
         x-data="{
             amount: @js($this->totalAward ?? 0),
         
-            distributions: $wire.entangle('distributions'),
+            distributions: $wire.entangle('form.distributions'),
         
             add() {
                 const keys = Object.keys(this.distributions)
@@ -183,8 +183,8 @@
             >
                 Distribuído: <span
                     class="font-bold"
-                    x-text="`${Number(totalPercentage).toFixed()}`"
-                ></span>/100%
+                    x-text="`${Number(totalPercentage).toFixed()}%`"
+                ></span> de 100%
             </flux:text>
 
             <flux:button

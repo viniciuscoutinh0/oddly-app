@@ -10,8 +10,10 @@ use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
+#[On('prize-distribution::saved')]
 final class Standings extends Component
 {
     #[Locked]
@@ -21,7 +23,7 @@ final class Standings extends Component
     {
         $this->pool = $this->pool->load([
             'season',
-            'participants',
+            'participants.bets',
             'distributions',
         ]);
     }

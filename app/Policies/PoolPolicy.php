@@ -36,7 +36,7 @@ final class PoolPolicy
 
     public function isOwner(User $user, Pool $pool): bool
     {
-        return $this->isOwner($user, $pool);
+        return $pool->isOwner($user);
     }
 
     public function bet(User $user, Pool $pool): bool

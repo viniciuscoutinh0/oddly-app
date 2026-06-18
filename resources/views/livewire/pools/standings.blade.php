@@ -22,37 +22,42 @@
         @endfor
     </div>
 
-    @if ($this->others->isNotEmpty())
-        <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl mb-6 overflow-hidden">
-            <div class="p-4 md:p-6 overflow-x-auto">
-                <flux:table>
-                    <flux:table.columns>
-                        <flux:table.column>#</flux:table.column>
-                        <flux:table.column>Nome</flux:table.column>
-                        <flux:table.column>Pontos</flux:table.column>
-                    </flux:table.columns>
+    <div>
+        @foreach ($this->others as $user)
+            <div
+                class="flex items-stretch bg-zinc-900 mb-3 last:mb-0 border border-zinc-800 text-white rounded-xl overflow-hidden"
+                wire:key="{{ $user->id }}"
+            >
+                <div class="w-14 sm:w-16 bg-zinc-800 flex items-center justify-center shrink-0">
+                    <flux:heading size="xl">
+                        {{ $loop->iteration + $this->leaders->count() }}º
+                    </flux:heading>
+                </div>
 
-                    <flux:table.rows>
-                        @foreach ($this->others as $user)
-                            <flux:table.row :key="$user->id">
-                                <flux:table.cell>
-                                    <flux:badge>
-                                        {{ $loop->iteration + $this->leaders->count() }}º
-                                    </flux:badge>
-                                </flux:table.cell>
-                                <flux:table.cell class="flex items-center gap-3">
-                                    <flux:avatar
-                                        size="xs"
-                                        initials="{{ $user->initials }}"
-                                    />
-                                    <flux:text variant="strong">{{ $user->name }}</flux:text>
-                                </flux:table.cell>
-                                <flux:table.cell>{{ $user->points }}</flux:table.cell>
-                            </flux:table.row>
-                        @endforeach
-                    </flux:table.rows>
-                </flux:table>
+                <div class="flex flex-1 items-center gap-3 p-3 pr-4 sm:pr-6 min-w-0">
+                    <flux:avatar
+                        circle
+                        size="sm"
+                        initials="{{ $user->initials }}"
+                        class="shrink-0"
+                    />
+
+                    <flux:text
+                        variant="strong"
+                        class="flex-1 min-w-0 truncate"
+                    >
+                        {{ $user->name }}
+                    </flux:text>
+
+                    <flux:text
+                        variant="strong"
+                        class="shrink-0 text-lg tabular-nums"
+                    >
+                        {{ $user->points }}pts
+                    </flux:text>
+                </div>
             </div>
-        </div>
-    @endif
+        @endforeach
+    </div>
+
 </div>
