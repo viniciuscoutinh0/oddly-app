@@ -7,10 +7,12 @@ namespace App\Models;
 use App\Enums\Fixture\Duration;
 use App\Enums\Fixture\Status;
 use App\Observers\FixtureObserver;
+use Carbon\CarbonImmutable;
 use Database\Factories\FixtureFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +34,15 @@ final class Fixture extends Model
             'status' => Status::class,
             'duration' => Duration::class,
         ];
+    }
+
+    protected function lockedAt(): Attribute
+    {
+        return Attribute::get(
+            fn (): CarbonImmutable => (
+                $this->locked_at ?? $this->match_date->subMinutes(self::MINUTES_BEFORE_MATCH_TO_LOCK)
+            ),
+        );
     }
 
     public function stage(): BelongsTo
@@ -62,9 +73,7 @@ final class Fixture extends Model
 
     public function isLocked(): bool
     {
-        return now()->gte(
-            $this->locked_at ?? $this->match_date->subMinutes(self::MINUTES_BEFORE_MATCH_TO_LOCK),
-        );
+        return now()->gte($this->locked_at);
     }
 
     public function isFinished(): bool
@@ -87,11 +96,6 @@ final class Fixture extends Model
         return $home > $away ? $this->homeTeam : $this->awayTeam;
     }
 
-    /**
-     * Final score pair to display, honouring the duration. Null until finished.
-     *
-     * @return array{home: int, away: int}|null
-     */
     public function finalScore(): ?array
     {
         if (! $this->isFinished()) {
@@ -103,11 +107,6 @@ final class Fixture extends Model
         return ['home' => $home, 'away' => $away];
     }
 
-    /**
-     * Resolve the score pair that decides the result, honouring the duration.
-     *
-     * @return array{0: int, 1: int}
-     */
     private function decisiveScores(): array
     {
         return match ($this->duration) {

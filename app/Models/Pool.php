@@ -51,6 +51,11 @@ final class Pool extends Model
         return $this->hasMany(PoolPrizeDistribution::class);
     }
 
+    public function bets(): HasMany
+    {
+        return $this->hasMany(Bet::class);
+    }
+
     public function totalAward(): int
     {
         return $this->entry_fee * $this->participants()->count();

@@ -25,14 +25,14 @@
             icon="minus"
             size="sm"
             variant="filled"
-            x-on:click="{{ $model }} = Math.max(0, (parseInt({{ $model }}) || 0) - 1)"
+            x-on:click="expired ? false : {{ $model }} = Math.max(0, (parseInt({{ $model }}) || 0) - 1)"
             :disabled="$disabled || blank($team)"
         />
         <flux:button
             icon="plus"
             size="sm"
             variant="filled"
-            x-on:click="{{ $model }} = (parseInt({{ $model }}) || 0) + 1"
+            x-on:click="expired ? false : {{ $model }} = (parseInt({{ $model }}) || 0) + 1"
             :disabled="$disabled || blank($team)"
         />
     </flux:button.group>

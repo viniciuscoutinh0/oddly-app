@@ -10,7 +10,6 @@ use App\Models\Bet;
 use App\Models\Fixture;
 use App\Models\Pool;
 use App\Models\User;
-use Exception;
 use Flux\Flux;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +48,7 @@ final class Bets extends Component
 
         $bets = Bet::query()
             ->where('user_id', $this->user->id)
+            ->where('pool_id', $this->pool->id)
             ->whereIn('fixture_id', $this->fixtures->pluck('id'))
             ->get()
             ->keyBy('fixture_id');
@@ -73,6 +73,7 @@ final class Bets extends Component
         try {
             app(PlaceBetAction::class)->handle(
                 $this->user,
+                $this->pool,
                 $fixture,
                 $homeScore,
                 $awayScore,
