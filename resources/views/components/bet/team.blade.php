@@ -6,7 +6,7 @@
             <img
                 src="{{ $team->logo_url }}"
                 alt="{{ $team->name }}"
-                class="w-full h-full object-contain"
+                class="w-full h-full object-contain ring-1 ring-inset ring-white/10"
             />
         @else
             <div class="w-full h-full rounded-md bg-zinc-800/15 border border-dashed border-zinc-800"></div>

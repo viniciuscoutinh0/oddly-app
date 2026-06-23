@@ -7,7 +7,7 @@
                         src="{{ $url }}"
                         alt="Logo {{ $pool->season->competition->name }}"
                         loading="lazy"
-                        class="w-full h-full object-cover"
+                        class="w-full h-full object-cover ring-1 ring-inset ring-white/10"
                     />
                 @else
                     <flux:icon.trophy
@@ -220,7 +220,7 @@
                             Premiação
                         </flux:text>
 
-                        <flux:text class="text-end">
+                        <flux:text class="text-end tabular-nums">
                             {{ Number::currency($pool->entry_fee * $pool->participants_count) }}
                         </flux:text>
                     </div>
@@ -276,7 +276,7 @@
                             </div>
                             <flux:heading
                                 size="lg"
-                                class="shrink-0"
+                                class="shrink-0 tabular-nums"
                             >+{{ $rule['points'] }}</flux:heading>
                         </div>
                     @endforeach

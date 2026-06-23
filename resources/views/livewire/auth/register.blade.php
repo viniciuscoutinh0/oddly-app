@@ -25,6 +25,6 @@
         </div>
     </div>
     <div class="flex-1 overflow-hidden rounded-xl p-16 max-lg:hidden">
-        <img src="{{ asset('images/hero.webp') }}" alt="Oddly" class="object-cover w-full h-full rounded-lg" draggable="false" />
+        <img src="{{ asset('images/hero.webp') }}" alt="Oddly" class="object-cover w-full h-full rounded-lg ring-1 ring-inset ring-white/10" draggable="false" />
     </div>
 </div>

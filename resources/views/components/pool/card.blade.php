@@ -12,7 +12,7 @@
                 src="{{ $url }}"
                 alt="Logo {{ $pool->season->competition->name }}"
                 loading="lazy"
-                class="bg-cover bg-center shrink-0 w-16 h-16 md:w-20 md:h-20"
+                class="bg-cover bg-center shrink-0 w-16 h-16 md:w-20 md:h-20 ring-1 ring-inset ring-white/10"
             />
         @else
             <flux:icon.trophy

@@ -21,7 +21,7 @@
                             <img
                                 src="{{ $team->logo_url }}"
                                 alt="{{ $team->tla }}"
-                                class="w-full h-full object-contain"
+                                class="w-full h-full object-contain ring-1 ring-inset ring-white/10"
                             />
                         @else
                             <div class="w-full h-full rounded-md border border-dashed border-zinc-800 bg-zinc-800/15"></div>
@@ -132,7 +132,7 @@
                         'bg-green-600/15' => $bet->is_exact || $bet->is_correct_result,
                         'bg-zinc-700/15' => !($bet->is_exact || $bet->is_correct_result),
                     ])>
-                        <flux:heading>
+                        <flux:heading class="tabular-nums">
                             {{ $bet->points() }}{{ str('pt')->plural($bet->points()) }}
                         </flux:heading>
                     </div>

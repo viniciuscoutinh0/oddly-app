@@ -96,7 +96,7 @@ new class extends Component {
         <img
             src="{{ asset('images/hero.webp') }}"
             alt="Oddly"
-            class="object-cover w-full h-full rounded-lg"
+            class="object-cover w-full h-full rounded-lg ring-1 ring-inset ring-white/10"
             draggable="false"
         />
     </div>
