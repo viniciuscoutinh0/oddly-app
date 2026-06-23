@@ -31,7 +31,7 @@
          {{ $user->name }}
      </flux:text>
 
-     <flux:heading size="xl">
+     <flux:heading size="xl" class="tabular-nums">
          {{ $user->points }}{{ str('pt')->plural($user->points) }}
      </flux:heading>
 

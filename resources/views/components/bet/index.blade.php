@@ -114,6 +114,7 @@
             <div class="flex items-center gap-3">
                 <flux:heading
                     size="xl"
+                    class="tabular-nums"
                     x-text="home ?? 0"
                 />
 
@@ -123,6 +124,7 @@
 
                 <flux:heading
                     size="xl"
+                    class="tabular-nums"
                     x-text="away ?? 0"
                 />
             </div>

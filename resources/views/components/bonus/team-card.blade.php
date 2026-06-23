@@ -4,7 +4,7 @@
     type="button"
     @disabled($disabled)
     {{ $attributes->class([
-        'group relative flex flex-col items-center gap-3 p-4 border rounded-xl bg-zinc-900 transition duration-75 disabled:opacity-50 disabled:pointer-events-none',
+        'group relative flex flex-col items-center gap-3 p-4 border rounded-xl bg-zinc-900 transition duration-75 active:scale-[0.96] disabled:opacity-50 disabled:pointer-events-none',
         'border-accent ring-1 ring-accent' => $selected,
         'border-zinc-800 hover:border-zinc-600' => !$selected,
     ]) }}
@@ -22,7 +22,7 @@
             <img
                 src="{{ $team->logo_url }}"
                 alt="{{ $team->name }}"
-                class="w-full h-full object-contain"
+                class="w-full h-full object-contain ring-1 ring-inset ring-white/10"
                 loading="lazy"
             />
         @else
