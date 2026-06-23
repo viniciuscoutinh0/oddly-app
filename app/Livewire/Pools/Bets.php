@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Pools;
 
 use App\Actions\Bet\PlaceBetAction;
+use App\Enums\Fixture\Status;
 use App\Exceptions\Bet\BetException;
 use App\Models\Bet;
 use App\Models\Fixture;
@@ -35,6 +36,8 @@ final class Bets extends Component
      * @var array<int, array{home: int|null, away: int|null}>
      */
     public array $scores = [];
+
+    public array $statuses = [];
 
     #[Computed]
     public function user(): User
@@ -106,7 +109,6 @@ final class Bets extends Component
                 'homeTeam',
                 'awayTeam',
                 'stage',
-                'bets.user',
             ])
             ->get()
             ->sortBy(fn (Fixture $fixture): string => sprintf(
@@ -127,6 +129,19 @@ final class Bets extends Component
     }
 
     #[Computed]
+    public function current(): string
+    {
+        $fixture = $this->fixtures
+            ->filter(fn (Fixture $fixture) => $fixture->status === Status::Finished)
+            ->sortByDesc('match_date')
+            ->first();
+
+        return $fixture->match_day
+            ? "Fase de Grupos - Rodada {$fixture->match_day}"
+            : $fixture->stage->name->getLabel();
+    }
+
+    #[Computed]
     public function bets(): Collection
     {
         return collect($this->scores)
@@ -140,6 +155,6 @@ final class Bets extends Component
 
     public function render(): View
     {
-        return view('livewire.pools.bets');
+        return view('livewire.pools.bets', ['status' => Status::all()]);
     }
 }

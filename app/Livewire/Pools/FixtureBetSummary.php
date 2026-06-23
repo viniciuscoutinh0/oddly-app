@@ -6,6 +6,7 @@ namespace App\Livewire\Pools;
 
 use App\Models\Bet;
 use App\Models\Fixture;
+use App\Models\Team;
 use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
@@ -62,7 +63,51 @@ final class FixtureBetSummary extends Component
             ->find($this->fixtureId);
     }
 
-    /** @return array{home: \App\Models\Team, away: \App\Models\Team} */
+    #[Computed]
+    public function hitsCount(): int
+    {
+        return $this->bets
+            ->filter(fn (Bet $bet): bool => $bet->is_exact || $bet->is_correct_result)
+            ->count();
+    }
+
+    #[Computed]
+    public function missesCount(): int
+    {
+        return $this->bets->count() - $this->hitsCount;
+    }
+
+    /** @return array{home: int, away: int} */
+    #[Computed]
+    public function score(): array
+    {
+        $score = $this->fixture?->finalScore();
+
+        return [
+            'home' => $score['home'] ?? 0,
+            'away' => $score['away'] ?? 0,
+        ];
+    }
+
+    /** @return array{r: int, circumference: float, arc: float} */
+    #[Computed]
+    public function donut(): array
+    {
+        $raio = 38;
+        $circumference = round(2 * M_PI * $raio, 2);
+
+        $total = $this->bets->count();
+
+        $arc = $total > 0 ? round(($this->hitsCount / $total) * $circumference, 2) : 0.0;
+
+        return [
+            'r' => $raio,
+            'circumference' => $circumference,
+            'arc' => $arc,
+        ];
+    }
+
+    /** @return array{home: Team|null, away: Team|null} */
     #[Computed]
     public function teams(): array
     {

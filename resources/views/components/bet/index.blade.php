@@ -138,8 +138,8 @@
                 size="sm"
                 icon="rectangle-stack"
                 variant="subtle"
-                x-on:click="Livewire.dispatchTo('pools.fixture-bet-summary', 'show', { fixtureId: {{ $fixture->id }} });"
-                {{-- :disabled="!$locked" --}}
+                x-on:click="expired && Livewire.dispatchTo('pools.fixture-bet-summary', 'show', { fixtureId: {{ $fixture->id }} });"
+                :disabled="!$locked"
             >
                 Palpites
             </flux:button>
