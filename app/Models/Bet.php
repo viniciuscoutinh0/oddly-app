@@ -32,4 +32,17 @@ final class Bet extends Model
     {
         return $this->belongsTo(Fixture::class);
     }
+
+    public function pool(): BelongsTo
+    {
+        return $this->belongsTo(Pool::class);
+    }
+
+    public function points(): int
+    {
+        return (
+            ($this->is_exact ? $this->pool->points_exact : 0)
+            + ($this->is_correct_result ? $this->pool->points_result : 0)
+        );
+    }
 }

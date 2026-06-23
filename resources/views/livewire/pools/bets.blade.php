@@ -1,9 +1,21 @@
 <div x-data="{
     index: $persist(0).as('bets-index'),
 
+    current: '{{ $this->current }}',
+
     stages: @js($this->groups->keys()),
 
-    init() { if (this.index > this.stages.length - 1) this.index = 0; },
+    init() {
+        if (this.current) {
+            const index = this.stages.findIndex(s => s === this.current);
+
+            if (!index) return;
+
+            this.index = index;
+        }
+
+        if (this.index > this.stages.length - 1) this.index = 0;
+    },
 
     get currentStage() { return this.stages[this.index]; },
 
@@ -15,7 +27,8 @@
 
     next() { if (this.canNext) this.index += 1; },
 }">
-    <div class="flex items-center justify-between gap-3 mb-6 border bg-zinc-900 border-zinc-800 p-1.5 rounded-xl">
+    <div
+        class="flex items-center justify-between gap-3 mb-6 border bg-zinc-900/75 backdrop-blur-sm border-zinc-800 p-1.5 rounded-xl sticky z-50 inset-0">
         <flux:button
             icon="arrow-left"
             variant="filled"

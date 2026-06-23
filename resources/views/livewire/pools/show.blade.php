@@ -286,4 +286,5 @@
     </div>
 
     <livewire:pools.prize-distribution :pool="$pool" />
+    <livewire:pools.fixture-bet-summary :pool-id="$pool->id" />
 </div>
