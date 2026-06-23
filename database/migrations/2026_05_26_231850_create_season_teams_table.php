@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('season_teams', function (Blueprint $table) {
+        Schema::create('season_teams', function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(Season::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Team::class)->constrained()->cascadeOnDelete();

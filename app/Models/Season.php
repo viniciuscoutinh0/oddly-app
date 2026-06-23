@@ -50,6 +50,8 @@ final class Season extends Model
         return $this
             ->belongsToMany(Team::class, 'season_teams')
             ->withPivot('group_letter', 'group_position')
+            ->orderByPivot('group_letter')
+            ->orderByPivot('group_position')
             ->withTimestamps();
     }
 

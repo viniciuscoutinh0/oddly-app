@@ -33,11 +33,12 @@ final class Bets extends Component
     public Pool $pool;
 
     /**
-     * @var array<int, array{home: int|null, away: int|null}>
+     * @var array<int, array{home: int, away: int}>
      */
     public array $scores = [];
 
-    public array $statuses = [];
+    #[Locked]
+    public array $points = [];
 
     #[Computed]
     public function user(): User
@@ -50,6 +51,7 @@ final class Bets extends Component
         abort_unless(Gate::allows('bet', $this->pool), code: 403);
 
         $bets = Bet::query()
+            ->with('pool')
             ->where('user_id', $this->user->id)
             ->where('pool_id', $this->pool->id)
             ->whereIn('fixture_id', $this->fixtures->pluck('id'))
@@ -61,6 +63,10 @@ final class Bets extends Component
                 'home' => $bets[$fixture->id]->home_score ?? null,
                 'away' => $bets[$fixture->id]->away_score ?? null,
             ];
+
+            $this->points[$fixture->id] = isset($bets[$fixture->id])
+                ? $bets[$fixture->id]->points()
+                : null;
         }
     }
 

@@ -64,6 +64,7 @@
                     :$fixture
                     :$group
                     :beted="isset($this->bets[$fixture->id])"
+                    :point="$points[$fixture->id]"
                     wire:key="fixture-{{ $fixture->id }}"
                 />
             @endforeach

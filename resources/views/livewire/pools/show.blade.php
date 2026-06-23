@@ -95,22 +95,26 @@
                     <flux:tab
                         name="standings"
                         icon="trophy"
-                    >Ranking</flux:tab>
+                    >
+                        Ranking
+                    </flux:tab>
+
                     @can('bet', $pool)
                         <flux:tab
                             name="bets"
                             icon="document-check"
-                        >Palpites</flux:tab>
+                        >
+                            Palpites
+                        </flux:tab>
+
                         <flux:tab
                             name="bonus"
                             icon="gift"
-                        >Bônus</flux:tab>
+                        >
+                            Bônus
+                        </flux:tab>
                     @endcan
                 </flux:tabs>
-
-                <flux:tab.panel name="standings">
-                    <livewire:pools.standings :$pool />
-                </flux:tab.panel>
 
                 @can('bet', $pool)
                     <flux:tab.panel name="bets">
@@ -121,6 +125,10 @@
                         <livewire:pools.bonus :$pool />
                     </flux:tab.panel>
                 @endcan
+
+                <flux:tab.panel name="standings">
+                    <livewire:pools.standings :$pool />
+                </flux:tab.panel>
             </flux:tab.group>
 
             @cannot('bet', $pool)
@@ -231,19 +239,25 @@
                         <flux:text
                             variant="subtle"
                             class="text-xs uppercase"
-                        >Bônus</flux:text>
+                        >
+                            Bônus
+                        </flux:text>
 
                         @if (!$this->bonusLocksAt)
                             <flux:badge
                                 size="sm"
                                 color="zinc"
-                            >Sem partidas</flux:badge>
+                            >
+                                Sem partidas
+                            </flux:badge>
                         @elseif ($this->bonusLocked)
                             <flux:badge
                                 size="sm"
                                 color="red"
                                 icon="lock-closed"
-                            >Encerrado</flux:badge>
+                            >
+                                Encerrado
+                            </flux:badge>
                         @else
                             <flux:text class="text-end">
                                 Encerra {{ $this->bonusLocksAt->format('d/m/Y H:i') }}
@@ -260,7 +274,9 @@
                         class="text-zinc-400 shrink-0"
                     />
 
-                    <flux:heading size="lg">Regras de Pontuação</flux:heading>
+                    <flux:heading size="lg">
+                        Regras de Pontuação
+                    </flux:heading>
                 </div>
 
                 <div class="grid grid-cols-1 gap-3">

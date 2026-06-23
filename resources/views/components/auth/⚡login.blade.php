@@ -4,7 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 
 new class extends Component {
-    #[Validate('required|email')]
+    #[Validate('required|email|max:255')]
     public string $email = '';
 
     #[Validate('required')]
@@ -15,7 +15,7 @@ new class extends Component {
 
     public function login(): void
     {
-        /** @var array<string, mixed> $data */
+        /** @var array<string,mixed> $data */
         $data = $this->validate();
 
         if (!auth()->attempt($this->credentials($data), (bool) $data['remember'])) {
@@ -44,17 +44,22 @@ new class extends Component {
     <div class="flex items-center justify-center flex-1">
         <div class="max-w-80 w-80 mx-auto flex-1">
             <div class="text-center mb-6">
-                <h1 class="text-2xl md:text-4xl font-extrabold text-secondary-500">{{ config('app.name') }}</h1>
+                <h1 class="text-2xl md:text-4xl font-extrabold">
+                    {{ config('app.name') }}
+                </h1>
             </div>
 
             <flux:heading
                 class="text-center"
                 size="xl"
-            >Bora palpitar?</flux:heading>
+            >
+                Bora palpitar?
+            </flux:heading>
 
             <form wire:submit="login">
                 <div class="space-y-6">
                     <flux:input
+                        type="email"
                         label="E-mail"
                         placeholder="seu.email@exemplo.com"
                         required
@@ -81,22 +86,29 @@ new class extends Component {
                         variant="primary"
                         color="cyan"
                         class="min-w-full"
-                    >Entrar no jogo</flux:button>
+                    >
+                        Entrar no jogo
+                    </flux:button>
+
+                    <flux:separator text="ou" />
 
                     <flux:button
                         :href="route('register')"
                         variant="subtle"
                         class="min-w-full"
-                    >Criar conta</flux:button>
+                    >
+                        Criar conta
+                    </flux:button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="relative flex-1 overflow-hidden  p-0 max-lg:hidden">
+
+    <div class="relative flex-1 overflow-hidden p-0 max-lg:hidden">
         <img
             src="{{ asset('images/background.webp') }}"
             alt="{{ config('app.name') }}"
-            class="object-cover w-full h-full"
+            class=" object-cover w-full h-full"
             draggable="false"
             loading="lazy"
         />

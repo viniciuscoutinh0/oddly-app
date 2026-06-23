@@ -25,8 +25,8 @@ final class Show extends Component
 
         $this->pool = $pool
             ->load([
-                'season.competition',
-                'owner',
+                'season' => fn ($builder) => $builder->with(['competition', 'teams']),
+                'owner:id,name',
             ])
             ->loadCount('participants');
     }
