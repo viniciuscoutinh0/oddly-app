@@ -92,12 +92,13 @@ new class extends Component {
             </form>
         </div>
     </div>
-    <div class="flex-1 overflow-hidden rounded-xl p-16 max-lg:hidden">
+    <div class="relative flex-1 overflow-hidden  p-0 max-lg:hidden">
         <img
-            src="{{ asset('images/hero.webp') }}"
-            alt="Oddly"
-            class="object-cover w-full h-full rounded-lg ring-1 ring-inset ring-white/10"
+            src="{{ asset('images/background.webp') }}"
+            alt="{{ config('app.name') }}"
+            class="object-cover w-full h-full"
             draggable="false"
+            loading="lazy"
         />
     </div>
 </div>
