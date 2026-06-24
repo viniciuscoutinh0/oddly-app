@@ -138,7 +138,7 @@ final class Bets extends Component
     public function current(): string
     {
         $fixture = $this->fixtures
-            ->filter(fn (Fixture $fixture) => $fixture->status === Status::Finished)
+            ->filter(fn (Fixture $fixture): bool => $fixture->status === Status::Scheduled)
             ->sortByDesc('match_date')
             ->first();
 
