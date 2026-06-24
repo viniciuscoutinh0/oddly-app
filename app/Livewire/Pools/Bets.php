@@ -139,7 +139,7 @@ final class Bets extends Component
     {
         $fixture = $this->fixtures
             ->filter(fn (Fixture $fixture): bool => $fixture->status === Status::Scheduled)
-            ->sortByDesc('match_date')
+            ->sortBy('match_date')
             ->first();
 
         return $fixture->match_day
