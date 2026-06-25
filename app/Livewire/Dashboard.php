@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Models\Competition;
+use App\Models\Fixture;
 use App\Models\Pool;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
+use App\Services\User\UserDashboard;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -15,39 +16,36 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 /**
+ * @property User $user
  * @property Collection<Pool> $pools
- * @property Collection<Competition> $competitions
+ * @property Collection<array{fixture: Fixture, pool: Pool}> $urgentFixtures
+ * @property Collection<Fixture> $upcomingFixtures
  */
 #[Layout('layouts.dashboard')]
 final class Dashboard extends Component
 {
     #[Computed]
-    public function competitions(): Collection
+    public function user(): User
     {
-        return Competition::query()->withCount('seasons')->get(['id', 'name']);
+        return Auth::user();
     }
 
     #[Computed]
     public function pools(): Collection
     {
-        $userId = Auth::id();
+        return app(UserDashboard::class)->poolsForUser($this->user);
+    }
 
-        return Pool::query()
-            ->where(function (Builder $query) use ($userId): void {
-                $query
-                    ->where('owner_id', $userId)
-                    ->orWhereHas('participants', fn (Builder $query): Builder => $query->whereKey($userId));
-            })
-            ->withCount('participants')
-            ->with([
-                'season' => fn ($query) => $query
-                    ->with('competition:id,name')
-                    ->withCount([
-                        'fixtures',
-                        'fixtures as fixtures_finished_count' => fn (Builder $query): Builder => $query->finished(),
-                    ]),
-            ])
-            ->get(['id', 'name']);
+    #[Computed]
+    public function urgentFixtures(): Collection
+    {
+        return app(UserDashboard::class)->urgentFixtures($this->user, $this->pools);
+    }
+
+    #[Computed]
+    public function upcomingFixtures(): Collection
+    {
+        return app(UserDashboard::class)->upcomingFixtures($this->pools);
     }
 
     public function render(): View

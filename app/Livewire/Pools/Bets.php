@@ -161,6 +161,6 @@ final class Bets extends Component
 
     public function render(): View
     {
-        return view('livewire.pools.bets', ['status' => Status::all()]);
+        return view('livewire.pools.bets');
     }
 }

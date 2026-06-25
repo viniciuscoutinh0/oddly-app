@@ -1,6 +1,10 @@
 <div class="space-y-8">
     @if ($this->locked)
-        <flux:callout variant="warning">Os palpites bônus estão encerrados.</flux:callout>
+        <flux:callout
+            variant="warning"
+            icon="exclamation-circle"
+            heading="Os palpites bônus estão encerrados"
+        />
     @endif
 
     <div class="overflow-hidden bg-zinc-900 border border-zinc-800 rounded-xl">
@@ -34,17 +38,17 @@
         </div>
     </div>
 
-    <div>
-        <flux:heading
-            size="lg"
-            class="mb-3"
-        >Classificados por grupo</flux:heading>
-        <flux:text
-            variant="subtle"
-            class="mb-4 block text-sm"
-        >
-            Selecione até 2 times que avançam em cada grupo.
-        </flux:text>
+    <div class="space-y-3">
+        <div class="space-y-1">
+            <flux:heading size="lg">Classificados por grupo</flux:heading>
+
+            <flux:text
+                variant="subtle"
+                class="block text-sm"
+            >
+                Selecione até 2 times que avançam em cada grupo.
+            </flux:text>
+        </div>
 
         @foreach ($this->groupLetters as $letter)
             @php
@@ -53,7 +57,7 @@
             @endphp
 
             <div
-                class="overflow-hidden bg-zinc-900 mb-3 last:mb-0 border border-zinc-800 rounded-xl"
+                class="overflow-hidden bg-zinc-900 border border-zinc-800 rounded-xl"
                 wire:key="group-{{ $letter }}"
             >
                 <div

@@ -7,7 +7,7 @@
                         src="{{ $url }}"
                         alt="Logo {{ $pool->season->competition->name }}"
                         loading="lazy"
-                        class="w-full h-full object-cover ring-1 ring-inset ring-white/10"
+                        class="w-full h-full object-contain"
                     />
                 @else
                     <flux:icon.trophy
@@ -91,7 +91,10 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 items-start gap-6">
         <div class="lg:col-span-2">
             <flux:tab.group>
-                <flux:tabs>
+                <flux:tabs
+                    scrollable
+                    scrollable:fade
+                >
                     <flux:tab
                         name="standings"
                         icon="trophy"
@@ -114,6 +117,13 @@
                             Bônus
                         </flux:tab>
                     @endcan
+
+                    <flux:tab
+                        name="group-standings"
+                        icon="rectangle-stack"
+                    >
+                        Classificação
+                    </flux:tab>
                 </flux:tabs>
 
                 @can('bet', $pool)
@@ -129,6 +139,10 @@
                 <flux:tab.panel name="standings">
                     <livewire:pools.standings :$pool />
                 </flux:tab.panel>
+
+                <flux:tab.panel name="group-standings">
+                    <livewire:pools.group-standings :$pool />
+                </flux:tab.panel>
             </flux:tab.group>
 
             @cannot('bet', $pool)
@@ -143,8 +157,8 @@
 
         <div class="lg:col-span-1 space-y-6">
             @can('seeInviteCode', $pool)
-                <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
-                    <div class="flex items-center gap-3 mb-4">
+                <div class="flex flex-col gap-4 bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
+                    <div class="flex items-center gap-3">
                         <flux:icon.ticket
                             variant="mini"
                             class="text-zinc-400 shrink-0"
@@ -155,7 +169,7 @@
 
                     <flux:text
                         variant="subtle"
-                        class="text-xs mb-3 block"
+                        class="text-xs"
                     >
                         Compartilhe o código para convidar participantes.
                     </flux:text>
@@ -169,8 +183,8 @@
                 </div>
             @endcan
 
-            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
-                <div class="flex items-center gap-3 mb-6">
+            <div class="flex flex-col gap-6 bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
+                <div class="flex items-center gap-3">
                     <flux:icon.information-circle
                         variant="mini"
                         class="text-zinc-400 shrink-0"
@@ -267,8 +281,8 @@
                 </div>
             </div>
 
-            <div class="bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
-                <div class="flex items-center gap-3 mb-6">
+            <div class="flex flex-col gap-6 bg-zinc-900 border border-zinc-800 text-white rounded-xl p-4 md:p-6">
+                <div class="flex items-center gap-3">
                     <flux:icon.shield-check
                         variant="mini"
                         class="text-zinc-400 shrink-0"
