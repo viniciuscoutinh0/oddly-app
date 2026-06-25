@@ -8,6 +8,7 @@ use App\Filament\Clusters\Tournament\Resources\Seasons\Pages\CreateSeason;
 use App\Filament\Clusters\Tournament\Resources\Seasons\Pages\EditSeason;
 use App\Filament\Clusters\Tournament\Resources\Seasons\Pages\ListSeasons;
 use App\Filament\Clusters\Tournament\Resources\Seasons\RelationManagers\StagesRelationManager;
+use App\Filament\Clusters\Tournament\Resources\Seasons\RelationManagers\TeamsRelationManager;
 use App\Filament\Clusters\Tournament\Resources\Seasons\Schemas\SeasonForm;
 use App\Filament\Clusters\Tournament\Resources\Seasons\Tables\SeasonsTable;
 use App\Filament\Clusters\Tournament\TournamentCluster;
@@ -44,6 +45,7 @@ final class SeasonResource extends Resource
     {
         return [
             StagesRelationManager::class,
+            TeamsRelationManager::class,
         ];
     }
 
