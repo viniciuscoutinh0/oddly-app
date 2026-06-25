@@ -54,10 +54,16 @@
     <div
         class="overflow-hidden relative bg-zinc-900 mb-6 border border-zinc-800 rounded-xl transition duration-75 p-4 ring-accent">
         <flux:field class="z-10 relative">
-            <flux:label>Seus palpites</flux:label>
+            <flux:label>
+                Seus palpites
+
+                <x-slot name="trailing">
+                    <span class="tabular-nums">{{ $this->completed }}%</span>
+                </x-slot>
+            </flux:label>
 
             <flux:progress
-                :value="round(($this->bets->count() / $this->fixtures->count()) * 100)"
+                :value="$this->completed"
                 color="blue"
             />
 
@@ -68,7 +74,7 @@
         </flux:field>
 
         <div class="absolute -top-4 -right-16 select-none opacity-5">
-            <x-heroicon-s-trophy class="w-32 h-32" />
+            <x-heroicon-s-trophy class="w-33 h-33" />
         </div>
     </div>
 

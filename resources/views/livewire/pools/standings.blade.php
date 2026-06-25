@@ -5,7 +5,7 @@
         heading=" Pontuação é processada ao final do dia."
     />
 
-    <div class="grid grid-cols-3 gap-3">
+    <div class="flex items-end gap-3">
         @foreach ($this->leaders as $user)
             <x-standing.card
                 :$user
@@ -16,7 +16,7 @@
 
         @for ($i = $this->leaders->count(); $i < 3; $i++)
             <x-standing.card-ghost
-                :position="$i"
+                :position="$i + 1"
                 wire:key="ghost-{{ $i }}"
             />
         @endfor

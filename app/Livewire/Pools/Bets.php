@@ -154,6 +154,12 @@ final class Bets extends Component
             ->filter(fn (array $values): bool => collect($values)->some(fn (?int $value): bool => filled($value)));
     }
 
+    #[Computed]
+    public function completed(): float
+    {
+        return round(($this->bets->count() / $this->fixtures->count()) * 100);
+    }
+
     public function placeholder(): View
     {
         return view('components.bet.placeholder');
