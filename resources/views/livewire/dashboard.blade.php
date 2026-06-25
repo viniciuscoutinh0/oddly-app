@@ -92,8 +92,8 @@
         </section>
     @endif
 
-    <section>
-        <div class="flex items-center justify-between mb-6">
+    <section class="space-y-6">
+        <div class="flex items-center justify-between">
             <flux:heading size="xl">Meus Bolões</flux:heading>
 
             <flux:button

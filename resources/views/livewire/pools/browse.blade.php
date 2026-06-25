@@ -32,7 +32,7 @@
             @forelse ($this->pools as $pool)
                 <x-pool.card
                     :$pool
-                    wire:key="pool-{{ $pool }}"
+                    wire:key="pool-{{ $pool->id }}"
                 />
             @empty
                 <x-pool.empty />

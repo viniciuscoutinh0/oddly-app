@@ -27,7 +27,7 @@ final class Dashboard extends Component
     #[Computed]
     public function user(): User
     {
-        return Auth::user();
+        return Auth::user() ?? throw new \RuntimeException('Unauthenticated.');
     }
 
     #[Computed]

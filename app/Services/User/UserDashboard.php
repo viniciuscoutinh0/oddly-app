@@ -33,7 +33,7 @@ final readonly class UserDashboard
                         'fixtures as fixtures_finished_count' => fn (Builder $query): Builder => $query->finished(),
                     ]),
             ])
-            ->get(['id', 'name', 'season_id']);
+            ->get(['id', 'name', 'owner_id', 'season_id']);
 
         if ($pools->isEmpty()) {
             return $pools;
@@ -66,7 +66,8 @@ final readonly class UserDashboard
                 'stage:id,season_id',
             ])
             ->orderBy('match_date')
-            ->get();
+            ->get()
+            ->reject(fn (Fixture $fixture): bool => $fixture->isLocked());
 
         if ($fixtures->isEmpty()) {
             return collect();
