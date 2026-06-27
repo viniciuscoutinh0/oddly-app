@@ -5,6 +5,11 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="description"
+        content="Seu palpite, sua vitória."
+    >
+
     <title>{{ $title ?? config('app.name') }}</title>
 
     <link
@@ -12,6 +17,7 @@
         href="https://rsms.me/inter/inter.css"
     />
 
+    @PwaHead
     @fluxAppearance
     @livewireStyles
     @vite('resources/css/app.css')

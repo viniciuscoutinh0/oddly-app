@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Oddly - Sem Conexão</title>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --zinc-950: #09090b;
+                --zinc-900: #18181b;
+                --zinc-800: #27272a;
+                --zinc-700: #3f3f46;
+                --zinc-400: #a1a1aa;
+                --zinc-300: #d4d4d8;
+                --sky-200: #bae6fd;
+                --sky-400: #38bdf8;
+                --sky-500: #0ea5e9;
+                --indigo: #818cf8;
+            }
+
+            html,
+            body {
+                height: 100%;
+                background: var(--zinc-950);
+                font-family: "Inter", system-ui, sans-serif;
+                font-feature-settings: "cv11";
+                color: #fff;
+                overflow: hidden;
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background: radial-gradient(
+                    ellipse 55% 40% at 50% 60%,
+                    rgba(14, 165, 233, 0.1) 0%,
+                    transparent 70%
+                );
+                pointer-events: none;
+            }
+
+            .page {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0;
+                padding: 24px;
+            }
+
+            .icon-wrap {
+                position: relative;
+                width: 100px;
+                height: 100px;
+                margin-bottom: 32px;
+            }
+
+            .icon-wrap::before {
+                content: "";
+                position: absolute;
+                inset: -14px;
+                border-radius: 50%;
+                border: 2px solid var(--sky-400);
+                opacity: 0;
+                animation: pulse-ring 2.6s ease-out infinite;
+            }
+            .icon-wrap::after {
+                content: "";
+                position: absolute;
+                inset: -28px;
+                border-radius: 50%;
+                border: 1.5px solid var(--sky-400);
+                opacity: 0;
+                animation: pulse-ring 2.6s ease-out infinite 0.5s;
+            }
+
+            @keyframes pulse-ring {
+                0% {
+                    transform: scale(0.85);
+                    opacity: 0;
+                }
+                20% {
+                    opacity: 0.35;
+                }
+                100% {
+                    transform: scale(1.2);
+                    opacity: 0;
+                }
+            }
+
+            .icon-svg {
+                width: 100px;
+                height: 100px;
+                animation: icon-float 3.5s ease-in-out infinite;
+                filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.3));
+            }
+
+            @keyframes icon-float {
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-7px);
+                }
+            }
+
+            .eye-l,
+            .eye-r {
+                animation: blink 3.5s ease-in-out infinite;
+            }
+            .eye-r {
+                animation-delay: 0.08s;
+            }
+
+            @keyframes blink {
+                0%,
+                44%,
+                52%,
+                100% {
+                    transform: scaleY(1);
+                    transform-origin: center;
+                }
+                48% {
+                    transform: scaleY(0.08);
+                    transform-origin: center;
+                }
+            }
+
+            .wordmark {
+                font-size: 13px;
+                font-weight: 700;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--sky-400);
+                margin-bottom: 16px;
+            }
+
+            .title {
+                font-size: clamp(22px, 5vw, 28px);
+                font-weight: 800;
+                letter-spacing: -0.03em;
+                color: #fff;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+
+            .subtitle {
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--zinc-400);
+                line-height: 1.6;
+                text-align: center;
+                max-width: 280px;
+                margin-bottom: 40px;
+            }
+
+            .signal {
+                display: flex;
+                align-items: flex-end;
+                gap: 5px;
+                height: 28px;
+                margin-bottom: 48px;
+            }
+
+            .bar {
+                width: 7px;
+                border-radius: 3px;
+                background: var(--zinc-700);
+                position: relative;
+                overflow: hidden;
+            }
+            .bar::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                    180deg,
+                    var(--sky-200),
+                    var(--sky-500)
+                );
+                transform: translateY(100%);
+            }
+
+            .bar:nth-child(1) {
+                height: 10px;
+            }
+            .bar:nth-child(2) {
+                height: 16px;
+            }
+            .bar:nth-child(3) {
+                height: 22px;
+            }
+            .bar:nth-child(4) {
+                height: 28px;
+            }
+
+            .bar:nth-child(1)::after {
+                animation: fill-bar 2.4s ease-in-out infinite;
+            }
+            .bar:nth-child(2)::after {
+                animation: fill-bar 2.4s ease-in-out infinite 0.25s;
+            }
+            .bar:nth-child(3)::after {
+                animation: fill-bar 2.4s ease-in-out infinite 0.5s;
+            }
+            .bar:nth-child(4)::after {
+                animation: fill-bar 2.4s ease-in-out infinite 0.75s;
+            }
+
+            @keyframes fill-bar {
+                0%,
+                15% {
+                    transform: translateY(100%);
+                }
+                45%,
+                70% {
+                    transform: translateY(0%);
+                }
+                90%,
+                100% {
+                    transform: translateY(100%);
+                }
+            }
+
+            .signal-label {
+                font-size: 11px;
+                color: var(--zinc-700);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                font-weight: 600;
+                font-family: monospace;
+                margin-left: 10px;
+                align-self: center;
+                animation: label-pulse 2.4s ease-in-out infinite;
+            }
+
+            @keyframes label-pulse {
+                0%,
+                100% {
+                    color: var(--zinc-700);
+                }
+                50% {
+                    color: var(--sky-400);
+                }
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 28px;
+                background: transparent;
+                border: 1.5px solid var(--zinc-700);
+                border-radius: 10px;
+                color: var(--zinc-300);
+                font-family: inherit;
+                font-size: 14px;
+                font-weight: 600;
+                letter-spacing: -0.01em;
+                cursor: pointer;
+                transition:
+                    border-color 0.2s,
+                    color 0.2s,
+                    background 0.2s;
+            }
+            .btn:hover {
+                border-color: var(--sky-500);
+                color: #fff;
+                background: rgba(14, 165, 233, 0.08);
+            }
+            .btn:active {
+                transform: scale(0.97);
+            }
+
+            .btn svg {
+                flex-shrink: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page">
+            <div class="icon-wrap">
+                <svg
+                    class="icon-svg"
+                    viewBox="0 0 100 100"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <defs>
+                        <linearGradient
+                            id="og"
+                            x1="15"
+                            y1="12"
+                            x2="85"
+                            y2="90"
+                            gradientUnits="userSpaceOnUse"
+                        >
+                            <stop offset="0%" stop-color="#bae6fd" />
+                            <stop offset="48%" stop-color="#38bdf8" />
+                            <stop offset="100%" stop-color="#818cf8" />
+                        </linearGradient>
+                        <radialGradient id="os" cx="38%" cy="30%" r="55%">
+                            <stop
+                                offset="0%"
+                                stop-color="#fff"
+                                stop-opacity=".20"
+                            />
+                            <stop
+                                offset="100%"
+                                stop-color="#fff"
+                                stop-opacity="0"
+                            />
+                        </radialGradient>
+                    </defs>
+
+                    <circle cx="50" cy="55" r="38" fill="url(#og)" />
+                    <circle cx="50" cy="55" r="38" fill="url(#os)" />
+
+                    <rect
+                        class="eye-l"
+                        x="30"
+                        y="42"
+                        width="14"
+                        height="22"
+                        rx="7"
+                        fill="#09090b"
+                        fill-opacity=".72"
+                        style="transform-box: fill-box"
+                    />
+
+                    <rect
+                        class="eye-r"
+                        x="56"
+                        y="42"
+                        width="14"
+                        height="22"
+                        rx="7"
+                        fill="#09090b"
+                        fill-opacity=".72"
+                        style="transform-box: fill-box"
+                    />
+
+                    <circle
+                        cx="33.5"
+                        cy="46"
+                        r="2.5"
+                        fill="#fff"
+                        fill-opacity=".28"
+                    />
+                    <circle
+                        cx="59.5"
+                        cy="46"
+                        r="2.5"
+                        fill="#fff"
+                        fill-opacity=".28"
+                    />
+
+                    <path
+                        d="M83 10 L85.5 18 L93 20.5 L85.5 23 L83 31 L80.5 23 L73 20.5 L80.5 18 Z"
+                        fill="#fff"
+                        fill-opacity=".88"
+                    />
+
+                    <circle
+                        cx="70"
+                        cy="9"
+                        r="2.2"
+                        fill="#7dd3fc"
+                        fill-opacity=".75"
+                    />
+                </svg>
+            </div>
+
+            <div class="wordmark">oddly</div>
+
+            <h1 class="title">Sem conexão</h1>
+            <p class="subtitle">
+                Parece que você está offline. Verifique sua internet e tente
+                novamente.
+            </p>
+
+            <div class="signal">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <span class="signal-label">reconectando…</span>
+            </div>
+
+            <button class="btn" onclick="window.location.reload()">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                    <path
+                        d="M1.5 7.5a6 6 0 1 1 1.07 3.4"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                    <path
+                        d="M1.5 11V7.5H5"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+                Tentar novamente
+            </button>
+        </div>
+    </body>
+</html>

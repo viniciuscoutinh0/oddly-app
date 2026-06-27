@@ -1,0 +1,16 @@
+{
+    "name": "Laravel",
+    "short_name": "Laravel",
+    "background_color": "#09090b",
+    "display": "standalone",
+    "description": "Seu palpite, sua vit\u00f3ria.",
+    "theme_color": "#09090b",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
