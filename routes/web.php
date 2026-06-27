@@ -8,11 +8,11 @@ use App\Livewire\Pools\Create;
 use App\Livewire\Pools\Show;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'static.home')->name('static.home');
+// Route::view('/', 'static.home')->name('static.home');
 
 Route::middleware('guest')->group(function (): void {
-    Route::livewire('/signin', 'auth.login')->name('login');
-    Route::get('/signup', Register::class)->name('register');
+    Route::livewire('/', 'auth.login')->name('login');
+    Route::get('/register', Register::class)->name('register');
 });
 
 Route::middleware('auth')->group(function (): void {
