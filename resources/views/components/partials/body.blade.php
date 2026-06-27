@@ -10,4 +10,5 @@
     @fluxScripts
     @livewireScripts
     @vite('resources/js/app.js')
+    @RegisterServiceWorkerScript
 </body>
