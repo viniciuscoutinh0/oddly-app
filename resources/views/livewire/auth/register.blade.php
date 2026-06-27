@@ -5,16 +5,49 @@
                 <h1 class="text-2xl md:text-4xl font-extrabold text-secondary-500">{{ config('app.name') }}</h1>
             </div>
 
-            <flux:heading class="text-center" size="xl">Criar conta</flux:heading>
+            <flux:heading
+                class="text-center"
+                size="xl"
+            >Criar conta</flux:heading>
 
             <form wire:submit="register">
                 <div class="space-y-6">
-                    <flux:input label="Nome" placeholder="Ex.: João Silva" required wire:model="name" />
-                    <flux:input label="E-mail" placeholder="seu.email@exemplo.com" required wire:model="email" />
-                    <flux:input label="Senha" type="password" placeholder="Mínimo 8 caracteres" viewable required wire:model="password" />
-                    <flux:input label="Confirme a senha" type="password" placeholder="Repita a senha" viewable required wire:model="password_confirmation" />
+                    <flux:input
+                        label="Nome"
+                        placeholder="Ex.: João Silva"
+                        required
+                        wire:model="name"
+                    />
+                    <flux:input
+                        type="email"
+                        label="E-mail"
+                        placeholder="seu.email@exemplo.com"
+                        required
+                        wire:model="email"
+                    />
+                    <flux:input
+                        label="Senha"
+                        type="password"
+                        placeholder="Mínimo 8 caracteres"
+                        viewable
+                        required
+                        wire:model="password"
+                    />
+                    <flux:input
+                        label="Confirme a senha"
+                        type="password"
+                        placeholder="Repita a senha"
+                        viewable
+                        required
+                        wire:model="password_confirmation"
+                    />
 
-                    <flux:button type="submit" variant="primary" color="cyan" class="min-w-full">Criar conta</flux:button>
+                    <flux:button
+                        type="submit"
+                        variant="primary"
+                        color="cyan"
+                        class="min-w-full"
+                    >Criar conta</flux:button>
 
                     <flux:text class="text-center">
                         Já tem conta?
@@ -24,7 +57,13 @@
             </form>
         </div>
     </div>
-    <div class="flex-1 overflow-hidden rounded-xl p-16 max-lg:hidden">
-        <img src="{{ asset('images/hero.webp') }}" alt="Oddly" class="object-cover w-full h-full rounded-lg ring-1 ring-inset ring-white/10" draggable="false" />
+    <div class="relative flex-1 overflow-hidden p-0 max-lg:hidden">
+        <img
+            src="{{ asset('images/background.webp') }}"
+            alt="{{ config('app.name') }}"
+            class=" object-cover w-full h-full"
+            draggable="false"
+            loading="lazy"
+        />
     </div>
 </div>
