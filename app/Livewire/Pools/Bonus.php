@@ -29,6 +29,9 @@ final class Bonus extends Component
 
     public array $groups = [];
 
+    #[Locked]
+    public $points = [];
+
     public function mount(Pool $pool): void
     {
         abort_unless(Gate::allows('bet', $pool), code: 403);
@@ -162,6 +165,10 @@ final class Bonus extends Component
             ->where('user_id', Auth::id())
             ->get()
             ->groupBy('group_letter');
+
+        $this->points = $groupBets->map(
+            fn (Collection $bets) => $bets->sum(fn ($bet): int => $bet->is_correct ? $this->pool->points_group_position : 0)
+        );
 
         foreach ($this->groupLetters as $letter) {
             $this->groups[$letter] = $groupBets

@@ -19,6 +19,6 @@ final class LogoutController extends Controller
 
         $request->session()->regenerateToken();
 
-        return to_route('static.home');
+        return to_route('login');
     }
 }

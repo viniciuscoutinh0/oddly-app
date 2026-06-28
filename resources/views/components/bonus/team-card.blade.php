@@ -22,7 +22,7 @@
             <img
                 src="{{ $team->logo_url }}"
                 alt="{{ $team->name }}"
-                class="w-full h-full object-contain ring-1 ring-inset ring-white/10"
+                class="w-full h-full object-contain"
                 loading="lazy"
             />
         @else

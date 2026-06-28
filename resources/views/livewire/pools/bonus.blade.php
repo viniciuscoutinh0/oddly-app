@@ -54,10 +54,16 @@
             @php
                 $selected = $groups[$letter] ?? [];
                 $selectedCount = count($selected);
+                $point = $points[$letter] ?? null;
             @endphp
 
             <div
-                class="overflow-hidden bg-zinc-900 border border-zinc-800 rounded-xl"
+                {{ $attributes->class([
+                        'ring-2 ring-offset-2 ring-offset-zinc-800 ring-green-400' => $point,
+                    ])->merge([
+                        'class' =>
+                            'overflow-hidden bg-zinc-900 border border-zinc-800 rounded-xl mb-[calc(0.75rem+calc(var(--spacing)*2))] last:mb-0',
+                    ]) }}
                 wire:key="group-{{ $letter }}"
             >
                 <div
@@ -65,6 +71,15 @@
                     <flux:text class="text-xs text-white">
                         Grupo {{ $letter }}
                     </flux:text>
+
+                    @if ($point)
+                        <flux:text
+                            class="text-green-400 text-xs"
+                            variant="strong"
+                        >
+                            +{{ $point }}{{ str('pt')->plural($point) }}
+                        </flux:text>
+                    @endif
 
                     <flux:badge
                         size="sm"

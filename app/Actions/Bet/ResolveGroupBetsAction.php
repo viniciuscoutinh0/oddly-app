@@ -5,23 +5,25 @@ declare(strict_types=1);
 namespace App\Actions\Bet;
 
 use App\Models\Season;
+use App\Models\Team;
+use Illuminate\Support\Collection;
 
 final class ResolveGroupBetsAction
 {
     public function handle(Season $season): void
     {
-        // Map of "<group_letter>:<position>" => team_id from the actual standings.
-        $actual = $season->teams()
+        $standings = $season->teams()
             ->wherePivotNotNull('group_position')
             ->get()
-            ->mapWithKeys(fn ($team): array => [
-                $team->pivot->group_letter.':'.$team->pivot->group_position => $team->id,
-            ]);
+            ->groupBy(fn (Team $team): string => $team->pivot->group_letter)
+            ->map(fn (Collection $teams): Collection => $teams->map(fn (Team $team): string => $team->pivot->group_letter. ':'. $team->id)->take(2))
+            ->toArray();
 
-        $season->groupBets()->chunkById(200, function ($bets) use ($actual): void {
+        $season->groupBets()->chunkById(200, function ($bets) use ($standings): void {
             foreach ($bets as $bet) {
-                $key = $bet->group_letter.':'.$bet->predicted_position;
-                $bet->is_correct = ($actual[$key] ?? null) === $bet->team_id;
+                $predicted = $bet->group_letter.':'.$bet->team_id;
+
+                $bet->is_correct = in_array($predicted, $standings[$bet->group_letter] ?? [], true);
                 $bet->resolved_at = now();
                 $bet->save();
             }
